@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/viewPagerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+            <ImageView
+                android:id="@+id/tempImgView"
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/ic_photo_camera_black_24dp"
+                />
+
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPagerProduct"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/changeImageBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/viewPagerLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/button_shape"
+            android:text="Change Image"
+            android:textColor="#FFFFFF" />
+
+        <LinearLayout
+            android:id="@+id/profile_details"
+            android:layout_below="@+id/changeImageBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Product Name"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_productName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="please enter product name"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/txt_productCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Product Category"
+                android:textSize="15sp" />
+
+            <Spinner
+                android:id="@+id/spinnerProductCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/txt_productType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Product Type"
+                android:textColor="#D8807D7D"
+                android:textSize="15sp" />
+
+            <RadioGroup
+                android:id="@+id/radioProductTypeGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_productType"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioNew"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New"
+                    android:textColor="#D8807D7D" />
+
+                <RadioButton
+                    android:id="@+id/radioUsed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Used"
+                    android:textColor="#D8807D7D" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/txt_productDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Product Description"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_productDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint=" enter product description"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:scrollbars="vertical"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/txt_condition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Product Condition"
+                android:textSize="15sp" />
+
+            <RadioGroup
+                android:id="@+id/radioProductConditionGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_productType"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioGood"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Good"
+                    android:textColor="#D8807D7D" />
+
+                <RadioButton
+                    android:id="@+id/radioNormal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Normal"
+                    android:textColor="#D8807D7D" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/txt_productPossibleExchange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Possible Exchange With"
+                android:textSize="15sp" />
+
+            <EditText
+                android:id="@+id/et_productPossibleExchange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint=" enter your preferences for exchange"
+                android:inputType="textMultiLine"
+                android:minLines="3"
+                android:scrollbars="vertical"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/txt_estimatedMarketValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Estimated Market Value"
+                android:textSize="15sp" />
+
+            <me.abhinay.input.CurrencyEditText
+                android:id="@+id/et_estimatedMarketValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="enter estimated market value"
+                android:inputType="numberDecimal"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/submitBtnLayout"
+            android:layout_below="@+id/profile_details"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <Button
+                android:background="@color/colorPrimary"
+                android:id="@+id/submitProductData"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Submit"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</ScrollView>
+

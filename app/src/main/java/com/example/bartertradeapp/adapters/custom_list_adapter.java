@@ -1,0 +1,110 @@
+package com.example.bartertradeapp.adapters;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.bartertradeapp.DataModels.UserUploadProductModel;
+import com.example.bartertradeapp.R;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
+public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapter.ViewHolder>  {
+
+    private List<UserUploadProductModel> userlist;
+    private LayoutInflater mInflater;
+    private ItemClickListener mClickListener;
+
+    // data is passed into the constructor
+    public custom_list_adapter(Context context, List<UserUploadProductModel> userlist) {
+        this.mInflater = LayoutInflater.from(context);
+        this.userlist = userlist;
+    }
+
+    // inflates the itemlist layout from xml when needed
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = mInflater.inflate(R.layout.my_list_item, parent, false);
+        return new ViewHolder(view);
+    }
+
+    // binds the data to the TextView in each row
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        UserUploadProductModel list = userlist.get(position);
+        holder.title.setText(list.getProductName());
+        holder.title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(v.getContext(), ""+holder.title.getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        holder.desc.setText(list.getProductDescription());
+        holder.condition.setText("Condition: "+list.getProductCondition());
+        holder.worth.setText(list.getProductEstimatedMarketValue());
+        holder.type.setText(":" +list.getProductCategoryList());
+        holder.exchange.setText("Exchange with: " +list.getPossibleExchangeWith());
+        Picasso.get().load(list.getmImageUri())
+            .fit()
+                 .centerCrop()
+                 .into(holder.image);
+
+}
+
+    // total number of rows
+    @Override
+    public int getItemCount() {
+        return userlist.size();
+    }
+
+
+    // stores and recycles views as they are scrolled off screen
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView title;
+        TextView desc;
+        TextView condition;
+        TextView worth;
+        TextView type;
+        TextView exchange;
+        ImageView image;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.ad_title);
+            desc = itemView.findViewById(R.id.ad_desc);
+            condition = itemView.findViewById(R.id.ad_condition);
+            worth = itemView.findViewById(R.id.ad_worth);
+            type = itemView.findViewById(R.id.ad_type);
+            exchange = itemView.findViewById(R.id.ad_exchange);
+            image = itemView.findViewById(R.id.ad_image);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+        }
+    }
+
+    // convenience method for getting data at click position
+    public UserUploadProductModel getItem(int id) {
+        return userlist.get(id);
+    }
+
+    // allows clicks events to be caught
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+    }
+}
