@@ -1,6 +1,7 @@
 package com.example.bartertradeapp.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapter.ViewHolder>  {
@@ -51,10 +53,20 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
         holder.worth.setText(list.getProductEstimatedMarketValue());
         holder.type.setText(":" +list.getProductCategoryList());
         holder.exchange.setText("Exchange with: " +list.getPossibleExchangeWith());
-        Picasso.get().load(list.getmImageUri())
-            .fit()
-                 .centerCrop()
-                 .into(holder.image);
+        if(list.getmImageUri() !=null) {
+            Picasso.get().load(list.getmImageUri())
+                    .fit()
+                    .centerCrop()
+                    .into(holder.image);
+        }
+        else if (!list.getmArrList().isEmpty()){
+            ArrayList<String> imagelist = list.getmArrList();
+            Uri uri = Uri.parse(imagelist.get(0));
+            Picasso.get().load(uri)
+                    .fit()
+                    .centerCrop()
+                    .into(holder.image);
+        }
 
 }
 
@@ -74,6 +86,8 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
         TextView type;
         TextView exchange;
         ImageView image;
+        ArrayList<String> imagelist;
+        Uri uri;
 
         ViewHolder(View itemView) {
             super(itemView);

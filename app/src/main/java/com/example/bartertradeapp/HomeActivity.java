@@ -10,6 +10,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.JavaClasses.ChatFragment;
 import com.example.bartertradeapp.JavaClasses.HomeFragment;
+import com.example.bartertradeapp.JavaClasses.HomeFragmentExtend;
 import com.example.bartertradeapp.JavaClasses.ProfileFragment;
 import com.example.bartertradeapp.JavaClasses.UserAdsFragment;
 import com.example.bartertradeapp.JavaClasses.UserUploadFragment;
@@ -44,6 +45,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,6 +58,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     TextView nav_header_user_name;
     TextView nav_header_user_email;
     ImageView img1;
+    Button btn_testing,btn_testing2;
 
     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -75,9 +78,27 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         mDrawer = findViewById(R.id.drawer_layout);
+        btn_testing = findViewById(R.id.btn_testing);
+        btn_testing2 = findViewById(R.id.btn_testing2);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        btn_testing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragmentExtend()).addToBackStack(null).commit();
+
+            }
+        });
+
+        btn_testing2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
+
+            }
+        });
 
 
         View header_view = navigationView.getHeaderView(0);
