@@ -34,30 +34,47 @@ import java.util.List;
 
 public class HomeFragment extends BaseFragment implements custom_list_adapter.ItemClickListener{
 
-    private RecyclerView recyclerView;
-    private custom_list_adapter adapter;
+    private RecyclerView recyclerView, recyclerView2,recyclerView3;
+    private custom_list_adapter adapter, adapter2, adapter3;
+    LinearLayoutManager layoutManager, layoutManager2,layoutManager3;
 
     FirebaseAuth uploadAuth;
-    List<UserUploadProductModel> userlist;
+    List<UserUploadProductModel> userlist,userlist2,userlist3;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
+
         userlist = new ArrayList<>();
+        userlist2 = new ArrayList<>();
+        userlist3 = new ArrayList<>();
         // hardcode adding items to list for testing reasons
         //userlist.add(new UserUploadProductModel("Shayan","pagaal hy shayan","good","asdasdsadasdadasd"));
 
         // set up the RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView2 = view.findViewById(R.id.recyclerView2);
+        recyclerView3 = view.findViewById(R.id.recyclerView3);
+        //layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        layoutManager2 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        layoutManager3 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView2.setLayoutManager(layoutManager2);
+        recyclerView3.setLayoutManager(layoutManager3);
         // initializing adapter
         adapter = new custom_list_adapter (getContext(), userlist);
         adapter.setClickListener(this);
 
+        adapter2 = new custom_list_adapter (getContext(), userlist2);
+        adapter2.setClickListener(this);
+
+        adapter3 = new custom_list_adapter (getContext(), userlist3);
+        adapter3.setClickListener(this);
 
 
+        databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -78,6 +95,50 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
             }
         });
 
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("zNDkFxEHhKa56XNRSgExnhG4N7F3").child("UserUploadProducts");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                userlist2.clear();
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()){
+                    UserUploadProductModel users = usersSnapshot.getValue(UserUploadProductModel.class);
+                    userlist2.add(users);
+                }
+                // setting adapter to recycler View
+                //recyclerView.setAdapter(adapter);
+                recyclerView2.setAdapter(adapter2);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                userlist3.clear();
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()){
+                    UserUploadProductModel users = usersSnapshot.getValue(UserUploadProductModel.class);
+                    userlist3.add(users);
+                }
+                // setting adapter to recycler View
+                //recyclerView.setAdapter(adapter);
+                recyclerView3.setAdapter(adapter3);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         return view;
     }
     @Override
@@ -88,13 +149,19 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         pname = userUploadProductModel.getProductName();
         pdesc = userUploadProductModel.getProductDescription();
         pexch = userUploadProductModel.getPossibleExchangeWith();
-        pworth = userUploadProductModel.getProductEstimatedMarketValue();
+        pest = userUploadProductModel.getProductEstimatedMarketValue();
+        ptype = userUploadProductModel.getProductType();
+        pcategory = userUploadProductModel.getProductCategoryList();
+        pcondition = userUploadProductModel.getProductCondition();
         pimg = userUploadProductModel.getmImageUri();
 
         intent.putExtra("name", pname);
         intent.putExtra("desc", pdesc);
-        intent.putExtra("exch", pexch);
-        intent.putExtra("worth", pworth);
+        intent.putExtra("exchange", pexch);
+        intent.putExtra("est", pest);
+        intent.putExtra("type", ptype);
+        intent.putExtra("category", pcategory);
+        intent.putExtra("condition", pcondition);
         intent.putExtra("image", pimg);
         startActivity(intent);
         //Toast.makeText(getContext(), "as"+image, Toast.LENGTH_SHORT).show();

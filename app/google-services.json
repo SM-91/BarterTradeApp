@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "723232220951",
-    "firebase_url": "https://bartertradeapp-295cd.firebaseio.com",
-    "project_id": "bartertradeapp-295cd",
-    "storage_bucket": "bartertradeapp-295cd.appspot.com"
+    "project_number": "49348405431",
+    "firebase_url": "https://bartertradeapp-37e86.firebaseio.com",
+    "project_id": "bartertradeapp-37e86",
+    "storage_bucket": "bartertradeapp-37e86.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:723232220951:android:54b953107f8b943f24b952",
+        "mobilesdk_app_id": "1:49348405431:android:1d40144afc3e4e33db4532",
         "android_client_info": {
           "package_name": "com.example.bartertradeapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "723232220951-itjiqdq7h76emf23b1sfbf86hopaudps.apps.googleusercontent.com",
+          "client_id": "49348405431-pb4vr6oiv2sc748rsk5l4ug6i4dqrtpa.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.bartertradeapp",
-            "certificate_hash": "ea3e33d58cd0fd0ae728181ab03cadea20ff1e4c"
+            "certificate_hash": "8055760a0dcfe96830fe02bf961d945f208010d5"
           }
         },
         {
-          "client_id": "723232220951-ud9706oppg1uc2ogpbbd00sabdd7ip93.apps.googleusercontent.com",
+          "client_id": "49348405431-hdei8kjo8n6r5qa7omg07u5b7kuhnejm.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCxdl1WO-bC7cP3KmL1hwqhfmSif0cCTEc"
+          "current_key": "AIzaSyCuRWfjdMxM-w2mlgF-UiIilG6ncLM7CxE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "723232220951-ud9706oppg1uc2ogpbbd00sabdd7ip93.apps.googleusercontent.com",
+              "client_id": "49348405431-hdei8kjo8n6r5qa7omg07u5b7kuhnejm.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

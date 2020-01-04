@@ -1,55 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".DetailedActivity">
 
-    <ImageView
-        android:id="@+id/image_display"
-        android:layout_centerHorizontal="true"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <!-- Here you put the rest of your current view-->
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@drawable/default_image"/>
+        android:layout_height="match_parent"
+        tools:context=".DetailedActivity">
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_below="@id/image_display"
-        android:paddingTop="20dp"
-        android:paddingLeft="5dp"
-        android:textStyle="bold"
-        android:textColor="#000000"
-        android:textSize="35sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/worth"
-        android:layout_below="@+id/name"
-        android:paddingTop="10dp"
-        android:paddingLeft="5dp"
-        android:textSize="8sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/exch"
-        android:layout_below="@+id/worth"
-        android:paddingTop="10dp"
-        android:paddingLeft="5dp"
-        android:textSize="20sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/details"
-        android:layout_below="@+id/exch"
-        android:paddingTop="10dp"
-        android:paddingLeft="5dp"
-        android:textSize="20sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/image_display"
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:background="@drawable/default_image"/>
 
 
 
-</RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/relative_layout_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_below="@id/image_display">
+
+            <LinearLayout
+                android:id="@+id/linear_layout_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+                <TextView
+                    android:id="@+id/textview_ad_name"
+                    android:paddingLeft="5dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="35sp"
+                    android:layout_weight="1"
+                    android:text="Name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/textview_ad_category"
+                    android:layout_below="@+id/textview_ad_condition"
+                    android:text="category"
+                    android:layout_weight="2"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/textview_Text"
+                android:text="Product Detail"
+                android:textColor="@color/black"
+                android:layout_below="@+id/linear_layout_1"
+                android:paddingTop="10dp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:id="@+id/linear_layout_2"
+                android:layout_below="@id/textview_Text"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Type"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:textSize="20sp"
+                    android:textAllCaps="true"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/textview_ad_type"
+                    android:text="type"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_layout_3"
+                android:layout_below="@id/linear_layout_2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Condition"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:textSize="20sp"
+                    android:textAllCaps="true"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/textview_ad_condition"
+                    android:text="condition"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="5dp"
+                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
+
+
+
+
+            <TextView
+                android:id="@+id/textview_Description"
+                android:text="Description"
+                android:textColor="@color/black"
+                android:layout_below="@+id/linear_layout_3"
+                android:paddingTop="10dp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+
+            <TextView
+                android:id="@+id/textview_ad_desc"
+                android:layout_below="@+id/textview_Description"
+                android:text="Description"
+                android:paddingLeft="5dp"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+            <TextView
+                android:id="@+id/textview_Possibilities"
+                android:text="Possibilities"
+                android:textColor="@color/black"
+                android:layout_below="@+id/textview_ad_desc"
+                android:paddingTop="10dp"
+                android:paddingLeft="5dp"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+
+            <TextView
+                android:id="@+id/textview_ad_exchange"
+                android:layout_below="@+id/textview_Possibilities"
+                android:text="Possible exchange with"
+                android:paddingLeft="5dp"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/textview_ad_estimated"
+                android:layout_below="@+id/textview_ad_exchange"
+                android:text="estimated price"
+                android:paddingTop="10dp"
+                android:paddingLeft="5dp"
+                android:textSize="20sp"
+                android:layout_weight="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+
+
+
+
+        </RelativeLayout>
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+</ScrollView>
