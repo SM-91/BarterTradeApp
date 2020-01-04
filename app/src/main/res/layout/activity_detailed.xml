@@ -14,12 +14,27 @@
         android:layout_height="match_parent"
         tools:context=".DetailedActivity">
 
-        <ImageView
-            android:id="@+id/image_display"
-            android:layout_centerHorizontal="true"
+        <LinearLayout
+            android:id="@+id/linear_layout_image"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:background="@drawable/default_image"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/image_display"
+                android:layout_centerHorizontal="true"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:visibility="gone"
+                android:background="@drawable/default_image"/>
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/view_pager_image"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:visibility="gone"
+                android:background="@drawable/default_image"/>
+
+        </LinearLayout>
 
 
 
@@ -30,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_below="@id/image_display">
+            android:layout_below="@id/linear_layout_image">
 
             <LinearLayout
                 android:id="@+id/linear_layout_1"

@@ -19,7 +19,7 @@ public class ViewPageAdapter extends PagerAdapter {
     private Context context;
     private ArrayList<Uri> imageUrls;
 
-    ViewPageAdapter(Context context, ArrayList<Uri> imageUrls) {
+    public ViewPageAdapter(Context context, ArrayList<Uri> imageUrls) {
         this.context = context;
         this.imageUrls = imageUrls;
     }
