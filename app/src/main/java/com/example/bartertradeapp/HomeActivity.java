@@ -11,6 +11,7 @@ import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.JavaClasses.ChatFragment;
 import com.example.bartertradeapp.JavaClasses.HomeFragment;
 import com.example.bartertradeapp.JavaClasses.ProfileFragment;
+import com.example.bartertradeapp.JavaClasses.UserAdsFragment;
 import com.example.bartertradeapp.JavaClasses.UserUploadFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -149,7 +150,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.nav_myAds:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserAdsFragment()).addToBackStack(null).commit();
                 break;
 
             case R.id.nav_signOut:
@@ -157,6 +158,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 firebaseAuth.signOut();
                 //commit by talal
                 break;
+
+               /* case R.id.nav_signOut:
+                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();
+                firebaseAuth.signOut();
+                break;*/
 
 
         }
