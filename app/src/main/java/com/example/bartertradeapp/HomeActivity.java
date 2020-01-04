@@ -70,7 +70,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         userModel = new UserModel();
 
 
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -148,6 +147,17 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_add_new_product:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();
                 break;
+
+            case R.id.nav_myAds:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();
+                break;
+
+            case R.id.nav_signOut:
+                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();
+                firebaseAuth.signOut();
+                break;
+
+
         }
 
         mDrawer.closeDrawer(GravityCompat.START);

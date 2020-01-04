@@ -25,6 +25,11 @@
         android:icon="@drawable/ic_chat"
         android:title="Chat" />
 
+        <item
+        android:id="@+id/nav_myAds"
+        android:icon="@drawable/ic_chat"
+        android:title="My Ads" />
+
     </group>
 
     <item android:title="View">
@@ -35,5 +40,15 @@
                 android:title="Maps" />
         </menu>
     </item>
+
+    <item android:title="Account Settings">
+        <menu>
+            <item
+                android:id="@+id/nav_signOut"
+                android:icon="@drawable/ic_map"
+                android:title="SignOut" />
+        </menu>
+    </item>
+
 
 </menu>
