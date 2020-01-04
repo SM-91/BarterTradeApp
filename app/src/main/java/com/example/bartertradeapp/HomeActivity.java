@@ -158,6 +158,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 firebaseAuth.signOut();
                 break;
 
+               /* case R.id.nav_signOut:
+                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();
+                firebaseAuth.signOut();
+                break;*/
+
 
         }
 
