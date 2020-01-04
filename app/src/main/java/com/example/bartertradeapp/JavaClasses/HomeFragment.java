@@ -172,5 +172,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         intent.putExtra("image", pimg);
         startActivity(intent);
         //Toast.makeText(getContext(), "as"+image, Toast.LENGTH_SHORT).show();
+
+        // ye 9.37pm pr likha hy
     }
 }
