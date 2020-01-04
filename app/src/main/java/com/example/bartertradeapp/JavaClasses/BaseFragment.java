@@ -30,6 +30,7 @@ public class BaseFragment extends Fragment {
     // Strings
     String pname,pdesc,pest,pexch,pcategory,ptype,pcondition,pimg;
 
+
     ProgressDialog progressDialog;
 
     /*Model Class*/

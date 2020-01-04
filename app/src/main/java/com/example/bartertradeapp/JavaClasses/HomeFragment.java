@@ -153,15 +153,22 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         ptype = userUploadProductModel.getProductType();
         pcategory = userUploadProductModel.getProductCategoryList();
         pcondition = userUploadProductModel.getProductCondition();
+
+
         pimg = userUploadProductModel.getmImageUri();
 
         intent.putExtra("name", pname);
         intent.putExtra("desc", pdesc);
+
         intent.putExtra("exchange", pexch);
         intent.putExtra("est", pest);
         intent.putExtra("type", ptype);
         intent.putExtra("category", pcategory);
         intent.putExtra("condition", pcondition);
+
+        intent.putExtra("exch", pexch);
+        intent.putExtra("worth", pest);
+
         intent.putExtra("image", pimg);
         startActivity(intent);
         //Toast.makeText(getContext(), "as"+image, Toast.LENGTH_SHORT).show();
