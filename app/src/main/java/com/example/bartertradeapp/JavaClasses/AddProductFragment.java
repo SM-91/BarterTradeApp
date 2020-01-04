@@ -332,7 +332,7 @@ public class AddProductFragment extends BaseFragment {
                             String url = String.valueOf(uri);
                             Log.i("image Url",url);
                             userUploadProductModel.setmImageUri(url);
-                            storeLink();
+                            //storeLink();
                         }
                     });
                 }

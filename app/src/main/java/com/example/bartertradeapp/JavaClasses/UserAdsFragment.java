@@ -108,7 +108,7 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         pname = userUploadProductModel.getProductName();
         pdesc = userUploadProductModel.getProductDescription();
         pexch = userUploadProductModel.getPossibleExchangeWith();
-        pworth = userUploadProductModel.getProductEstimatedMarketValue();
+        pest = userUploadProductModel.getProductEstimatedMarketValue();
         pimg = userUploadProductModel.getmImageUri();
 
         UpdateProductFragment updateProductFragment = new UpdateProductFragment();
@@ -119,7 +119,7 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         bundle.putString("name", pname);
         bundle.putString("desc", pdesc);
         bundle.putString("exch", pexch);
-        bundle.putString("worth", pworth);
+        bundle.putString("worth", pest);
         bundle.putString("image", pimg);
         updateProductFragment.setArguments(bundle);
 

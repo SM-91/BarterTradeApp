@@ -88,13 +88,13 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         pname = userUploadProductModel.getProductName();
         pdesc = userUploadProductModel.getProductDescription();
         pexch = userUploadProductModel.getPossibleExchangeWith();
-        pworth = userUploadProductModel.getProductEstimatedMarketValue();
+        pest = userUploadProductModel.getProductEstimatedMarketValue();
         pimg = userUploadProductModel.getmImageUri();
 
         intent.putExtra("name", pname);
         intent.putExtra("desc", pdesc);
         intent.putExtra("exch", pexch);
-        intent.putExtra("worth", pworth);
+        intent.putExtra("worth", pest);
         intent.putExtra("image", pimg);
         startActivity(intent);
         //Toast.makeText(getContext(), "as"+image, Toast.LENGTH_SHORT).show();

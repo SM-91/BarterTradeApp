@@ -28,7 +28,7 @@ public class BaseFragment extends Fragment {
     FirebaseAuth uploadAuth;
 
     // Strings
-    String pname,pdesc,pworth,pexch,pimg;
+    String pname,pdesc,pest,pexch,pimg;
 
     ProgressDialog progressDialog;
 
