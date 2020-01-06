@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.bartertradeapp.JavaClasses.ViewPageAdapter;
@@ -14,7 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class DetailedActivity extends AppCompatActivity {
+public class DetailedActivity extends BaseActivity {
 
     TextView textView_name;
     TextView textView_desc;
@@ -93,6 +92,8 @@ public class DetailedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
-
+        changeStatusBarColor();
     }
+
+
 }
