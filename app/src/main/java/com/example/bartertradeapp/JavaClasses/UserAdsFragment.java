@@ -105,22 +105,32 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         startActivity(intent);*/
 
         userUploadProductModel = adapter.getItem(position);
+        String id = userUploadProductModel.getAdId();
         pname = userUploadProductModel.getProductName();
         pdesc = userUploadProductModel.getProductDescription();
         pexch = userUploadProductModel.getPossibleExchangeWith();
         pest = userUploadProductModel.getProductEstimatedMarketValue();
+        ptype = userUploadProductModel.getProductType();
+        pcategory = userUploadProductModel.getProductCategoryList();
+        pcondition = userUploadProductModel.getProductCondition();
         pimg = userUploadProductModel.getmImageUri();
+        ArrayList<String> multipleImagesList = userUploadProductModel.getmArrList();
 
         UpdateProductFragment updateProductFragment = new UpdateProductFragment();
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         Bundle bundle = new Bundle();
+        bundle.putString("AD_ID",id);
         bundle.putString("name", pname);
         bundle.putString("desc", pdesc);
         bundle.putString("exch", pexch);
         bundle.putString("worth", pest);
         bundle.putString("image", pimg);
+        bundle.putString("type", ptype);
+        bundle.putString("category", pcategory);
+        bundle.putString("condition", pcondition);
+        bundle.putStringArrayList("multipleImagesList", multipleImagesList);
         updateProductFragment.setArguments(bundle);
 
         fragmentTransaction.replace(R.id.fragment_container,updateProductFragment);

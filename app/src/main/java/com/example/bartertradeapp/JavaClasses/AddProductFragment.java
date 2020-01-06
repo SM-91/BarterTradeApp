@@ -28,6 +28,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -55,6 +57,8 @@ public class AddProductFragment extends BaseFragment {
 
     private static EditText et_name, et_description, et_possible_exchange_with;
     private static CurrencyEditText et_estimated_market_value;
+
+
 
     private Button btn_imageChange, btn_submit;
 
@@ -376,11 +380,12 @@ public class AddProductFragment extends BaseFragment {
     private void storeLink(){
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference(uploadAuth.getUid()).child("UserUploadProducts");
-        String key = databaseReference.push().getKey();
-        userUploadProductModel.setAdId(key);
+
+        String AdId = databaseReference.push().getKey();
+        userUploadProductModel.setAdId(AdId);
 
         initEdittext();
-        databaseReference.push().setValue(userUploadProductModel);
+        databaseReference.setValue(userUploadProductModel);
 
     }
 

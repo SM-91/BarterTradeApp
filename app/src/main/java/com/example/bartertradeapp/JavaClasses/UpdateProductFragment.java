@@ -27,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
@@ -45,7 +44,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 import me.abhinay.input.CurrencyEditText;
 
@@ -66,34 +64,106 @@ public class UpdateProductFragment extends BaseFragment {
 
     private ImageView imageView;
 
-    private ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
+    private ArrayList<Uri> mArrayUri = new ArrayList<>();
     final ArrayList<String> arrayList = new ArrayList<>();
+
+    private ArrayList<String> listImages = new ArrayList<>();
     private Uri mImageUri;
 
     ViewPager viewPager;
     ViewPageAdapter adapter = null;
+    ViewPageAdapter updateImagesAdapter = null;
 
 
     ProgressDialog progressDialog;
 
     private static final int MULTIPLE_IMAGE_REQUEST = 2;
     int uploadCount = 0;
+
+    ArrayAdapter<String> categoriesAdapter;
     private String[] categories = {"Clothes", "Shoes", "Household", "Electronics", "Console Games"};
+
+    private String id;
 
     public UpdateProductFragment() {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        updateImagesAdapter = new ViewPageAdapter(getContext(), mArrayUri);
+        viewPager.getOffscreenPageLimit();
+        viewPager.setAdapter(updateImagesAdapter);
+
+        Bundle bundle = getArguments();
+        id = getArguments().getString("AD_ID");
+        String productName = getArguments().getString("name");
+        String productDescription = getArguments().getString("desc");
+        String productPossibleExchangeWith = getArguments().getString("exch");
+        String productEstimatedMarketPrice = getArguments().getString("worth");
+        String productType = getArguments().getString("type");
+        String productCondition = getArguments().getString("condition");
+        String productCategory = getArguments().getString("category");
+        String productSingleImage = getArguments().getString("image");
+        listImages = getArguments().getStringArrayList("multipleImagesList");
+
+        if (bundle != null) {
+
+            if (productSingleImage != null) {
+
+                Picasso.get().load(productSingleImage)
+                        .fit()
+                        .centerCrop()
+                        .into(imageView);
+
+            } else if (!listImages.isEmpty()) {
+                viewPager.setVisibility(View.VISIBLE);
+                mArrayUri.clear();
+                for (int i = 0; i < listImages.size(); i++) {
+                    Uri tem_uri = Uri.parse(listImages.get(i));
+                    mArrayUri.add(tem_uri);
+                }
+                updateImagesAdapter.notifyDataSetChanged();
+            }
+
+
+            et_name.setText(productName);
+            et_description.setText(productDescription);
+            et_possible_exchange_with.setText(productPossibleExchangeWith);
+            et_estimated_market_value.setText(productEstimatedMarketPrice);
+
+            if (radioNew.isChecked()) {
+                radioNew.setChecked(true);
+            } else {
+                radioUsed.setChecked(true);
+            }
+
+            if (radioGood.isChecked()) {
+                radioGood.setChecked(true);
+            } else {
+                radioNormal.setChecked(true);
+            }
+
+            if (productCategory != null) {
+                int spinnerPosition = categoriesAdapter.getPosition(productCategory);
+                productCategories.setSelection(spinnerPosition);
+            }
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_new_product,container,false);
+        View view = inflater.inflate(R.layout.fragment_update_product, container, false);
 
         userUploadProductModel = new UserUploadProductModel();
 
         uploadAuth = FirebaseAuth.getInstance();
-        if (uploadAuth.getCurrentUser() == null){
-            startActivity(new Intent(getContext() , LogInActivity.class));
+        if (uploadAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getContext(), LogInActivity.class));
         }
 
         /*Layout Components Casting*/
@@ -109,8 +179,6 @@ public class UpdateProductFragment extends BaseFragment {
         et_estimated_market_value.setDecimals(true);
         //Make sure that Decimals is set as false if a custom Separator is used
         et_estimated_market_value.setSeparator(".");
-
-
 
         /*ViewPager*/
         viewPager = view.findViewById(R.id.viewPagerProduct);
@@ -154,7 +222,7 @@ public class UpdateProductFragment extends BaseFragment {
         /*Spinner*/
         productCategories = view.findViewById(R.id.spinnerProductCategory);
         /*Spinner Listener*/
-        ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<String>(
+        categoriesAdapter = new ArrayAdapter<String>(
                 getContext(), android.R.layout.simple_spinner_dropdown_item, categories);
         productCategories.setAdapter(categoriesAdapter);
 
@@ -217,11 +285,6 @@ public class UpdateProductFragment extends BaseFragment {
         startActivityForResult(Intent.createChooser(intent, "Select Images"), MULTIPLE_IMAGE_REQUEST);
     }
 
-    /*Function for Converting Dp to Pixel*/
-    public int convertDpToPixelInt(float dp, Context context) {
-        return (int) (dp * (((float) context.getResources().getDisplayMetrics().densityDpi) / 160.0f));
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
@@ -229,7 +292,7 @@ public class UpdateProductFragment extends BaseFragment {
         if (requestCode == MULTIPLE_IMAGE_REQUEST) {
             if (data.getClipData() != null) {
                 mArrayUri.clear();
-                imageView.setImageBitmap(null);
+                //imageView.setImageBitmap(null);
                 int count = data.getClipData().getItemCount();
                 Log.i("count", String.valueOf(count));
                 int currentItem = 0;
@@ -251,12 +314,12 @@ public class UpdateProductFragment extends BaseFragment {
 
                     }
                 });*/
-            } else if(data.getData() != null){
+            } else if (data.getData() != null) {
                 mImageUri = data.getData();
                 Bitmap new_bitmap = null;
                 try {
 
-                    new_bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),mImageUri);
+                    new_bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), mImageUri);
                     imageView.setImageBitmap(new_bitmap);
                     Picasso.get()
                             .load(mImageUri)
@@ -275,7 +338,7 @@ public class UpdateProductFragment extends BaseFragment {
     }
 
     /*Posting Functions*/
-    private void postingData(){
+    private void postingData() {
 
        /* progressDialog.setTitle("Uploading...");
         progressDialog.show();*/
@@ -284,16 +347,16 @@ public class UpdateProductFragment extends BaseFragment {
 
         Log.i("Checking Storage", String.valueOf(ImageFolder));
 
-        if (!mArrayUri.isEmpty()){
+        if (!mArrayUri.isEmpty()) {
 
             arrayList.clear();
 
-            for (uploadCount = 0; uploadCount < mArrayUri.size(); uploadCount++){
-                final Uri individualImage =  mArrayUri.get(uploadCount);
+            for (uploadCount = 0; uploadCount < mArrayUri.size(); uploadCount++) {
+                final Uri individualImage = mArrayUri.get(uploadCount);
                 //String imageUrl = String.valueOf(individualImage);
 
                 Log.i("Individual Image Uri:", String.valueOf(individualImage));
-                final StorageReference imageName = ImageFolder.child("Image"+ individualImage.getLastPathSegment());
+                final StorageReference imageName = ImageFolder.child("Image" + individualImage.getLastPathSegment());
 
                 imageName.putFile(individualImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -317,13 +380,12 @@ public class UpdateProductFragment extends BaseFragment {
                     @Override
                     public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
                         double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                        Log.i("Progress","checking progress" + progress);
+                        Log.i("Progress", "checking progress" + progress);
                         //progressDialog.setMessage("Uploaded" + (int) progress + "%");
                     }
                 });
             }
-        }
-        else if(mImageUri != null){
+        } else if (mImageUri != null) {
 
             final StorageReference singleImageName = ImageFolder.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
 
@@ -335,7 +397,7 @@ public class UpdateProductFragment extends BaseFragment {
                         public void onSuccess(Uri uri) {
 
                             String url = String.valueOf(uri);
-                            Log.i("image Url",url);
+                            Log.i("image Url", url);
                             userUploadProductModel.setmImageUri(url);
                             storeLink();
                         }
@@ -351,13 +413,12 @@ public class UpdateProductFragment extends BaseFragment {
                 @Override
                 public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
                     double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                    Log.i("Progress","checking progress" + progress);
+                    Log.i("Progress", "checking progress" + progress);
                     progressDialog.setMessage("Uploaded" + (int) progress + "%");
                 }
             });
-        }
-        else{
-            Toast.makeText(getContext().getApplicationContext(),"No image selected",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext().getApplicationContext(), "No image selected", Toast.LENGTH_SHORT).show();
         }
 
         userUploadProductModel.setmArrList(arrayList);
@@ -376,39 +437,17 @@ public class UpdateProductFragment extends BaseFragment {
     }
 
     /*Sending Data to DB*/
-    private void storeLink(){
+    private void storeLink() {
+        //String Id = userUploadProductModel.getAdId();
+
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference(uploadAuth.getUid()).child("UserUploadProducts");
-        String key = databaseReference.push().getKey();
-        userUploadProductModel.setAdId(key);
+        updateDatabaseReference = firebaseDatabase.getReference(uploadAuth.getUid()).child("UserUploadProducts");
 
         initEdittext();
-        databaseReference.push().setValue(userUploadProductModel);
+        updateDatabaseReference.setValue(userUploadProductModel);
+
 
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        Bundle bundle = getArguments();
-        String productName = getArguments().getString("name");
-        String productDescription = getArguments().getString("desc");
-        String productPossibleExchangeWith = getArguments().getString("exch");
-        String productEstimatedMarketPrice = getArguments().getString("worth");
-        String productSingleImage = getArguments().getString("image");
-        if (bundle!= null) {
-            //Toast.makeText(this, ""+image, Toast.LENGTH_SHORT).show();
-            Picasso.get().load(productSingleImage)
-                    .fit()
-                    .centerCrop()
-                    .into(imageView);
-            et_name.setText(productName);
-            et_description.setText(productDescription);
-            et_possible_exchange_with.setText(productPossibleExchangeWith);
-            et_estimated_market_value.setText(productEstimatedMarketPrice);
-            //final UserUploadProductModel userUploadProductModel = new UserUploadProductModel();
-        }
-    }
 
 }
