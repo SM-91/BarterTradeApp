@@ -48,11 +48,8 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
                 Toast.makeText(v.getContext(), ""+holder.title.getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
-        holder.desc.setText(list.getProductDescription());
-        holder.condition.setText("Condition: "+list.getProductCondition());
-        holder.worth.setText(list.getProductEstimatedMarketValue());
-        holder.type.setText(":" +list.getProductCategoryList());
-        holder.exchange.setText("Exchange with: " +list.getPossibleExchangeWith());
+        holder.type.setText("Type: "+list.getProductType());
+        holder.estimation.setText("Estimated price: "+list.getProductEstimatedMarketValue());
         if(list.getmImageUri() !=null) {
             Picasso.get().load(list.getmImageUri())
                     .fit()
@@ -80,11 +77,8 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title;
-        TextView desc;
-        TextView condition;
-        TextView worth;
         TextView type;
-        TextView exchange;
+        TextView estimation;
         ImageView image;
         ArrayList<String> imagelist;
         Uri uri;
@@ -92,11 +86,8 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
         ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.ad_title);
-            desc = itemView.findViewById(R.id.ad_desc);
-            condition = itemView.findViewById(R.id.ad_condition);
-            worth = itemView.findViewById(R.id.ad_worth);
             type = itemView.findViewById(R.id.ad_type);
-            exchange = itemView.findViewById(R.id.ad_exchange);
+            estimation = itemView.findViewById(R.id.ad_estimation);
             image = itemView.findViewById(R.id.ad_image);
             itemView.setOnClickListener(this);
         }

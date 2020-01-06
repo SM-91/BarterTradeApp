@@ -6,11 +6,11 @@
         android:id="@+id/nearest"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:text="Nearest Uploads"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="Nearest Ads"
         android:textColor="@color/black"
-        android:textSize="35sp">
+        android:textSize="30sp">
 
     </TextView>
     <androidx.recyclerview.widget.RecyclerView
@@ -24,11 +24,11 @@
         android:layout_below="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:text="Recommended For You"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="Recommended Ads"
         android:textColor="@color/black"
-        android:textSize="35sp">
+        android:textSize="30sp">
 
     </TextView>
 

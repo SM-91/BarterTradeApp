@@ -100,6 +100,7 @@ public class UpdateProductFragment extends BaseFragment {
 
         Bundle bundle = getArguments();
         id = getArguments().getString("AD_ID");
+        Toast.makeText(getContext(), ""+id, Toast.LENGTH_SHORT).show();
         String productName = getArguments().getString("name");
         String productDescription = getArguments().getString("desc");
         String productPossibleExchangeWith = getArguments().getString("exch");
@@ -441,9 +442,10 @@ public class UpdateProductFragment extends BaseFragment {
         //String Id = userUploadProductModel.getAdId();
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        updateDatabaseReference = firebaseDatabase.getReference(uploadAuth.getUid()).child("UserUploadProducts");
-
+        updateDatabaseReference = firebaseDatabase.getReference(uploadAuth.getUid()).child("UserUploadProducts").child(id);
+        userUploadProductModel.setAdId(id);
         initEdittext();
+
         updateDatabaseReference.setValue(userUploadProductModel);
 
 
