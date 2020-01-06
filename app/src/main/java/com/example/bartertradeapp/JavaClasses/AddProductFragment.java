@@ -385,7 +385,7 @@ public class AddProductFragment extends BaseFragment {
         userUploadProductModel.setAdId(AdId);
 
         initEdittext();
-        databaseReference.setValue(userUploadProductModel);
+        databaseReference.push().setValue(userUploadProductModel);
 
     }
 
