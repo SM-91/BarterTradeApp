@@ -11,6 +11,7 @@ import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.JavaClasses.ChatFragment;
 import com.example.bartertradeapp.JavaClasses.HomeFragment;
 import com.example.bartertradeapp.JavaClasses.HomeFragmentExtend;
+import com.example.bartertradeapp.JavaClasses.MapFragment;
 import com.example.bartertradeapp.JavaClasses.ProfileFragment;
 import com.example.bartertradeapp.JavaClasses.UserAdsFragment;
 import com.example.bartertradeapp.JavaClasses.UserUploadFragment;
@@ -172,6 +173,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.nav_myAds:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserAdsFragment()).addToBackStack(null).commit();
+                break;
+
+            case R.id.nav_maps:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment()).addToBackStack(null).commit();
                 break;
 
             case R.id.nav_signOut:

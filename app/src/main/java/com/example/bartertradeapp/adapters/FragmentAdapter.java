@@ -13,7 +13,7 @@ public class FragmentAdapter extends FragmentPagerAdapter {
 
     Context context;
 
-    public FragmentAdapter(FragmentManager fm,Context context){
+    public FragmentAdapter(FragmentManager fm, Context context){
         super(fm);
         this.context = context;
 
