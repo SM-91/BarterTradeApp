@@ -1,5 +1,6 @@
 package com.example.bartertradeapp;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -178,6 +179,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_maps:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment()).addToBackStack(null).commit();
                 break;
+
 
             case R.id.nav_signOut:
                 //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();

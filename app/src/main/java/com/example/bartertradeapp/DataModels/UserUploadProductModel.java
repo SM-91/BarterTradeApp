@@ -13,6 +13,8 @@ public class UserUploadProductModel {
     private String productEstimatedMarketValue;
     private String possibleExchangeWith;
     private String productCategoryList;
+    private double latitude;
+    private double longitude;
 
     private ArrayList<String> mArrList;
     private String mImageUri;
@@ -89,6 +91,22 @@ public class UserUploadProductModel {
 
     public void setProductCategoryList(String productCategoryList) {
         this.productCategoryList = productCategoryList;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public String getmImageUri() {
