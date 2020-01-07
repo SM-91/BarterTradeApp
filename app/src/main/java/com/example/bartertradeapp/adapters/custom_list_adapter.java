@@ -53,8 +53,6 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
 
         holder.type.setText("Type: " + list.getProductType());
         holder.estimation.setText("Estimated price: " + list.getProductEstimatedMarketValue());
-        if (list.getmImageUri() != null) {
-
 
             if (list.getmImageUri() != null) {
 
@@ -74,7 +72,6 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
             }
 
         }
-    }
 
     // total number of rows
     @Override
