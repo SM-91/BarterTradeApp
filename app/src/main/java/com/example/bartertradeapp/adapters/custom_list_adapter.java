@@ -24,6 +24,8 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
+    private ArrayList<String> imageList = null;
+
     // data is passed into the constructor
     public custom_list_adapter(Context context, List<UserUploadProductModel> userlist) {
         this.mInflater = LayoutInflater.from(context);
@@ -45,27 +47,34 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), ""+holder.title.getText().toString(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), "" + holder.title.getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
-        holder.type.setText("Type: "+list.getProductType());
-        holder.estimation.setText("Estimated price: "+list.getProductEstimatedMarketValue());
-        if(list.getmImageUri() !=null) {
-            Picasso.get().load(list.getmImageUri())
-                    .fit()
-                    .centerCrop()
-                    .into(holder.image);
-        }
-        else if (!list.getmArrList().isEmpty()){
-            ArrayList<String> imagelist = list.getmArrList();
-            Uri uri = Uri.parse(imagelist.get(0));
-            Picasso.get().load(uri)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.image);
-        }
 
-}
+        holder.type.setText("Type: " + list.getProductType());
+        holder.estimation.setText("Estimated price: " + list.getProductEstimatedMarketValue());
+        if (list.getmImageUri() != null) {
+
+
+            if (list.getmImageUri() != null) {
+
+                Picasso.get().load(list.getmImageUri())
+                        .fit()
+                        .centerCrop()
+                        .into(holder.image);
+
+            } else {
+
+                imageList = list.getmArrList();
+                Uri uri = Uri.parse(imageList.get(0));
+                Picasso.get().load(uri)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.image);
+            }
+
+        }
+    }
 
     // total number of rows
     @Override

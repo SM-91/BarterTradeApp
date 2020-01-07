@@ -46,6 +46,7 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
         View view = inflater.inflate(R.layout.fragment_home_fragment_extend,container,false);
 
 
+        uploadAuth = FirebaseAuth.getInstance();
         userlist = new ArrayList<>();
         // hardcode adding items to list for testing reasons
         //userlist.add(new UserUploadProductModel("Shayan","pagaal hy shayan","good","asdasdsadasdadasd"));
@@ -60,8 +61,11 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
         adapter.setClickListener(this);
 
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        //databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
+                .child(uploadAuth.getUid());
+
+        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

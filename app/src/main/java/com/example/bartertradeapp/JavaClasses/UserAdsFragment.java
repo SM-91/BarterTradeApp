@@ -47,10 +47,13 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_user_ads, container, false);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
+        uploadAuth = FirebaseAuth.getInstance();
+
+        //databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
+                .child(uploadAuth.getCurrentUser().getUid());
         userUploadProductModels = new ArrayList<>();
         // hardcode adding items to list for testing reasons
         //userlist.add(new UserUploadProductModel("Shayan","pagaal hy shayan","good","asdasdsadasdadasd"));
@@ -60,15 +63,15 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // initializing adapter
-        adapter = new custom_list_adapter (getContext(), userUploadProductModels);
+        adapter = new custom_list_adapter(getContext(), userUploadProductModels);
         adapter.setClickListener(this);
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 userUploadProductModels.clear();
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     UserUploadProductModel users = usersSnapshot.getValue(UserUploadProductModel.class);
                     userUploadProductModels.add(users);
                 }
@@ -82,7 +85,6 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
 
             }
         });
-
         return view;
     }
 
@@ -106,6 +108,7 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
 
         userUploadProductModel = adapter.getItem(position);
         String id = userUploadProductModel.getAdId();
+        String myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
         pname = userUploadProductModel.getProductName();
         pdesc = userUploadProductModel.getProductDescription();
         pexch = userUploadProductModel.getPossibleExchangeWith();
@@ -121,7 +124,8 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         Bundle bundle = new Bundle();
-        bundle.putString("AD_ID",id);
+        bundle.putString("AD_ID", id);
+        bundle.putString("Key", myCurrentDateTime);
         bundle.putString("name", pname);
         bundle.putString("desc", pdesc);
         bundle.putString("exch", pexch);
@@ -133,7 +137,7 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         bundle.putStringArrayList("multipleImagesList", multipleImagesList);
         updateProductFragment.setArguments(bundle);
 
-        fragmentTransaction.replace(R.id.fragment_container,updateProductFragment);
+        fragmentTransaction.replace(R.id.fragment_container, updateProductFragment);
         fragmentTransaction.commit();
 
     }

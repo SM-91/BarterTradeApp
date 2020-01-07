@@ -140,15 +140,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:layout_marginBottom="70dp"
         android:gravity="bottom">
 
         <Button
             android:id="@+id/submitProfileData"
-            android:layout_width="match_parent"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
-            android:text="Submit"
-            android:textColor="@color/colorPrimary"
+            android:background="@color/colorPrimary"
+            android:layout_centerInParent="true"
+            android:text="Create Profile"
+            android:textColor="#FFFFFF"
             android:textSize="20sp"
             />
 

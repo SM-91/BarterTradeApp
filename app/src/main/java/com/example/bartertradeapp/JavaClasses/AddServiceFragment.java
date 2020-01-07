@@ -28,6 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import me.abhinay.input.CurrencyEditText;
@@ -42,13 +44,6 @@ public class AddServiceFragment extends BaseFragment {
 
     private String[] serviceCategories = {"Tutoring", "Designing" ,"Electrical work", "Mechanical work", "Wood work", "Cleaning"};
 
-    /*Firebase*/
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference refServiceImage = firebaseDatabase.getReference().child(firebaseAuth.getUid()).child("Profile");
-    private DatabaseReference refServicePosting = firebaseDatabase.getReference().child(firebaseAuth.getUid()).child("UserUploadService");
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,10 +51,16 @@ public class AddServiceFragment extends BaseFragment {
 
         userUploadServiceModel = new UserUploadServiceModel();
         userModel = new UserModel();
+        uploadAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        //refServiceImage = firebaseDatabase.getReference().child(firebaseAuth.getUid()).child("Profile");
+        databaseReference = firebaseDatabase.getReference("Users").child("UserUploadProducts")
+                .child(uploadAuth.getUid());
+        //refServicePosting = firebaseDatabase.getReference().child(firebaseAuth.getUid()).child("UserUploadService");
 
 
         serviceImageView = view.findViewById(R.id.serviceGivenBy);
-        refServiceImage.addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -134,11 +135,18 @@ public class AddServiceFragment extends BaseFragment {
 
     private void storeLink(){
 
-        String key = refServicePosting.push().getKey();
-        userUploadServiceModel.setUid(key);
+        String myCurrentDateTime = DateFormat.getDateTimeInstance()
+                .format(Calendar.getInstance().getTime());
 
+        String key = databaseReference.push().getKey();
+        userUploadServiceModel.setUid(key);
         initEditText();
-        refServicePosting.push().setValue(userUploadServiceModel);
+        databaseReference = firebaseDatabase.getReference("Users").child("UserUploadService")
+                .child(uploadAuth.getUid()).child(myCurrentDateTime);
+        databaseReference.setValue(userUploadProductModel);
+
+
+        //refServicePosting.push().setValue(userUploadServiceModel);
 
         Toast.makeText(getContext().getApplicationContext(), "Uploaded", Toast.LENGTH_SHORT).show();
     }
