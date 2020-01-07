@@ -24,6 +24,8 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
+    private ArrayList<String> imageList = null;
+
     // data is passed into the constructor
     public custom_list_adapter(Context context, List<UserUploadProductModel> userlist) {
         this.mInflater = LayoutInflater.from(context);
@@ -53,15 +55,18 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
         holder.worth.setText(list.getProductEstimatedMarketValue());
         holder.type.setText(":" +list.getProductCategoryList());
         holder.exchange.setText("Exchange with: " +list.getPossibleExchangeWith());
-        if(list.getmImageUri() !=null) {
+
+        if (list.getmImageUri() != null){
             Picasso.get().load(list.getmImageUri())
                     .fit()
                     .centerCrop()
                     .into(holder.image);
+
         }
-        else if (!list.getmArrList().isEmpty()){
-            ArrayList<String> imagelist = list.getmArrList();
-            Uri uri = Uri.parse(imagelist.get(0));
+        else{
+
+            imageList = list.getmArrList();
+            Uri uri = Uri.parse(imageList.get(0));
             Picasso.get().load(uri)
                     .fit()
                     .centerCrop()

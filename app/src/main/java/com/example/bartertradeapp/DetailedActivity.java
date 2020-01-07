@@ -61,11 +61,6 @@ public class DetailedActivity extends AppCompatActivity {
         String mimage = getIntent().getStringExtra("image");
         listimages = getIntent().getStringArrayListExtra("imagelist");
 
-
-
-
-
-
         if (bundle!= null) {
 
             if(mimage != null){

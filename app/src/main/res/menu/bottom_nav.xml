@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/grid"
+        android:title="Grid"
+        android:icon="@drawable/ic_view_grid_black_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/list"
+        android:title="List"
+        android:icon="@drawable/ic_list_black_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/add"
+        android:title="Add New Product"
+        android:icon="@drawable/ic_add_circle_outline_black_24dp"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/map"
+        android:title="Map"
+        android:icon="@drawable/ic_map"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/profile_edit"
+        android:title="Edit Profile"
+        android:icon="@drawable/ic_profile"
+        app:showAsAction="always" />
+
+
+</menu>

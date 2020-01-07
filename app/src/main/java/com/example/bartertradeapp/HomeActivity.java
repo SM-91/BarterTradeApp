@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.bartertradeapp.DataModels.UserModel;
+import com.example.bartertradeapp.JavaClasses.AddProductFragment;
 import com.example.bartertradeapp.JavaClasses.ChatFragment;
 import com.example.bartertradeapp.JavaClasses.HomeFragment;
 import com.example.bartertradeapp.JavaClasses.HomeFragmentExtend;
@@ -16,6 +17,7 @@ import com.example.bartertradeapp.JavaClasses.MapFragment;
 import com.example.bartertradeapp.JavaClasses.ProfileFragment;
 import com.example.bartertradeapp.JavaClasses.UserAdsFragment;
 import com.example.bartertradeapp.JavaClasses.UserUploadFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -54,6 +56,7 @@ import android.widget.TextView;
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawer;
+    //BottomNavigationView nav_bar;
 
     UserModel userModel;
 
@@ -80,29 +83,13 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         mDrawer = findViewById(R.id.drawer_layout);
-        btn_testing = findViewById(R.id.btn_testing);
-        btn_testing2 = findViewById(R.id.btn_testing2);
+        /*btn_testing = findViewById(R.id.btn_testing);
+        btn_testing2 = findViewById(R.id.btn_testing2);*/
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        btn_testing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragmentExtend()).addToBackStack(null).commit();
-
-            }
-        });
-
-        btn_testing2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
-
-            }
-        });
-
-
+        /*Navigation Drawer Header*/
         View header_view = navigationView.getHeaderView(0);
         nav_header_user_name = (TextView) header_view.findViewById(R.id.nav_header_userName);
         nav_header_user_email = (TextView) header_view.findViewById(R.id.nav_header_userEmail);
@@ -126,6 +113,38 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+
+        /*Bottom Navigation Bar*/
+        BottomNavigationView nav_bar = findViewById(R.id.nav_bar);
+        nav_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.grid:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
+                        return true;
+
+                    case R.id.list:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragmentExtend()).addToBackStack(null).commit();
+                        return true;
+
+                    case R.id.add:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddProductFragment()).addToBackStack(null).commit();
+                        return true;
+
+                    case R.id.map:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatFragment()).addToBackStack(null).commit();
+                        return true;
+
+                    case R.id.profile_edit:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
+                        return true;
+                    // ///// ADD more cases for different navigation bar options////////
+                    default:
+                        return false;
+                }
             }
         });
 
@@ -184,14 +203,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_signOut:
                 //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();
                 firebaseAuth.signOut();
-                //commit by shayan and talal
                 break;
-
-               /* case R.id.nav_signOut:
-                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();
-                firebaseAuth.signOut();
-                break;*/
-
 
         }
 

@@ -15,6 +15,7 @@ public class UserUploadProductModel {
     private String productCategoryList;
     private double latitude;
     private double longitude;
+    private String currentDateTime;
 
     private ArrayList<String> mArrList;
     private String mImageUri;
@@ -123,5 +124,13 @@ public class UserUploadProductModel {
 
     public void setmArrList(ArrayList<String> mArrList) {
         this.mArrList = mArrList;
+    }
+
+    public String getCurrentDateTime() {
+        return currentDateTime;
+    }
+
+    public void setCurrentDateTime(String currentDateTime) {
+        this.currentDateTime = currentDateTime;
     }
 }
