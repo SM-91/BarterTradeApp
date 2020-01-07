@@ -9,11 +9,11 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.bartertradeapp.JavaClasses.MapFragment;
 
-public class FragmentAdapter extends FragmentPagerAdapter {
+//public class FragmentAdapter extends FragmentPagerAdapter {
 
-    Context context;
+    //Context context;
 
-    public FragmentAdapter(FragmentManager fm, Context context){
+    /*public FragmentAdapter(FragmentManager fm, Context context){
         super(fm);
         this.context = context;
 
@@ -41,5 +41,5 @@ public class FragmentAdapter extends FragmentPagerAdapter {
         }
 
         return "";
-    }
-}
+    }*/
+//}

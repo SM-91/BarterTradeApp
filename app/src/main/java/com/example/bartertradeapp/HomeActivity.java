@@ -203,6 +203,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment()).addToBackStack(null).commit();
                 break;
 
+
             case R.id.nav_signOut:
                 //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();
                 firebaseAuth.signOut();
