@@ -316,14 +316,19 @@ public class UpdateProductFragment extends BaseFragment {
                 viewPager.setVisibility(View.VISIBLE);
 
                 //mArrayUri.clear();
-                for (int i = 0; i < listImages.size(); i++) {
-                    Uri tem_uri = Uri.parse(listImages.get(i));
-                    mArrayUri.add(tem_uri);
+                try{
+                    for (int i = 0; i < listImages.size(); i++) {
+                        Uri tem_uri = Uri.parse(listImages.get(i));
+                        mArrayUri.add(tem_uri);
+                    }
+                    updateImagesAdapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    // This will catch any exception, because they are all descended from Exception
+                    System.out.println("Error " + e.getMessage());
+                    Toast.makeText(getContext(),"Error in multiple images" + e.getMessage(),Toast.LENGTH_SHORT).show();
                 }
-                updateImagesAdapter.notifyDataSetChanged();
+
             }
-
-
             et_name.setText(productName);
             et_description.setText(productDescription);
             et_possible_exchange_with.setText(productPossibleExchangeWith);
