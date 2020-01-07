@@ -136,7 +136,8 @@ public class ProfileFragment extends BaseFragment {
     private void postingProfileData() {
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference(firebaseAuth.getUid()).child("Profile");
+        databaseReference = firebaseDatabase.getReference("Users").child("Profile")
+                .child(uploadAuth.getCurrentUser().getUid());
 
         progressDialog.setTitle("Uploading...");
         progressDialog.show();

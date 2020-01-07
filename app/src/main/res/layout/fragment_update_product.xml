@@ -13,11 +13,19 @@
             android:layout_height="300dp">
 
             <ImageView
-                android:id="@+id/tempImgView"
+                android:id="@+id/tempImgView1"
                 android:layout_centerInParent="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/ic_photo_camera_black_24dp"
+                />
+
+            <ImageView
+                android:id="@+id/tempImgView2"
+                android:layout_centerInParent="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
                 />
 
             <androidx.viewpager.widget.ViewPager

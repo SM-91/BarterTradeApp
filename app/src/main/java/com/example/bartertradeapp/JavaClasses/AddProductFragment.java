@@ -48,16 +48,21 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import me.abhinay.input.CurrencyEditText;
 
 public class AddProductFragment extends BaseFragment {
 
+ /*   DatabaseReference databaseReference;
+    FirebaseDatabase firebaseDatabase;
+    FirebaseAuth uploadAuth;*/
+
     private static EditText et_name, et_description, et_possible_exchange_with;
     private static CurrencyEditText et_estimated_market_value;
-
 
 
     private Button btn_imageChange, btn_submit;
@@ -72,6 +77,8 @@ public class AddProductFragment extends BaseFragment {
     private ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
     final ArrayList<String> arrayList = new ArrayList<>();
     private Uri mImageUri;
+
+    public String key = " ";
 
     ViewPager viewPager;
     ViewPageAdapter adapter = null;
@@ -92,8 +99,10 @@ public class AddProductFragment extends BaseFragment {
         userUploadProductModel = new UserUploadProductModel();
 
         uploadAuth = FirebaseAuth.getInstance();
-        if (uploadAuth.getCurrentUser() == null){
-            startActivity(new Intent(getContext() , LogInActivity.class));
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
+        if (uploadAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getContext(), LogInActivity.class));
         }
 
         /*Layout Components Casting*/
@@ -174,12 +183,9 @@ public class AddProductFragment extends BaseFragment {
         return view;
     }
 
-    private void initEdittext() {
-        userUploadProductModel.setProductName(et_name.getText().toString().trim());
-        userUploadProductModel.setProductDescription(et_description.getText().toString().trim());
-        userUploadProductModel.setProductEstimatedMarketValue(et_estimated_market_value.getText().toString().trim());
-        userUploadProductModel.setPossibleExchangeWith(et_possible_exchange_with.getText().toString().trim());
-    }
+   /* private void initEdittext() {
+
+    }*/
 
     private void radioProductTypeListener() {
         radioProductTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -250,12 +256,12 @@ public class AddProductFragment extends BaseFragment {
 
                     }
                 });*/
-            } else if(data.getData() != null){
+            } else if (data.getData() != null) {
                 mImageUri = data.getData();
                 Bitmap new_bitmap = null;
                 try {
 
-                    new_bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(),mImageUri);
+                    new_bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), mImageUri);
                     imageView.setImageBitmap(new_bitmap);
                     Picasso.get()
                             .load(mImageUri)
@@ -274,7 +280,7 @@ public class AddProductFragment extends BaseFragment {
     }
 
     /*Posting Functions*/
-    private void postingData(){
+    private void postingData() {
 
        /* progressDialog.setTitle("Uploading...");
         progressDialog.show();*/
@@ -283,16 +289,16 @@ public class AddProductFragment extends BaseFragment {
 
         Log.i("Checking Storage", String.valueOf(ImageFolder));
 
-        if (!mArrayUri.isEmpty()){
+        if (!mArrayUri.isEmpty()) {
 
             arrayList.clear();
 
-            for (uploadCount = 0; uploadCount < mArrayUri.size(); uploadCount++){
-                final Uri individualImage =  mArrayUri.get(uploadCount);
+            for (uploadCount = 0; uploadCount < mArrayUri.size(); uploadCount++) {
+                final Uri individualImage = mArrayUri.get(uploadCount);
                 //String imageUrl = String.valueOf(individualImage);
 
                 Log.i("Individual Image Uri:", String.valueOf(individualImage));
-                final StorageReference imageName = ImageFolder.child("Image"+ individualImage.getLastPathSegment());
+                final StorageReference imageName = ImageFolder.child("Image" + individualImage.getLastPathSegment());
 
                 imageName.putFile(individualImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -316,13 +322,12 @@ public class AddProductFragment extends BaseFragment {
                     @Override
                     public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
                         double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                        Log.i("Progress","checking progress" + progress);
+                        Log.i("Progress", "checking progress" + progress);
                         //progressDialog.setMessage("Uploaded" + (int) progress + "%");
                     }
                 });
             }
-        }
-        else if(mImageUri != null){
+        } else if (mImageUri != null) {
 
             final StorageReference singleImageName = ImageFolder.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
 
@@ -334,7 +339,7 @@ public class AddProductFragment extends BaseFragment {
                         public void onSuccess(Uri uri) {
 
                             String url = String.valueOf(uri);
-                            Log.i("image Url",url);
+                            Log.i("image Url", url);
                             userUploadProductModel.setmImageUri(url);
                             //storeLink();
                         }
@@ -350,13 +355,12 @@ public class AddProductFragment extends BaseFragment {
                 @Override
                 public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
                     double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                    Log.i("Progress","checking progress" + progress);
+                    Log.i("Progress", "checking progress" + progress);
                     progressDialog.setMessage("Uploaded" + (int) progress + "%");
                 }
             });
-        }
-        else{
-            Toast.makeText(getContext().getApplicationContext(),"No image selected",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getContext().getApplicationContext(), "No image selected", Toast.LENGTH_SHORT).show();
         }
 
         userUploadProductModel.setmArrList(arrayList);
@@ -375,18 +379,41 @@ public class AddProductFragment extends BaseFragment {
     }
 
 
-
     /*Sending Data to DB*/
-    private void storeLink(){
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference(uploadAuth.getUid()).child("UserUploadProducts");
+    private void storeLink() {
 
-        String AdId = databaseReference.push().getKey();
-        userUploadProductModel.setAdId(AdId);
+        String myCurrentDateTime = DateFormat.getDateTimeInstance()
+                .format(Calendar.getInstance().getTime());
+        userUploadProductModel.setCurrentDateTime(myCurrentDateTime);
 
-        initEdittext();
+        UpdateProductFragment updateProductFragment = new UpdateProductFragment();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        Bundle createBundle = new Bundle();
+        createBundle.putString("Key", myCurrentDateTime);
+        updateProductFragment.setArguments(createBundle);
+
+        fragmentTransaction.replace(R.id.fragment_container, updateProductFragment).commit();
+
+
+        //String AdId = databaseReference.push().getKey();
+        //userUploadProductModel.setAdId(AdId);
+        userUploadProductModel.setProductName(et_name.getText().toString().trim());
+        userUploadProductModel.setProductDescription(et_description.getText().toString().trim());
+        userUploadProductModel.setProductEstimatedMarketValue(et_estimated_market_value.getText().toString().trim());
+        userUploadProductModel.setPossibleExchangeWith(et_possible_exchange_with.getText().toString().trim());
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
+                .child(uploadAuth.getCurrentUser().getUid()).child(myCurrentDateTime);
         databaseReference.setValue(userUploadProductModel);
 
+
+       /*         getReference(uploadAuth.getUid()).child("");
+
+
+        initEdittext();
+        databaseReference.push().setValue(userUploadProductModel);*/
     }
 
     /*Posting End*/

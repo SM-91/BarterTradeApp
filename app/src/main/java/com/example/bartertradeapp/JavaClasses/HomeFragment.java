@@ -32,20 +32,21 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends BaseFragment implements custom_list_adapter.ItemClickListener{
+public class HomeFragment extends BaseFragment implements custom_list_adapter.ItemClickListener {
 
     private RecyclerView recyclerView, recyclerView2;
     private custom_list_adapter adapter, adapter2;
     LinearLayoutManager layoutManager, layoutManager2;
 
     FirebaseAuth uploadAuth;
-    List<UserUploadProductModel> userlist,userlist2;
+    List<UserUploadProductModel> userlist, userlist2;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home,container,false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-
+        uploadAuth = FirebaseAuth.getInstance();
         userlist = new ArrayList<>();
         userlist2 = new ArrayList<>();
         // hardcode adding items to list for testing reasons
@@ -60,19 +61,27 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         recyclerView.setLayoutManager(layoutManager);
         recyclerView2.setLayoutManager(layoutManager2);
         // initializing adapter
-        adapter = new custom_list_adapter (getContext(), userlist);
+        adapter = new custom_list_adapter(getContext(), userlist);
         adapter.setClickListener(this);
 
-        adapter2 = new custom_list_adapter (getContext(), userlist2);
+        adapter2 = new custom_list_adapter(getContext(), userlist2);
         adapter2.setClickListener(this);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+       /* UserUploadProductModel userGetCurrentDateTime = new UserUploadProductModel();
+        String myCurrentDateTime = userGetCurrentDateTime.getCurrentDateTime();*/
+
+        //databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
+
+        //uploadAuth.getCurrentUser().getUid();
+
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
+                .child(uploadAuth.getUid());
+        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 userlist.clear();
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     UserUploadProductModel users = usersSnapshot.getValue(UserUploadProductModel.class);
                     userlist.add(users);
                 }
@@ -87,13 +96,17 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
             }
         });
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        //databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
+                .child(uploadAuth.getUid());
+
+
+        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 userlist2.clear();
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     UserUploadProductModel users = usersSnapshot.getValue(UserUploadProductModel.class);
                     userlist2.add(users);
                 }
@@ -111,6 +124,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
 
         return view;
     }
+
     @Override
     public void onItemClick(View view, int position) {
 

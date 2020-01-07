@@ -32,8 +32,10 @@ import android.widget.Toast;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.LogInActivity;
 import com.example.bartertradeapp.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -62,12 +64,14 @@ public class UpdateProductFragment extends BaseFragment {
 
     private Spinner productCategories;
 
-    private ImageView imageView;
+    private ImageView imageView, updateImageView;
 
     private ArrayList<Uri> mArrayUri = new ArrayList<>();
     final ArrayList<String> arrayList = new ArrayList<>();
 
     private ArrayList<String> listImages = new ArrayList<>();
+    String productSingleImage;
+
     private Uri mImageUri;
 
     ViewPager viewPager;
@@ -84,75 +88,13 @@ public class UpdateProductFragment extends BaseFragment {
     private String[] categories = {"Clothes", "Shoes", "Household", "Electronics", "Console Games"};
 
     private String id;
+    private String singleImageUrl;
+
 
     public UpdateProductFragment() {
         // Required empty public constructor
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        updateImagesAdapter = new ViewPageAdapter(getContext(), mArrayUri);
-        viewPager.getOffscreenPageLimit();
-        viewPager.setAdapter(updateImagesAdapter);
-
-        Bundle bundle = getArguments();
-        id = getArguments().getString("AD_ID");
-        String productName = getArguments().getString("name");
-        String productDescription = getArguments().getString("desc");
-        String productPossibleExchangeWith = getArguments().getString("exch");
-        String productEstimatedMarketPrice = getArguments().getString("worth");
-        String productType = getArguments().getString("type");
-        String productCondition = getArguments().getString("condition");
-        String productCategory = getArguments().getString("category");
-        String productSingleImage = getArguments().getString("image");
-        listImages = getArguments().getStringArrayList("multipleImagesList");
-
-        if (bundle != null) {
-
-            if (productSingleImage != null) {
-
-                Picasso.get().load(productSingleImage)
-                        .fit()
-                        .centerCrop()
-                        .into(imageView);
-
-            } else if (!listImages.isEmpty()) {
-                viewPager.setVisibility(View.VISIBLE);
-                mArrayUri.clear();
-                for (int i = 0; i < listImages.size(); i++) {
-                    Uri tem_uri = Uri.parse(listImages.get(i));
-                    mArrayUri.add(tem_uri);
-                }
-                updateImagesAdapter.notifyDataSetChanged();
-            }
-
-
-            et_name.setText(productName);
-            et_description.setText(productDescription);
-            et_possible_exchange_with.setText(productPossibleExchangeWith);
-            et_estimated_market_value.setText(productEstimatedMarketPrice);
-
-            if (radioNew.isChecked()) {
-                radioNew.setChecked(true);
-            } else {
-                radioUsed.setChecked(true);
-            }
-
-            if (radioGood.isChecked()) {
-                radioGood.setChecked(true);
-            } else {
-                radioNormal.setChecked(true);
-            }
-
-            if (productCategory != null) {
-                int spinnerPosition = categoriesAdapter.getPosition(productCategory);
-                productCategories.setSelection(spinnerPosition);
-            }
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -162,6 +104,9 @@ public class UpdateProductFragment extends BaseFragment {
         userUploadProductModel = new UserUploadProductModel();
 
         uploadAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
+
         if (uploadAuth.getCurrentUser() == null) {
             startActivity(new Intent(getContext(), LogInActivity.class));
         }
@@ -187,6 +132,7 @@ public class UpdateProductFragment extends BaseFragment {
 
         /*ImageView*/
         imageView = (ImageView) view.findViewById(R.id.tempImgView);
+        updateImageView = view.findViewById(R.id.tempImgView2);
 
         /*RadioGroups*/
         radioProductTypeGroup = view.findViewById(R.id.radioProductTypeGroup);
@@ -243,12 +189,9 @@ public class UpdateProductFragment extends BaseFragment {
         return view;
     }
 
-    private void initEdittext() {
-        userUploadProductModel.setProductName(et_name.getText().toString().trim());
-        userUploadProductModel.setProductDescription(et_description.getText().toString().trim());
-        userUploadProductModel.setProductEstimatedMarketValue(et_estimated_market_value.getText().toString().trim());
-        userUploadProductModel.setPossibleExchangeWith(et_possible_exchange_with.getText().toString().trim());
-    }
+    /*private void initEdittext() {
+
+    }*/
 
     private void radioProductTypeListener() {
         radioProductTypeGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -304,9 +247,8 @@ public class UpdateProductFragment extends BaseFragment {
 
                 }
                 Log.i("listsize", String.valueOf(mArrayUri.size()));
-                imageView.setVisibility(View.GONE);
-                viewPager.setVisibility(View.VISIBLE);
 
+                viewPager.setVisibility(View.VISIBLE);
                 adapter.notifyDataSetChanged();
                 /*mHandler.post(new Runnable() {
                     @Override
@@ -320,20 +262,88 @@ public class UpdateProductFragment extends BaseFragment {
                 try {
 
                     new_bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), mImageUri);
-                    imageView.setImageBitmap(new_bitmap);
+                    updateImageView.setImageBitmap(new_bitmap);
                     Picasso.get()
                             .load(mImageUri)
                             .fit()
                             .centerCrop()
-                            .into(imageView);
+                            .into(updateImageView);
                     viewPager.setVisibility(View.GONE);
-                    imageView.setVisibility(View.VISIBLE);
+                    updateImageView.setVisibility(View.VISIBLE);
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
 
+        }
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        updateImagesAdapter = new ViewPageAdapter(getContext(), mArrayUri);
+        viewPager.getOffscreenPageLimit();
+        viewPager.setAdapter(updateImagesAdapter);
+
+        Bundle bundle = getArguments();
+        //id = getArguments().getString("AD_ID");
+        //Log.i("ad id",id);
+        String productName = getArguments().getString("name");
+        String productDescription = getArguments().getString("desc");
+        String productPossibleExchangeWith = getArguments().getString("exch");
+        String productEstimatedMarketPrice = getArguments().getString("worth");
+        String productType = getArguments().getString("type");
+        String productCondition = getArguments().getString("condition");
+        String productCategory = getArguments().getString("category");
+        productSingleImage = getArguments().getString("image");
+        listImages = getArguments().getStringArrayList("multipleImagesList");
+
+        if (bundle != null) {
+
+            if (productSingleImage != null) {
+
+                updateImageView.setVisibility(View.VISIBLE);
+                Picasso.get().load(productSingleImage)
+                        .fit()
+                        .centerCrop()
+                        .into(updateImageView);
+
+            } else {
+                viewPager.setVisibility(View.VISIBLE);
+
+                //mArrayUri.clear();
+                for (int i = 0; i < listImages.size(); i++) {
+                    Uri tem_uri = Uri.parse(listImages.get(i));
+                    mArrayUri.add(tem_uri);
+                }
+                updateImagesAdapter.notifyDataSetChanged();
+            }
+
+
+            et_name.setText(productName);
+            et_description.setText(productDescription);
+            et_possible_exchange_with.setText(productPossibleExchangeWith);
+            et_estimated_market_value.setText(productEstimatedMarketPrice);
+
+            if (radioNew.isChecked()) {
+                radioNew.setChecked(true);
+            } else {
+                radioUsed.setChecked(true);
+            }
+
+            if (radioGood.isChecked()) {
+                radioGood.setChecked(true);
+            } else {
+                radioNormal.setChecked(true);
+            }
+
+            if (productCategory != null) {
+                int spinnerPosition = categoriesAdapter.getPosition(productCategory);
+                productCategories.setSelection(spinnerPosition);
+            }
         }
     }
 
@@ -367,6 +377,7 @@ public class UpdateProductFragment extends BaseFragment {
                                 final String url = String.valueOf(uri);
                                 Log.i("images Url", url);
                                 arrayList.add(url);
+
                             }
                         });
                     }
@@ -399,7 +410,9 @@ public class UpdateProductFragment extends BaseFragment {
                             String url = String.valueOf(uri);
                             Log.i("image Url", url);
                             userUploadProductModel.setmImageUri(url);
-                            storeLink();
+
+
+                            //storeLink();
                         }
                     });
                 }
@@ -414,7 +427,7 @@ public class UpdateProductFragment extends BaseFragment {
                 public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
                     double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
                     Log.i("Progress", "checking progress" + progress);
-                    progressDialog.setMessage("Uploaded" + (int) progress + "%");
+                    //progressDialog.setMessage("Uploaded" + (int) progress + "%");
                 }
             });
         } else {
@@ -422,7 +435,7 @@ public class UpdateProductFragment extends BaseFragment {
         }
 
         userUploadProductModel.setmArrList(arrayList);
-        progressDialog = ProgressDialog.show(getContext(), "Posting Data",
+        progressDialog = ProgressDialog.show(getContext(), "Updating Data",
                 "Uploading..", true);
 
         Runnable progressRunnable = new Runnable() {
@@ -439,13 +452,52 @@ public class UpdateProductFragment extends BaseFragment {
     /*Sending Data to DB*/
     private void storeLink() {
         //String Id = userUploadProductModel.getAdId();
+        //updateDatabaseReference = firebaseDatabase.getReference(uploadAuth.getCurrentUser().getUid()).child("UserUploadProducts").child(id);
+        //initEdittext();
+        //updateDatabaseReference.setValue(userUploadProductModel);
 
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        updateDatabaseReference = firebaseDatabase.getReference(uploadAuth.getUid()).child("UserUploadProducts");
+        userUploadProductModel.setProductName(et_name.getText().toString().trim());
+        userUploadProductModel.setProductDescription(et_description.getText().toString().trim());
+        userUploadProductModel.setProductEstimatedMarketValue(et_estimated_market_value.getText().toString().trim());
+        userUploadProductModel.setPossibleExchangeWith(et_possible_exchange_with.getText().toString().trim());
 
-        initEdittext();
-        updateDatabaseReference.setValue(userUploadProductModel);
+        Bundle createBundle = getArguments();
+        String myCurrentDateTime = getArguments().getString("Key");
 
+        userUploadProductModel.setCurrentDateTime(myCurrentDateTime);
+
+        if (createBundle != null) {
+            if (uploadAuth.getCurrentUser().getUid() != null) {
+                updateDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
+                        .child(uploadAuth.getCurrentUser().getUid()).child(myCurrentDateTime);
+                updateDatabaseReference.setValue(userUploadProductModel).addOnCompleteListener(
+                        new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                                if (task.isSuccessful()) {
+
+                                    /*if (singleImageUrl != null) {
+                                        StorageReference storageReferenceDel = FirebaseStorage.getInstance()
+                                                .getReferenceFromUrl(String.valueOf(mImageUri));
+                                        storageReferenceDel.delete();
+                                    } else {
+                                        StorageReference storageReferenceDel = FirebaseStorage.getInstance()
+                                                .getReferenceFromUrl(String.valueOf(mArrayUri));
+                                        storageReferenceDel.delete();
+                                    }
+*/
+                                    Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT)
+                                            .show();
+
+                                }
+                            }
+                        }
+                );
+            }
+
+
+        }
 
     }
 

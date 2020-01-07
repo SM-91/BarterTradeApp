@@ -13,6 +13,7 @@ public class UserUploadProductModel {
     private String productEstimatedMarketValue;
     private String possibleExchangeWith;
     private String productCategoryList;
+    private String currentDateTime;
 
     private ArrayList<String> mArrList;
     private String mImageUri;
@@ -105,5 +106,13 @@ public class UserUploadProductModel {
 
     public void setmArrList(ArrayList<String> mArrList) {
         this.mArrList = mArrList;
+    }
+
+    public String getCurrentDateTime() {
+        return currentDateTime;
+    }
+
+    public void setCurrentDateTime(String currentDateTime) {
+        this.currentDateTime = currentDateTime;
     }
 }
