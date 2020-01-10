@@ -15,9 +15,9 @@
             <ImageView
                 android:id="@+id/tempImgView"
                 android:layout_centerInParent="true"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/ic_photo_camera_black_24dp"
+                android:layout_width="280dp"
+                android:layout_height="280dp"
+                android:background="@drawable/ic_add_a_photo_black_24dp"
                 />
 
             <androidx.viewpager.widget.ViewPager
@@ -36,8 +36,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
             android:background="@drawable/button_shape"
-            android:text="Change Image"
-            android:textColor="#FFFFFF" />
+            android:text="Select Image"
+            android:textColor="@color/white" />
 
         <LinearLayout
             android:id="@+id/profile_details"

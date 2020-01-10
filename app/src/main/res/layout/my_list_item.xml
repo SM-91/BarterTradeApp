@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
+
+
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:padding="16dp">
 
 
     <ImageView
@@ -24,7 +35,7 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textAllCaps="true"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:layout_height="wrap_content"
@@ -40,7 +51,7 @@
                 android:textColor="@color/blue"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="condition" />
+                android:text="type" />
 
             <TextView
                 android:id="@+id/ad_estimation"
@@ -51,7 +62,7 @@
                 android:textColor="@color/blue"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="worth" />
+                android:text="estimation" />
 
 
     </RelativeLayout>
@@ -61,3 +72,5 @@
 
 
 </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
