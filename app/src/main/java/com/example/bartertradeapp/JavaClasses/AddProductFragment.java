@@ -440,7 +440,7 @@ public class AddProductFragment extends BaseFragment {
                     allProfuctRef.setValue(userUploadProductModel);
 
                     Toast.makeText(getContext(),"Product Added",Toast.LENGTH_LONG).show();
-                    getActivity().finish();
+                    //getActivity().finish();
                 }
 
             }

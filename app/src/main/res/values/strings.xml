@@ -11,7 +11,7 @@
     <string name="reg_btn_text">SignUp</string>
     <string name="login_btn_text">Login</string>
     <string name="reg_login_text">Already have an Account ?</string>
-    <string name="login_signup_btn">SignUp</string>
+    <string name="login_signup_btn">No account yet? Create one</string>
     <string name="reg_email_text">Enter Email</string>
     <string name="reg_username_text">Enter UserName</string>
     <string name="reg_pass_text">Enter Password</string>

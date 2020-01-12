@@ -549,7 +549,7 @@ public class UpdateProductFragment extends BaseFragment {
                                     Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT)
                                             .show();
 
-                                    getActivity().finish();
+                                    //getActivity().finish();
 
                                 }
                             }

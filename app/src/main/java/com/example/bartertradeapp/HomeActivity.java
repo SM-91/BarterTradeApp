@@ -14,6 +14,7 @@ import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.JavaClasses.AddProductFragment;
 import com.example.bartertradeapp.JavaClasses.BaseFragment;
 import com.example.bartertradeapp.JavaClasses.ChatFragment;
+import com.example.bartertradeapp.JavaClasses.Feedback_postFragment;
 import com.example.bartertradeapp.JavaClasses.HomeFragment;
 import com.example.bartertradeapp.JavaClasses.HomeFragmentExtend;
 import com.example.bartertradeapp.JavaClasses.MapFragment;
