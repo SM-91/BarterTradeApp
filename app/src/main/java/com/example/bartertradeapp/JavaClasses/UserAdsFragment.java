@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.DetailedActivity;
+import com.example.bartertradeapp.MyAdsDetailsActivity;
 import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.custom_list_adapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -91,22 +92,33 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
     @Override
     public void onItemClick(View view, int position) {
 
-        /*intent = new Intent(getContext(), DetailedActivity.class);
+        intent = new Intent(getContext(), MyAdsDetailsActivity.class);
         userUploadProductModel = adapter.getItem(position);
-        pname = userUploadProductModel.getProductName();
-        pdesc = userUploadProductModel.getProductDescription();
-        pexch = userUploadProductModel.getPossibleExchangeWith();
-        pworth = userUploadProductModel.getProductEstimatedMarketValue();
-        pimg = userUploadProductModel.getmImageUri();
+        String myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
+        productName = userUploadProductModel.getProductName();
+        productDescription = userUploadProductModel.getProductDescription();
+        productPossibleExchangeWith = userUploadProductModel.getPossibleExchangeWith();
+        productEstimatedPrice = userUploadProductModel.getProductEstimatedMarketValue();
+        productType = userUploadProductModel.getProductType();
+        productCategory = userUploadProductModel.getProductCategoryList();
+        productCondition = userUploadProductModel.getProductCondition();
+        productSingleImage = userUploadProductModel.getmImageUri();
+        ArrayList<String> productMultipleImages = userUploadProductModel.getmArrList();
 
-        intent.putExtra("name", pname);
-        intent.putExtra("desc", pdesc);
-        intent.putExtra("exch", pexch);
-        intent.putExtra("worth", pworth);
-        intent.putExtra("image", pimg);
-        startActivity(intent);*/
+        intent.putExtra("Key", myCurrentDateTime);
+        intent.putExtra("name", productName);
+        intent.putExtra("description", productDescription);
+        intent.putExtra("possibelExchange", productPossibleExchangeWith);
+        intent.putExtra("estimatedPrice", productEstimatedPrice);
+        intent.putExtra("type", productType);
+        intent.putExtra("category", productCategory);
+        intent.putExtra("condition", productCondition);
 
-        userUploadProductModel = adapter.getItem(position);
+        intent.putExtra("multipleImagesList", productMultipleImages);
+        intent.putExtra("singleImage", productSingleImage);
+        startActivity(intent);
+
+       /* userUploadProductModel = adapter.getItem(position);
         String id = userUploadProductModel.getAdId();
         String myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
         pname = userUploadProductModel.getProductName();
@@ -138,7 +150,7 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         updateProductFragment.setArguments(bundle);
 
         fragmentTransaction.replace(R.id.fragment_container, updateProductFragment);
-        fragmentTransaction.commit();
+        fragmentTransaction.commit();*/
 
     }
 }

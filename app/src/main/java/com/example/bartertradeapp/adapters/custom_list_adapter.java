@@ -18,11 +18,13 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapter.ViewHolder>  {
+public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapter.ViewHolder> {
 
     private List<UserUploadProductModel> userlist;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
+
+    private Context context;
 
     private ArrayList<String> imageList = null;
 
@@ -54,6 +56,7 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
         holder.type.setText("Type: " + list.getProductType());
         holder.estimation.setText("Estimated price: " + list.getProductEstimatedMarketValue());
 
+        try {
             if (list.getmImageUri() != null) {
 
                 Picasso.get().load(list.getmImageUri())
@@ -64,14 +67,22 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
             } else {
 
                 imageList = list.getmArrList();
-                Uri uri = Uri.parse(imageList.get(0));
-                Picasso.get().load(uri)
-                        .fit()
-                        .centerCrop()
-                        .into(holder.image);
+                if (imageList != null) {
+                    Uri uri = Uri.parse(imageList.get(0));
+                    Picasso.get().load(uri)
+                            .fit()
+                            .centerCrop()
+                            .into(holder.image);
+                }
             }
 
+        } catch (Exception e) {
+            System.out.println("Error " + e.getMessage());
+            //Toast.makeText(this.context,"Error in multiple images" + e.getMessage(),Toast.LENGTH_SHORT).show();
         }
+
+
+    }
 
     // total number of rows
     @Override

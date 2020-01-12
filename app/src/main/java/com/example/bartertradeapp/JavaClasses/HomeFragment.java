@@ -74,8 +74,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
 
         //uploadAuth.getCurrentUser().getUid();
 
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
-                .child(uploadAuth.getUid());
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("AllProducts");
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -97,8 +96,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         });
 
         //databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
-                .child(uploadAuth.getUid());
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("AllProducts");
 
 
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
@@ -137,6 +135,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         ptype = userUploadProductModel.getProductType();
         pcategory = userUploadProductModel.getProductCategoryList();
         pcondition = userUploadProductModel.getProductCondition();
+        UserModel postedBy = userUploadProductModel.getPostedBy();
         ArrayList<String> pimagelist = userUploadProductModel.getmArrList();
 
 
@@ -154,6 +153,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         intent.putExtra("worth", pest);
         intent.putExtra("imagelist", pimagelist);
         intent.putExtra("image", pimg);
+        intent.putExtra("user", postedBy);
         startActivity(intent);
         //Toast.makeText(getContext(), "as"+image, Toast.LENGTH_SHORT).show();
 

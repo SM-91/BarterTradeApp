@@ -16,6 +16,7 @@ public class UserUploadProductModel {
     private double latitude;
     private double longitude;
     private String currentDateTime;
+    private UserModel postedBy;
 
     private ArrayList<String> mArrList;
     private String mImageUri;
@@ -132,5 +133,13 @@ public class UserUploadProductModel {
 
     public void setCurrentDateTime(String currentDateTime) {
         this.currentDateTime = currentDateTime;
+    }
+
+    public UserModel getPostedBy() {
+        return postedBy;
+    }
+
+    public void setPostedBy(UserModel postedBy) {
+        this.postedBy = postedBy;
     }
 }

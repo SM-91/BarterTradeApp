@@ -1,13 +1,16 @@
 package com.example.bartertradeapp;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.JavaClasses.ViewPageAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -24,14 +27,23 @@ public class DetailedActivity extends BaseActivity {
     TextView textView_condition;
     ImageView imageView;
     ViewPager viewPager;
+    UserModel postedBy;
+
+    Button chatBtn;
     ViewPageAdapter adapter = null;
 
     private ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
     private ArrayList<String> listimages = new ArrayList<String>() ;
 
+
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detailed);
+        changeStatusBarColor();
+
+        chatBtn = findViewById(R.id.chatBtn);
+
         textView_name = findViewById(R.id.textview_ad_name);
         textView_desc = findViewById(R.id.textview_ad_desc);
         textView_exch = findViewById(R.id.textview_ad_exchange);
@@ -40,6 +52,8 @@ public class DetailedActivity extends BaseActivity {
         textView_category = findViewById(R.id.textview_ad_category);
         textView_condition = findViewById(R.id.textview_ad_condition);
         imageView = findViewById(R.id.image_display);
+
+
 
         /*ViewPager*/
         viewPager = findViewById(R.id.view_pager_image);
@@ -58,6 +72,7 @@ public class DetailedActivity extends BaseActivity {
         String category = getIntent().getStringExtra("category");
         String condition = getIntent().getStringExtra("condition");
         String mimage = getIntent().getStringExtra("image");
+        postedBy = getIntent().getParcelableExtra("user");
         listimages = getIntent().getStringArrayListExtra("imagelist");
 
         if (bundle!= null) {
@@ -86,13 +101,15 @@ public class DetailedActivity extends BaseActivity {
             textView_category.setText(category);
             textView_condition.setText(condition);
         }
-    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detailed);
-        changeStatusBarColor();
+        chatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailedActivity.this, MessageActivity.class);
+                intent.putExtra("user", postedBy);
+                startActivity(intent);
+            }
+        });
     }
 
 

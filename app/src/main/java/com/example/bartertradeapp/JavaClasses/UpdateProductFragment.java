@@ -29,6 +29,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.LogInActivity;
 import com.example.bartertradeapp.R;
@@ -37,7 +38,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -87,8 +92,12 @@ public class UpdateProductFragment extends BaseFragment {
     ArrayAdapter<String> categoriesAdapter;
     private String[] categories = {"Clothes", "Shoes", "Household", "Electronics", "Console Games"};
 
-    private String id;
+
     private String singleImageUrl;
+    String myCurrentDateTime;
+
+    private UserModel currentUserModel = null;
+
 
 
     public UpdateProductFragment() {
@@ -132,7 +141,7 @@ public class UpdateProductFragment extends BaseFragment {
         viewPager.setAdapter(adapter);
 
         /*ImageView*/
-        imageView = (ImageView) view.findViewById(R.id.tempImgView);
+        imageView = (ImageView) view.findViewById(R.id.tempImgView1);
         updateImageView = view.findViewById(R.id.tempImgView2);
 
         /*RadioGroups*/
@@ -162,7 +171,13 @@ public class UpdateProductFragment extends BaseFragment {
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postingData();
+                if (!mArrayUri.isEmpty()) {
+                    uploadMultipleImages();
+                } else if (mImageUri != null) {
+                    uploadSingleImage();
+                } else {
+                    Toast.makeText(getContext().getApplicationContext(), "Please Select Image", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -186,6 +201,26 @@ public class UpdateProductFragment extends BaseFragment {
             }
         });
 
+        /*Fetching User Model From Firebase*/
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child("UserDetails");
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    UserModel userModel = snapshot.getValue(UserModel.class);
+
+                    if (uploadAuth.getUid().equals(userModel.getuserId())) {
+                        currentUserModel = userModel;
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         return view;
     }
@@ -222,6 +257,7 @@ public class UpdateProductFragment extends BaseFragment {
 
     /*Intent Function for Open Gallery*/
     private void selectImagesFromGallery() {
+
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -234,6 +270,8 @@ public class UpdateProductFragment extends BaseFragment {
         //super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == MULTIPLE_IMAGE_REQUEST) {
+            imageView.setVisibility(View.GONE);
+
             if (data.getClipData() != null) {
                 mArrayUri.clear();
                 //imageView.setImageBitmap(null);
@@ -250,8 +288,9 @@ public class UpdateProductFragment extends BaseFragment {
                 Log.i("listsize", String.valueOf(mArrayUri.size()));
 
                 viewPager.setVisibility(View.VISIBLE);
+                updateImageView.setVisibility(View.GONE);
                 adapter.notifyDataSetChanged();
-                /*mHandler.post(new Runnable() {
+               /* mHandler.post(new Runnable() {
                     @Override
                     public void run() {
 
@@ -261,9 +300,8 @@ public class UpdateProductFragment extends BaseFragment {
                 mImageUri = data.getData();
                 Bitmap new_bitmap = null;
                 try {
-
-                    new_bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), mImageUri);
-                    updateImageView.setImageBitmap(new_bitmap);
+//                    new_bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), mImageUri);
+//                    updateImageView.setImageBitmap(new_bitmap);
                     Picasso.get()
                             .load(mImageUri)
                             .fit()
@@ -272,7 +310,7 @@ public class UpdateProductFragment extends BaseFragment {
                     viewPager.setVisibility(View.GONE);
                     updateImageView.setVisibility(View.VISIBLE);
 
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -285,13 +323,15 @@ public class UpdateProductFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
 
+        /*Bundle from MyAdsDetailsActivity*/
         updateImagesAdapter = new ViewPageAdapter(getContext(), mArrayUri);
         viewPager.getOffscreenPageLimit();
         viewPager.setAdapter(updateImagesAdapter);
 
-        Bundle bundle = getArguments();
+        Bundle updateBundle = getArguments();
         //id = getArguments().getString("AD_ID");
         //Log.i("ad id",id);
+        myCurrentDateTime = getArguments().getString("Key");
         String productName = getArguments().getString("name");
         String productDescription = getArguments().getString("desc");
         String productPossibleExchangeWith = getArguments().getString("exch");
@@ -300,10 +340,14 @@ public class UpdateProductFragment extends BaseFragment {
         String productCondition = getArguments().getString("condition");
         String productCategory = getArguments().getString("category");
         productSingleImage = getArguments().getString("image");
-        listImages = getArguments().getStringArrayList("multipleImagesList");
+        listImages = getArguments().getStringArrayList("updateMultipleImagesList");
 
-        if (bundle != null) {
+        if (updateBundle != null) {
 
+           /* if (productSingleImage == null || listImages.isEmpty()){
+                Toast.makeText(getContext(),"Please Select Images",Toast.LENGTH_LONG).show();
+                getActivity().finish();
+            }*/
             if (productSingleImage != null) {
 
                 updateImageView.setVisibility(View.VISIBLE);
@@ -314,8 +358,7 @@ public class UpdateProductFragment extends BaseFragment {
 
             } else {
                 viewPager.setVisibility(View.VISIBLE);
-
-                //mArrayUri.clear();
+                mArrayUri.clear();
                 try{
                     for (int i = 0; i < listImages.size(); i++) {
                         Uri tem_uri = Uri.parse(listImages.get(i));
@@ -351,81 +394,51 @@ public class UpdateProductFragment extends BaseFragment {
                 productCategories.setSelection(spinnerPosition);
             }
         }
+
     }
 
     /*Posting Functions*/
-    private void postingData() {
+    /*Posting Functions*/
+    private void uploadMultipleImages() {
 
        /* progressDialog.setTitle("Uploading...");
         progressDialog.show();*/
 
-        StorageReference ImageFolder = FirebaseStorage.getInstance().getReference("UserProductUploads").child("UserProductImages");
+        progressDialog = ProgressDialog.show(getContext(), "Posting Data",
+                "Uploading..", true);
 
+        StorageReference ImageFolder = FirebaseStorage.getInstance().getReference("UserProductUploads").child("UserProductImages");
         Log.i("Checking Storage", String.valueOf(ImageFolder));
 
-        if (!mArrayUri.isEmpty()) {
+        arrayList.clear();
+        for (uploadCount = 0; uploadCount < mArrayUri.size(); uploadCount++) {
+            final Uri individualImage = mArrayUri.get(uploadCount);
 
-            arrayList.clear();
+            Log.i("Individual Image Uri:", String.valueOf(individualImage));
+            final StorageReference imageName = ImageFolder.child("Image" + individualImage.getLastPathSegment());
 
-            for (uploadCount = 0; uploadCount < mArrayUri.size(); uploadCount++) {
-                final Uri individualImage = mArrayUri.get(uploadCount);
-                //String imageUrl = String.valueOf(individualImage);
-
-                Log.i("Individual Image Uri:", String.valueOf(individualImage));
-                final StorageReference imageName = ImageFolder.child("Image" + individualImage.getLastPathSegment());
-
-                imageName.putFile(individualImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        imageName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                final String url = String.valueOf(uri);
-                                Log.i("images Url", url);
-                                arrayList.add(url);
-
-                            }
-                        });
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Toast.makeText(getContext().getApplicationContext(), "Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                        Log.i("Progress", "checking progress" + progress);
-                        //progressDialog.setMessage("Uploaded" + (int) progress + "%");
-                    }
-                });
-            }
-        } else if (mImageUri != null) {
-
-            final StorageReference singleImageName = ImageFolder.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
-
-            singleImageName.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            imageName.putFile(individualImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    singleImageName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    imageName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
+                            final String url = String.valueOf(uri);
+                            Log.i("images Url", url);
+                            arrayList.add(url);
 
-                            String url = String.valueOf(uri);
-                            Log.i("image Url", url);
-                            userUploadProductModel.setmImageUri(url);
+                            userUploadProductModel.setmArrList(arrayList);
+                            progressDialog.cancel();
+                            storeLink();
 
 
-                            //storeLink();
                         }
                     });
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    progressDialog.dismiss();
+                    progressDialog.cancel();
                     Toast.makeText(getContext().getApplicationContext(), "Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -436,43 +449,78 @@ public class UpdateProductFragment extends BaseFragment {
                     //progressDialog.setMessage("Uploaded" + (int) progress + "%");
                 }
             });
-        } else {
-            Toast.makeText(getContext().getApplicationContext(), "No image selected", Toast.LENGTH_SHORT).show();
         }
 
-        userUploadProductModel.setmArrList(arrayList);
-        progressDialog = ProgressDialog.show(getContext(), "Updating Data",
-                "Uploading..", true);
-
-        Runnable progressRunnable = new Runnable() {
-            @Override
-            public void run() {
-                progressDialog.cancel();
-                storeLink();
-            }
-        };
-        Handler pdCanceller = new Handler();
-        pdCanceller.postDelayed(progressRunnable, 10000);
+//        Runnable progressRunnable = new Runnable() {
+//            @Override
+//            public void run() {
+//            }
+//        };
+//        Handler pdCanceller = new Handler();
+//        pdCanceller.postDelayed(progressRunnable, 10000);
     }
+
+    private void uploadSingleImage() {
+
+        StorageReference ImageFolder = FirebaseStorage.getInstance().getReference("UserProductUploads").child("UserProductImages");
+        Log.i("Checking Storage", String.valueOf(ImageFolder));
+      /*  if (mImageUri != null) {
+
+
+        } else {
+            Toast.makeText(getContext().getApplicationContext(), "No image selected", Toast.LENGTH_SHORT).show();
+        }*/
+
+        final StorageReference singleImageName = ImageFolder.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
+        singleImageName.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                singleImageName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+
+                        String url = String.valueOf(uri);
+                        Log.i("image Url", url);
+                        userUploadProductModel.setmImageUri(url);
+                        storeLink();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+                Toast.makeText(getContext().getApplicationContext(), "Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                Log.i("Progress", "checking progress" + progress);
+                progressDialog.setMessage("Uploaded" + (int) progress + "%");
+            }
+        });
+    }
+
 
     /*Sending Data to DB*/
     private void storeLink() {
-        //String Id = userUploadProductModel.getAdId();
-        //updateDatabaseReference = firebaseDatabase.getReference(uploadAuth.getCurrentUser().getUid()).child("UserUploadProducts").child(id);
-        //initEdittext();
-        //updateDatabaseReference.setValue(userUploadProductModel);
 
         userUploadProductModel.setProductName(et_name.getText().toString().trim());
         userUploadProductModel.setProductDescription(et_description.getText().toString().trim());
         userUploadProductModel.setProductEstimatedMarketValue(et_estimated_market_value.getText().toString().trim());
         userUploadProductModel.setPossibleExchangeWith(et_possible_exchange_with.getText().toString().trim());
+        userUploadProductModel.setPostedBy(currentUserModel);
 
         Bundle createBundle = getArguments();
-        String myCurrentDateTime = getArguments().getString("Key");
-
-        userUploadProductModel.setCurrentDateTime(myCurrentDateTime);
+        final String myCurrentDateTime = getArguments().getString("Key");
 
         if (createBundle != null) {
+
+
+            userUploadProductModel.setCurrentDateTime(myCurrentDateTime);
+
+
             if (uploadAuth.getCurrentUser().getUid() != null) {
                 updateDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
                         .child(uploadAuth.getCurrentUser().getUid()).child(myCurrentDateTime);
@@ -492,9 +540,16 @@ public class UpdateProductFragment extends BaseFragment {
                                                 .getReferenceFromUrl(String.valueOf(mArrayUri));
                                         storageReferenceDel.delete();
                                     }
+
 */
+                                    DatabaseReference newUpdateReference;
+                                    newUpdateReference = FirebaseDatabase.getInstance().getReference("Users")
+                                            .child("AllProducts").child(myCurrentDateTime);
+                                    newUpdateReference.setValue(userUploadProductModel);
                                     Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT)
                                             .show();
+
+                                    getActivity().finish();
 
                                 }
                             }
