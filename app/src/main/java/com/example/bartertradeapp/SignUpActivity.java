@@ -93,7 +93,7 @@ public class SignUpActivity extends BaseActivity {
                                     hashMap.put("userName", username);
                                     hashMap.put("imageURL","default");
 
-                                    reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    reference.push().setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
 

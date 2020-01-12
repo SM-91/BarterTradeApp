@@ -50,6 +50,7 @@ public class MessageListActivity extends AppCompatActivity implements View.OnCli
         allChatReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //otherUserList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     ChatModel chatModel = snapshot.getValue(ChatModel.class);
                     UserModel otherUser = null;
@@ -64,7 +65,6 @@ public class MessageListActivity extends AppCompatActivity implements View.OnCli
                         otherUserList.add(otherUser);
                     }
                 }
-
                 setRVAdapter();
             }
 
@@ -79,6 +79,8 @@ public class MessageListActivity extends AppCompatActivity implements View.OnCli
         UserAdapter userAdapter = new UserAdapter(this, otherUserList);
         userAdapter.setOnClickListener(this);
         rvMessageList.setAdapter(userAdapter);
+        //userAdapter.notifyDataSetChanged();
+
     }
 
     @Override
