@@ -17,7 +17,7 @@
             android:textSize="16sp"
             android:layout_margin="10dp"
             android:textAlignment="center"
-            android:text="Hey give this User feedback to make it easy for all">
+            android:text="Update your feedback to make it easy for all">
         </TextView>
 
         <androidx.appcompat.widget.AppCompatRatingBar
@@ -59,7 +59,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/edittext_feedback"
-        android:text="Submit"
+        android:text="update"
         android:textColor="@color/white"
         android:background="@color/colorPrimary">
     </Button>

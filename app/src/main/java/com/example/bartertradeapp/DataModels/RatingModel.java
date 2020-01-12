@@ -3,21 +3,21 @@ package com.example.bartertradeapp.DataModels;
 
 public class RatingModel {
 
-        private String feedback;
-        private int rating;
-        private int avg_rating;
+    private String feedback,sellerid,buyerid,currentDateTime;
+    private int rating,avg_rating;
 
+
+    // class constructor..
+    public RatingModel(){
+    }
+
+    // Setter and Getter
     public int getAvg_rating() {
         return avg_rating;
     }
-
     public void setAvg_rating(int avg_rating) {
         this.avg_rating = avg_rating;
     }
-
-    private String sellerid;
-        private String buyerid;
-        private String currentDateTime;
 
     public String getCurrentDateTime() {
         return currentDateTime;
@@ -25,10 +25,6 @@ public class RatingModel {
 
     public void setCurrentDateTime(String currentDateTime) {
         this.currentDateTime = currentDateTime;
-    }
-
-    public RatingModel(){
-
     }
 
     public String getFeedback() {
@@ -62,8 +58,6 @@ public class RatingModel {
     public void setBuyerid(String buyerid) {
         this.buyerid = buyerid;
     }
-
-
 
 
 }
