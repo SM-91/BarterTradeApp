@@ -19,10 +19,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
 
 public class SignUpActivity extends BaseActivity {
 
-    EditText et_email,et_pass,et_confirm_pass;
+    EditText et_email,et_pass,et_confirm_pass,et_username;
     Button btn_signUp, btn_already_account;
 
     UserModel mUserModel;
@@ -30,6 +36,7 @@ public class SignUpActivity extends BaseActivity {
     private ProgressBar reg_progress;
 
     private FirebaseAuth mAuth;
+    private DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,7 @@ public class SignUpActivity extends BaseActivity {
 
         mUserModel = new UserModel();
 
+        et_username = findViewById(R.id.reg_userName);
         et_email = findViewById(R.id.reg_email);
         et_pass = findViewById(R.id.reg_pass);
         et_confirm_pass = findViewById(R.id.reg_confirm_pass);
@@ -52,6 +60,9 @@ public class SignUpActivity extends BaseActivity {
 
                 String email = et_email.getText().toString();
                 mUserModel.setUserEmail(email);
+
+                final String username = et_username.getText().toString();
+                mUserModel.setUserName(username);
 
                 Log.i("User Email", email );
                 String pass = et_pass.getText().toString();
@@ -67,11 +78,31 @@ public class SignUpActivity extends BaseActivity {
 
                                     Toast.makeText(SignUpActivity.this, "Account Created.", Toast.LENGTH_LONG).show();
 
+                                    FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                    String userid = firebaseUser.getUid();
 
-                                    Intent setupIntent = new Intent(SignUpActivity.this, HomeActivity.class);
-                                    startActivity(setupIntent);
-                                    //finish();
+                                    String userCreatedDateTime = DateFormat.getDateTimeInstance()
+                                            .format(Calendar.getInstance().getTime());
 
+                                    reference = FirebaseDatabase.getInstance().getReference("Users")
+                                            .child("UserDetails");
+
+                                    HashMap<String,String> hashMap = new HashMap<>();
+                                    hashMap.put("userId",userid);
+                                    hashMap.put("userCreatedDateTime",userCreatedDateTime);
+                                    hashMap.put("userName", username);
+                                    hashMap.put("imageURL","default");
+
+                                    reference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                            if(task.isSuccessful()){
+                                                Intent setupIntent = new Intent(SignUpActivity.this, HomeActivity.class);
+                                                startActivity(setupIntent);
+                                            }
+                                        }
+                                    });
                                 } else {
                                     String errorMessage = task.getException().getMessage();
                                     Toast.makeText(SignUpActivity.this, "Error : " + errorMessage, Toast.LENGTH_LONG).show();

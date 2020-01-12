@@ -17,6 +17,7 @@ import com.example.bartertradeapp.JavaClasses.ChatFragment;
 import com.example.bartertradeapp.JavaClasses.HomeFragment;
 import com.example.bartertradeapp.JavaClasses.HomeFragmentExtend;
 import com.example.bartertradeapp.JavaClasses.MapFragment;
+import com.example.bartertradeapp.JavaClasses.MessageListActivity;
 import com.example.bartertradeapp.JavaClasses.ProfileFragment;
 import com.example.bartertradeapp.JavaClasses.UserAdsFragment;
 import com.example.bartertradeapp.JavaClasses.UserUploadFragment;
@@ -33,6 +34,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -127,23 +129,23 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 switch (menuItem.getItemId()){
                     case R.id.grid:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
+                        loadFragment(new HomeFragment());
                         return true;
 
                     case R.id.list:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragmentExtend()).addToBackStack(null).commit();
+                        loadFragment(new HomeFragmentExtend());
                         return true;
 
                     case R.id.add:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddProductFragment()).addToBackStack(null).commit();
+                        loadFragment(new AddProductFragment());
                         return true;
 
                     case R.id.map:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatFragment()).addToBackStack(null).commit();
+                        loadFragment(new ChatFragment());
                         return true;
 
                     case R.id.profile_edit:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
+                        loadFragment(new ProfileFragment());
                         return true;
                     // ///// ADD more cases for different navigation bar options////////
                     default:
@@ -163,6 +165,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
         navigationView.setCheckedItem(R.id.nav_home);
         }
+    }
+
+    public void loadFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
     }
 
     @Override
@@ -188,7 +194,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
 
             case R.id.nav_chat:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatFragment()).addToBackStack(null).commit();
+                Intent intent = new Intent(HomeActivity.this, MessageListActivity.class);
+                startActivity(intent);
+                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatFragment()).addToBackStack(null).commit();
                 break;
 
             case R.id.nav_add_new_product:

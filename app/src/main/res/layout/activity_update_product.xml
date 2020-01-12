@@ -17,6 +17,7 @@
                 android:id="@+id/tempImgView1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_centerInParent="true"
                 android:background="@drawable/ic_photo_camera_black_24dp" />
 
             <ImageView
@@ -192,7 +193,8 @@
             android:id="@+id/submitBtnLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/profile_details">
+            android:layout_below="@+id/profile_details"
+            android:layout_marginBottom="70dp">
 
             <Button
                 android:id="@+id/submitProductData"

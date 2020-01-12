@@ -62,8 +62,7 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
 
 
         //databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
-                .child(uploadAuth.getUid());
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("AllProducts");
 
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -100,6 +99,7 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
         ptype = userUploadProductModel.getProductType();
         pcategory = userUploadProductModel.getProductCategoryList();
         pcondition = userUploadProductModel.getProductCondition();
+        UserModel postedBy = userUploadProductModel.getPostedBy();
         ArrayList<String> pimagelist = userUploadProductModel.getmArrList();
 
 
@@ -117,6 +117,7 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
         intent.putExtra("worth", pest);
         intent.putExtra("imagelist", pimagelist);
         intent.putExtra("image", pimg);
+        intent.putExtra("user", postedBy);
         startActivity(intent);
         //Toast.makeText(getContext(), "as"+image, Toast.LENGTH_SHORT).show();
 

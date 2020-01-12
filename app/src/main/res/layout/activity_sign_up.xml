@@ -23,8 +23,24 @@
             android:layout_height="wrap_content"/>
 
         <EditText
-            android:id="@+id/reg_email"
+            android:id="@+id/reg_userName"
             android:layout_below="@+id/SignUp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="@string/reg_username_text"
+            android:inputType="text"
+            android:textColor="#707070"
+            android:textColorHint="#707070"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <EditText
+            android:id="@+id/reg_email"
+            android:layout_below="@+id/reg_userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/white"
@@ -72,19 +88,13 @@
             android:layout_below="@+id/reg_confirm_pass"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_centerInParent="true"
             android:padding="20dp"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"
             android:text="@string/reg_btn_text"
             android:textAllCaps="false"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reg_confirm_pass" />
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/reg_login_btn"
@@ -92,9 +102,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             android:padding="20dp"
             android:paddingTop="20dp"
             android:paddingBottom="20dp"

@@ -33,6 +33,9 @@ public class BaseFragment extends Fragment {
     // Strings
     String pname,pdesc,pest,pexch,pcategory,ptype,pcondition,pimg;
 
+    String productName,productDescription,productEstimatedPrice,productPossibleExchangeWith,productCategory,productType,productCondition,productSingleImage;
+
+
 
     ProgressDialog progressDialog;
 
