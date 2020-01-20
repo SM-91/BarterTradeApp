@@ -1,6 +1,7 @@
 package com.example.bartertradeapp.JavaClasses;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -12,12 +13,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.location.Address;
+
+import com.example.bartertradeapp.adapters.CustomInfoWindowAdapter;
+import com.google.android.gms.maps.PlaceInfo;
+import com.google.android.gms.maps.model.LatLng;
+import android.location.Location;
+import android.location.Geocoder;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -62,8 +72,11 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.maps.android.SphericalUtil;
 
 
+import java.io.IOException;
 import java.sql.Array;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -81,6 +94,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private UserUploadProductModel userUploadProductModel;
     private GoogleMap mMap;
     private CameraPosition mCameraPosition;
+    private Marker mMarker;
+    private PlaceInfo mPlace;
 
     // The entry points to the Places API.
     private GeoDataClient mGeoDataClient;
@@ -247,9 +262,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap = map;
         getuser();
 
+
+
+
         // Use a custom info window adapter to handle multiple lines of text in the
         // info window contents.
+
         mMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+
+
 
             @Override
             // Return null here, so that getInfoContents() is called next.
@@ -257,8 +278,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 return null;
             }
 
+
+
             @Override
             public View getInfoContents(Marker marker) {
+
                 // Inflate the layouts for the info window, title and snippet.
                 View infoWindow = getActivity().getLayoutInflater().inflate(R.layout.custom_info_contents, null);
                 TextView title = ((TextView) infoWindow.findViewById(R.id.title));
@@ -269,6 +293,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 return infoWindow;
             }
         });
+
 
         // Prompt the user for permission.
         getLocationPermission();
@@ -284,6 +309,36 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+
+
+
+
+
+    }
+
+
+
+
+    //Get Address from Latitude and longitude//
+
+
+
+    public String getAddress(Context ctx, double lat, double lng){
+
+        String fullAdd = null;
+        try {
+            Geocoder geocoder = new Geocoder(ctx, Locale.getDefault());
+            List<Address> addresses = geocoder.getFromLocation(lat,lng,1);
+            if (addresses.size()>0){
+                Address address = addresses.get(0);
+                fullAdd = address.getAddressLine(0);
+            }
+        }catch(IOException ex){
+            ex.printStackTrace();
+
+        }
+        return fullAdd;
+
 
     }
 
@@ -421,6 +476,43 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         }
     }
+
+
+
+
+
+    //playing with address
+    private void moveCamera(LatLng latLng, float zoom, com.google.android.gms.maps.PlaceInfo placeInfo){
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        mMap.clear();
+
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(getContext()));
+
+        if(placeInfo != null){
+            try{
+                String snippet = "Address: " + placeInfo.getAddress() + "\n" +
+                        "Phone Number: " + placeInfo.getPhoneNumber() + "\n" +
+                        "Website: " + placeInfo.getWebsiteUri() + "\n" +
+                        "Price Rating: " + placeInfo.getRating() + "\n";
+
+                MarkerOptions options = new MarkerOptions()
+                        .position(latLng)
+                        .title(placeInfo.getName())
+                        .snippet(snippet);
+                mMarker = mMap.addMarker(options);
+
+            }catch (NullPointerException e){
+                Log.e(TAG, "moveCamera: NullPointerException: " + e.getMessage() );
+            }
+        }else{
+            mMap.addMarker(new MarkerOptions().position(latLng));
+        }
+
+        //hideSoftKeyboard();
+    }
+
 
     /**
      * adds new user location to firebase
