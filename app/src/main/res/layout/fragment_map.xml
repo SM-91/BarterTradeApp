@@ -4,8 +4,8 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:layout_marginTop="50dp"
-        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_width="320dp"
         android:layout_height="50dp"
 
         android:layout_marginRight="10dp"
@@ -15,8 +15,8 @@
         android:id="@+id/relLayout1">
 
         <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:id="@+id/ic_magnify"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
