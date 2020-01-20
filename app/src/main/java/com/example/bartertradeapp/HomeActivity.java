@@ -142,7 +142,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         return true;
 
                     case R.id.map:
-                        loadFragment(new ChatFragment());
+                        loadFragment(new MapFragment());
                         return true;
 
                     case R.id.profile_edit:
