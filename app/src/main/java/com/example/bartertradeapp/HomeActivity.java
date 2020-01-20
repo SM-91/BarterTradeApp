@@ -19,7 +19,7 @@ import com.example.bartertradeapp.JavaClasses.HomeFragment;
 import com.example.bartertradeapp.JavaClasses.HomeFragmentExtend;
 import com.example.bartertradeapp.JavaClasses.MapFragment;
 import com.example.bartertradeapp.JavaClasses.MessageListActivity;
-import com.example.bartertradeapp.JavaClasses.ProfileFragment;
+import com.example.bartertradeapp.JavaClasses.Profile_displayFragment;
 import com.example.bartertradeapp.JavaClasses.UserAdsFragment;
 import com.example.bartertradeapp.JavaClasses.UserUploadFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -71,13 +71,12 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     TextView nav_header_user_name;
     TextView nav_header_user_email;
     ImageView img1;
-    Button btn_testing,btn_testing2;
 
     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference reference = firebaseDatabase.getReference().child(firebaseAuth.getUid()).child("Profile");
+    private DatabaseReference reference = firebaseDatabase.getReference("Users").child("UserDetails");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +100,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         nav_header_user_name = (TextView) header_view.findViewById(R.id.nav_header_userName);
         nav_header_user_email = (TextView) header_view.findViewById(R.id.nav_header_userEmail);
         img1 = (ImageView) header_view.findViewById(R.id.nav_header_userProfilePic);
+        img1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadFragment(new Profile_displayFragment());
+                mDrawer.closeDrawer(GravityCompat.START);
+            }
+        });
         changeStatusBarColor();
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -146,7 +152,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         return true;
 
                     case R.id.profile_edit:
-                        loadFragment(new ProfileFragment());
+                        loadFragment(new Profile_displayFragment());
                         return true;
                     // ///// ADD more cases for different navigation bar options////////
                     default:
@@ -187,11 +193,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         switch (menuItem.getItemId()){
 
             case R.id.nav_home:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
+                loadFragment(new HomeFragment());
                 break;
 
             case R.id.nav_profile:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
+                loadFragment(new Profile_displayFragment());
                 break;
 
             case R.id.nav_chat:
@@ -201,21 +207,24 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
 
             case R.id.nav_add_new_product:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();
+                loadFragment(new UserUploadFragment());
                 break;
 
             case R.id.nav_myAds:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserAdsFragment()).addToBackStack(null).commit();
+                loadFragment(new UserAdsFragment());
                 break;
 
             case R.id.nav_maps:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment()).addToBackStack(null).commit();
+                loadFragment(new Feedback_postFragment());
                 break;
 
 
             case R.id.nav_signOut:
                 //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();
                 firebaseAuth.signOut();
+                finish();
+                intent = new Intent(HomeActivity.this, SignUpActivity.class);
+                startActivity(intent);
                 break;
 
         }

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/cardview_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardCornerRadius="3dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true">
+
+    <RelativeLayout
+        android:id="@+id/profile_details_layout"
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/profile_image_view"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/ic_profile" />
+        <TextView
+            android:id="@+id/textview_username"
+            android:layout_below="@id/profile_image_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:paddingTop="5dp"
+            android:text="User Name"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="16sp">
+
+        </TextView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:layout_alignStart="@+id/btn_update_profile"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textview_avg_rating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:text="4.5">
+
+            </TextView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:text="User Feedback">
+
+            </TextView>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_update_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/textview_username"
+            android:layout_centerInParent="true"
+            android:text="Update Profile"
+            android:backgroundTint="@color/whiteTransparent"
+            android:clickable="true"
+            android:focusable="true"
+            >
+
+        </Button>
+    </RelativeLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_user_feedbacks"
+            android:layout_below="@id/cardview_profile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="60dp">
+
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+
+
+</RelativeLayout>

@@ -3,9 +3,16 @@ package com.example.bartertradeapp.DataModels;
 
 public class RatingModel {
 
-    private String feedback,sellerid,buyerid,currentDateTime;
+    private String feedback,sellerid,buyerid,currentDateTime, imageUri;
     private int rating,avg_rating;
 
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
 
     // class constructor..
     public RatingModel(){

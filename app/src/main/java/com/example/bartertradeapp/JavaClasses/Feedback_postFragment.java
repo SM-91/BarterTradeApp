@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.bartertradeapp.DataModels.RatingModel;
+import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -25,12 +26,14 @@ import java.util.Calendar;
 
 public class Feedback_postFragment extends BaseFragment {
 
+
         RatingBar rating_bar;
         TextView default_feedback;
         EditText user_feedback;
         Button btn_submit;
         RatingModel ratingdata;
         int rate;
+        UserModel reciever;
 
     @Nullable
         @Override
@@ -43,6 +46,7 @@ public class Feedback_postFragment extends BaseFragment {
             uploadAuth = FirebaseAuth.getInstance();
 
             ratingdata = new RatingModel();
+            reciever = new UserModel();
 
 
             rating_bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -88,13 +92,16 @@ public class Feedback_postFragment extends BaseFragment {
 
         String myCurrentDateTime = DateFormat.getDateTimeInstance()
                 .format(Calendar.getInstance().getTime());
+        String Ad_id = uploadAuth.getCurrentUser().getUid();
         ratingdata.setCurrentDateTime(myCurrentDateTime);
         ratingdata.setRating(rate);
         ratingdata.setBuyerid(uploadAuth.getCurrentUser().getUid());
-        ratingdata.setSellerid("seller id");
+        ratingdata.setSellerid(reciever.getuserId());
         ratingdata.setFeedback(user_feedback.getText().toString());
+        ratingdata.setImageUri("idhr image ka url dena hy");
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserRating")
+                .child(Ad_id)
                 .child(myCurrentDateTime);
         databaseReference.setValue(ratingdata);
     }
