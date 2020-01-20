@@ -376,12 +376,6 @@ public class AddProductFragment extends BaseFragment {
 
         StorageReference ImageFolder = FirebaseStorage.getInstance().getReference("UserProductUploads").child("UserProductImages");
         Log.i("Checking Storage", String.valueOf(ImageFolder));
-      /*  if (mImageUri != null) {
-
-
-        } else {
-            Toast.makeText(getContext().getApplicationContext(), "No image selected", Toast.LENGTH_SHORT).show();
-        }*/
 
         final StorageReference singleImageName = ImageFolder.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
         singleImageName.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -428,6 +422,7 @@ public class AddProductFragment extends BaseFragment {
         userUploadProductModel.setProductEstimatedMarketValue(et_estimated_market_value.getText().toString().trim());
         userUploadProductModel.setPossibleExchangeWith(et_possible_exchange_with.getText().toString().trim());
         userUploadProductModel.setPostedBy(currentUserModel);
+
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
                 .child(uploadAuth.getCurrentUser().getUid()).child(myCurrentDateTime);

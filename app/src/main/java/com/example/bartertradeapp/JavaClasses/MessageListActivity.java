@@ -34,6 +34,7 @@ public class MessageListActivity extends AppCompatActivity implements View.OnCli
     private List<UserModel> otherUserList = new ArrayList<>();
 
     private String myId;
+    private String ad_id = " ";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
