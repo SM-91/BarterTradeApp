@@ -70,6 +70,9 @@ public class LogInActivity extends BaseActivity {
                     });
 
                 }
+                else{
+                    Toast.makeText(LogInActivity.this, "Enter Email and Password", Toast.LENGTH_LONG).show();
+                }
             }
         });
         btn_signUp = findViewById(R.id.login_signUp_btn);

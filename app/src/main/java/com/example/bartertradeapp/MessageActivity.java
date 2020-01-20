@@ -85,6 +85,7 @@ public class MessageActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
+
             receiver = bundle.getParcelable("user");
         }
 
@@ -106,7 +107,7 @@ public class MessageActivity extends AppCompatActivity {
                 if (!msg.equals("")) {
                     sendMessage(msg);
                 } else {
-                    Toast.makeText(MessageActivity.this, "You cannot send empty message", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MessageActivity.this, "You cannot send empty message", Toast.LENGTH_LONG).show();
                 }
                 text_send.setText("");
             }
@@ -144,6 +145,7 @@ public class MessageActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference("Users").child("Chat").push();
         sendMessageReference.setValue(hashMap);
     }
+
 
     private void readMessage() {
         chatReference = FirebaseDatabase.getInstance().getReference("Users").child("Chat");

@@ -146,10 +146,7 @@ public class MyAdsDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-
-
                         String updateCurrentDateTime = dataSnapshot.child("currentDateTime").getValue(String.class);
-
                         String pName = dataSnapshot.child("productName").getValue(String.class);
                         String pDescription = dataSnapshot.child("productDescription").getValue(String.class);
                         String pPossibleExchangeWith = dataSnapshot.child("possibleExchangeWith").getValue(String.class);

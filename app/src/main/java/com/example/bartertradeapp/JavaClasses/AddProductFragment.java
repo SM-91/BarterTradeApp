@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -163,14 +164,25 @@ public class AddProductFragment extends BaseFragment {
 
         btn_submit = view.findViewById(R.id.submitProductData);
         btn_submit.setOnClickListener(new View.OnClickListener() {
+
+
             @Override
             public void onClick(View v) {
-                if (!mArrayUri.isEmpty()) {
-                    uploadMultipleImages();
-                } else if (mImageUri != null) {
-                    uploadSingleImage();
-                } else {
-                    Toast.makeText(getContext().getApplicationContext(), "Please Select Image", Toast.LENGTH_SHORT).show();
+                String name = et_name.getText().toString();
+                String description = et_description.getText().toString();
+                String estimated = et_estimated_market_value.getText().toString();
+                String exchange = et_possible_exchange_with.getText().toString();
+                if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(description) && !TextUtils.isEmpty(estimated) && !TextUtils.isEmpty(exchange)){
+                    if (!mArrayUri.isEmpty()) {
+                        uploadMultipleImages();
+                    } else if (mImageUri != null) {
+                        uploadSingleImage();
+                    } else {
+                        Toast.makeText(getContext().getApplicationContext(), "Please Select Image", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Toast.makeText(getContext().getApplicationContext(), "Please Write complete Details", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -376,12 +388,6 @@ public class AddProductFragment extends BaseFragment {
 
         StorageReference ImageFolder = FirebaseStorage.getInstance().getReference("UserProductUploads").child("UserProductImages");
         Log.i("Checking Storage", String.valueOf(ImageFolder));
-      /*  if (mImageUri != null) {
-
-
-        } else {
-            Toast.makeText(getContext().getApplicationContext(), "No image selected", Toast.LENGTH_SHORT).show();
-        }*/
 
         final StorageReference singleImageName = ImageFolder.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
         singleImageName.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -428,6 +434,7 @@ public class AddProductFragment extends BaseFragment {
         userUploadProductModel.setProductEstimatedMarketValue(et_estimated_market_value.getText().toString().trim());
         userUploadProductModel.setPossibleExchangeWith(et_possible_exchange_with.getText().toString().trim());
         userUploadProductModel.setPostedBy(currentUserModel);
+
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
                 .child(uploadAuth.getCurrentUser().getUid()).child(myCurrentDateTime);
