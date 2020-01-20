@@ -24,14 +24,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.bartertradeapp.DataModels.UserModel;
+import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.LogInActivity;
 import com.example.bartertradeapp.R;
+import com.example.bartertradeapp.SignUpActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -50,14 +57,13 @@ public class ProfileFragment extends BaseFragment {
     private EditText uName, uEmail, uBio, uAge;
     private RadioGroup uGender;
     private RadioButton uMale, uFemale;
-    private Button uProfilePostData;
+    private Button btn_update;
 
     private Uri uImageUri;
+    String image_url;
 
 
     private FirebaseAuth firebaseAuth;
-
-
 
     @Nullable
     @Override
@@ -77,38 +83,61 @@ public class ProfileFragment extends BaseFragment {
 
         uImage = view.findViewById(R.id.profile_image_view);
         uImage.setClickable(true);
-        uImageOnClick();
-
         uName = view.findViewById(R.id.et_name);
         uEmail = view.findViewById(R.id.et_email);
         uAge = view.findViewById(R.id.et_age);
         uBio = view.findViewById(R.id.et_bio);
-
         uGender = view.findViewById(R.id.radioGroupGender);
         uMale = view.findViewById(R.id.radio_male);
         uFemale = view.findViewById(R.id.radio_female);
+        btn_update = view.findViewById(R.id.submitProfileData);
+
+
         uRadioGroupCheckItem();
 
-        uProfilePostData = view.findViewById(R.id.submitProfileData);
-        uPostData();
-
-        return view;
-    }
-
-    private void uImageOnClick() {
         uImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectUserProfileImage();
             }
         });
+
+        btn_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //updatingprofile();
+            }
+        });
+
+        return view;
     }
 
-    private void uEditTextGetText() {
-        userModel.setUserName(uName.getText().toString().trim());
-        userModel.setUserEmail(uEmail.getText().toString().trim());
-        userModel.setUserAge(uAge.getText().toString().trim());
-        userModel.setUserBio(uBio.getText().toString().trim());
+    @Override
+    public void onStart() {
+        super.onStart();
+        // getting images
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserDetails");
+        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
+                    UserModel userModel = usersSnapshot.getValue(UserModel.class);
+                    uName.setText(userModel.getUserName());
+                    uEmail.setText(userModel.getUserEmail());
+                    Picasso.get().load(userModel.getUserImageUrl())
+                            .fit()
+                            .centerCrop()
+                            .into(uImage);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void uRadioGroupCheckItem() {
@@ -124,25 +153,22 @@ public class ProfileFragment extends BaseFragment {
         });
     }
 
-    private void uPostData() {
-        uProfilePostData.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postingProfileData();
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
+            if (data.getData() != null) {
+                uImageUri = data.getData();
+                gettingImageUrl();
+                Picasso.get().load(uImageUri)
+                        .fit()
+                        .centerCrop()
+                        .into(uImage);
             }
-        });
+        }
     }
 
-    private void postingProfileData() {
-
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("Users").child("Profile")
-                .child(uploadAuth.getCurrentUser().getUid());
-
-        progressDialog.setTitle("Uploading...");
-        progressDialog.show();
-
-        StorageReference userProfileImage = FirebaseStorage.getInstance().getReference(firebaseAuth.getUid()).child("Images").child("Profile Image");
+    public void gettingImageUrl(){
+        StorageReference userProfileImage = FirebaseStorage.getInstance().getReference("UserProfilePic");
 
         if(uImageUri != null){
 
@@ -155,14 +181,8 @@ public class ProfileFragment extends BaseFragment {
                         @Override
                         public void onSuccess(Uri uri) {
 
-                            String url = String.valueOf(uri);
-                            userModel.setUserImageUrl(url);
-
-                            uEditTextGetText();
-                            databaseReference.push().setValue(userModel);
-
-                            progressDialog.dismiss();
-                            Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+                            image_url = String.valueOf(uri);
+                            //Toast.makeText(SignUpActivity.this, "Image Url Saved"+image_url, Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -172,42 +192,45 @@ public class ProfileFragment extends BaseFragment {
                 @Override
                 public void onFailure(@NonNull Exception e) {
 
-                    progressDialog.dismiss();
-                    Toast.makeText(getContext(), "Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                    Log.i("Progress","checking progress" + progress);
-                    progressDialog.setMessage("Uploaded" + (int) progress + "%");
+                    Toast.makeText(getContext(), "Failed:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
-
+        else{
+            Toast.makeText(getContext(), "Image not Saved", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK) {
-            if (data.getData() != null) {
 
-                uImageUri = data.getData();
-                Bitmap bitmap = null;
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), uImageUri);
-                    Picasso.get()
-                            .load(uImageUri)
-                            .fit()
-                            .centerCrop()
-                            .into(uImage);
-                    uImage.setImageBitmap(bitmap);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    private void updatingprofile() {
+
+        userModel.setUserName(uName.getText().toString().trim());
+        userModel.setUserEmail(uEmail.getText().toString().trim());
+        userModel.setUserAge(uAge.getText().toString().trim());
+        userModel.setUserBio(uBio.getText().toString().trim());
+        userModel.setUserImageUrl(image_url);
+
+            if (firebaseAuth.getCurrentUser().getUid() != null) {
+                updateDatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
+                        .child("UserDetails").child(firebaseAuth.getCurrentUser().getUid());
+                updateDatabaseReference.setValue(userModel).addOnCompleteListener(
+                        new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT)
+                                            .show();
+                                }
+                                else {
+                                    Toast.makeText(getContext(), "Rola hy reference me", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                );
             }
-        }
+
+
+
     }
 }

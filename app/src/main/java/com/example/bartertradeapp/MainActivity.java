@@ -26,30 +26,31 @@ public class MainActivity extends BaseActivity {
         changeStatusBarColor();
         //Check current user
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.addAuthStateListener(authStateListener);
+        firebaseUser = firebaseAuth.getCurrentUser();
+        //firebaseAuth.addAuthStateListener(authStateListener);
+        handler();
+
     }
 
-    FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
-        @Override
-        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            firebaseUser = firebaseAuth.getCurrentUser();
-
-            handler();
-        }
-    };
+//    FirebaseAuth.AuthStateListener authStateListener = new FirebaseAuth.AuthStateListener() {
+//        @Override
+//        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+//            firebaseUser = firebaseAuth.getCurrentUser();
+//        }
+//    };
 
     private void handler() {
         new Handler().postDelayed(new Runnable() {
 
             public void run() {
 
-
                 if (firebaseUser == null) {
                     signup();
                 }
-                if (firebaseUser != null) {
+                else if (firebaseUser != null) {
                     home();
                 }
+
             }
 
         }, 800);
