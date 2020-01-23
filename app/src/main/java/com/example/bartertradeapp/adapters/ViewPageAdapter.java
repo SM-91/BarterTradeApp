@@ -1,4 +1,4 @@
-package com.example.bartertradeapp.JavaClasses;
+package com.example.bartertradeapp.adapters;
 
 import android.content.Context;
 import android.net.Uri;

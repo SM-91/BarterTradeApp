@@ -1,4 +1,4 @@
-package com.example.bartertradeapp.JavaClasses;
+package com.example.bartertradeapp.Fragments;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.view.Gravity;
 import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -30,7 +29,7 @@ public class BaseFragment extends Fragment {
     Intent intent;
 
     /*Firebase*/
-    DatabaseReference databaseReference , updateDatabaseReference, viewDatabaseReference;
+    DatabaseReference updateDatabaseReference, viewDatabaseReference;
     FirebaseDatabase firebaseDatabase;
     FirebaseAuth uploadAuth;
 

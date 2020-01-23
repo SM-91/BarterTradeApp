@@ -1,4 +1,4 @@
-package com.example.bartertradeapp.JavaClasses;
+package com.example.bartertradeapp.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,11 +7,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -82,7 +80,7 @@ public class Profile_displayFragment extends BaseFragment implements user_feedba
         // Path dena hy abi
         String Ad_id = uploadAuth.getCurrentUser().getUid();
 
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserRating").child(Ad_id);
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserRating").child(Ad_id);
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -104,7 +102,7 @@ public class Profile_displayFragment extends BaseFragment implements user_feedba
             }
         });
 
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserDetails");
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users");
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -1,4 +1,4 @@
-package com.example.bartertradeapp.JavaClasses;
+package com.example.bartertradeapp.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.bartertradeapp.R;
+import com.example.bartertradeapp.adapters.UploadTabsAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 public class UserUploadFragment extends BaseFragment {

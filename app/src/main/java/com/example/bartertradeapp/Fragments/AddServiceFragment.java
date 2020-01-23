@@ -1,4 +1,4 @@
-package com.example.bartertradeapp.JavaClasses;
+package com.example.bartertradeapp.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +21,7 @@ import com.example.bartertradeapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
@@ -38,6 +39,8 @@ public class AddServiceFragment extends BaseFragment {
     private static Spinner serviceCategory;
     private Button btn_submit;
 
+    private UserModel currentUserModel = null;
+
     private String[] serviceCategories = {"Tutoring", "Designing" ,"Electrical work", "Mechanical work", "Wood work", "Cleaning"};
 
     @Nullable
@@ -48,28 +51,26 @@ public class AddServiceFragment extends BaseFragment {
         userUploadServiceModel = new UserUploadServiceModel();
         userModel = new UserModel();
         uploadAuth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        //refServiceImage = firebaseDatabase.getReference().child(firebaseAuth.getUid()).child("Profile");
-        databaseReference = firebaseDatabase.getReference("Users").child("UserUploadProducts")
-                .child(uploadAuth.getUid());
-        //refServicePosting = firebaseDatabase.getReference().child(firebaseAuth.getUid()).child("UserUploadService");
-
 
         serviceImageView = view.findViewById(R.id.serviceGivenBy);
+        DatabaseReference databaseReference;
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users");
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 for(DataSnapshot userSnapshot: dataSnapshot.getChildren()){
                     UserModel userModel = userSnapshot.getValue(UserModel.class);
-                    Picasso.get().load(userModel.getUserImageUrl())
+                    String mImageUrl = userModel.getUserImageUrl();
+                    Picasso.get().load(mImageUrl)
                             .fit()
-                            .centerCrop()
                             .into(serviceImageView);
+                    userUploadServiceModel.setmImageUrl(mImageUrl);
 
+                    if (uploadAuth.getUid().equals(userModel.getuserId())) {
+                        currentUserModel = userModel;
+                    }
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
@@ -81,7 +82,7 @@ public class AddServiceFragment extends BaseFragment {
         et_serviceDescription = view.findViewById(R.id.et_serviceDescription);
         et_servicePossibleExchangeWith = view.findViewById(R.id.et_servicePossibleExchange);
 
-        editTextPrice = (CurrencyEditText) view.findViewById(R.id.et_serviceEstimatedMarketValue);
+        editTextPrice = view.findViewById(R.id.et_serviceEstimatedMarketValue);
         editTextPrice.setCurrency("€");
         editTextPrice.setDelimiter(false);
         editTextPrice.setSpacing(false);
@@ -117,33 +118,35 @@ public class AddServiceFragment extends BaseFragment {
             }
         });
 
-
         return view;
     }
 
-    private void initEditText(){
-
-        userUploadServiceModel.setServiceName(et_serviceName.getText().toString().trim());
-        userUploadServiceModel.setServiceDescription(et_serviceDescription.getText().toString().trim());
-        userUploadServiceModel.setServicePossibleExchangeWith(et_servicePossibleExchangeWith.getText().toString().trim());
-        userUploadServiceModel.setServiceEstimatedMarketValue(editTextPrice.getText().toString().trim());
-    }
 
     private void storeLink(){
 
         String myCurrentDateTime = DateFormat.getDateTimeInstance()
                 .format(Calendar.getInstance().getTime());
 
-        String key = databaseReference.push().getKey();
-        userUploadServiceModel.setUid(key);
-        initEditText();
-        databaseReference = firebaseDatabase.getReference("Users").child("UserUploadService")
-                .child(uploadAuth.getUid()).child(myCurrentDateTime);
-        databaseReference.setValue(userUploadProductModel);
+        userUploadServiceModel.setServiceName(et_serviceName.getText().toString().trim());
+        userUploadServiceModel.setServiceDescription(et_serviceDescription.getText().toString().trim());
+        userUploadServiceModel.setServicePossibleExchangeWith(et_servicePossibleExchangeWith.getText().toString().trim());
+        userUploadServiceModel.setServiceEstimatedMarketValue(editTextPrice.getText().toString().trim());
+        userUploadServiceModel.setPostedBy(currentUserModel);
+        userUploadServiceModel.setCurrentDateTime(myCurrentDateTime);
+        String tag = "Service";
+        userUploadServiceModel.setTag(tag);
 
+        DatabaseReference uploadServiceReference;
+        uploadServiceReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices")
+                .child("UserUploads").child(uploadAuth.getUid());
+        String pushkey = uploadServiceReference.push().getKey();
+        userUploadServiceModel.setAd_id(pushkey);
+        uploadServiceReference.child(pushkey).setValue(userUploadServiceModel);
 
-        //refServicePosting.push().setValue(userUploadServiceModel);
+        DatabaseReference uploadAllServices;
+        uploadAllServices = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child(pushkey);
+        uploadAllServices.setValue(userUploadServiceModel);
 
-        Toast.makeText(getContext().getApplicationContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
     }
 }

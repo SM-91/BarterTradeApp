@@ -1,19 +1,13 @@
-package com.example.bartertradeapp.JavaClasses;
+package com.example.bartertradeapp.Fragments;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,7 +19,6 @@ import com.example.bartertradeapp.adapters.custom_list_adapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -40,6 +33,8 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
 
     FirebaseAuth uploadAuth;
     List<UserUploadProductModel> userlist, userlist2;
+
+    private String ad_id;
 
     @Nullable
     @Override
@@ -74,7 +69,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
 
         //uploadAuth.getCurrentUser().getUid();
 
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("AllProducts");
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -96,9 +91,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         });
 
         //databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("AllProducts");
-
-
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -128,6 +121,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
 
         intent = new Intent(getContext(), DetailedActivity.class);
         userUploadProductModel = adapter.getItem(position);
+        ad_id = userUploadProductModel.getAdId();
         pname = userUploadProductModel.getProductName();
         pdesc = userUploadProductModel.getProductDescription();
         pexch = userUploadProductModel.getPossibleExchangeWith();
@@ -143,7 +137,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
 
         intent.putExtra("name", pname);
         intent.putExtra("desc", pdesc);
-
+        intent.putExtra("ad_id",ad_id);
         intent.putExtra("exchange", pexch);
         intent.putExtra("est", pest);
         intent.putExtra("type", ptype);
@@ -155,8 +149,5 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         intent.putExtra("image", pimg);
         intent.putExtra("user", postedBy);
         startActivity(intent);
-        //Toast.makeText(getContext(), "as"+image, Toast.LENGTH_SHORT).show();
-
-        // ye 9.37pm pr likha hy
     }
 }
