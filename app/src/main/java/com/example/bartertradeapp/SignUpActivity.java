@@ -212,8 +212,7 @@ public class SignUpActivity extends BaseActivity {
     }
 
     public void pushing_data (){
-        reference = FirebaseDatabase.getInstance().getReference("Users")
-                .child("UserDetails");
+        reference = FirebaseDatabase.getInstance().getReference("Users");
 
         //Toast.makeText(SignUpActivity.this, "url:"+image_url, Toast.LENGTH_SHORT).show();
 
@@ -224,7 +223,7 @@ public class SignUpActivity extends BaseActivity {
         hashMap.put("userEmail", email);
         hashMap.put("userImageUrl", image_url);
 
-        reference.push().setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+        reference.child(userid).setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
 

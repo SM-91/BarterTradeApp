@@ -1,4 +1,4 @@
-package com.example.bartertradeapp.JavaClasses;
+package com.example.bartertradeapp.Fragments;
 
 
 import android.content.Intent;
@@ -6,8 +6,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
-import com.example.bartertradeapp.DetailedActivity;
 import com.example.bartertradeapp.MyAdsDetailsActivity;
 import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.custom_list_adapter;
@@ -36,6 +33,7 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
 
     private RecyclerView recyclerView;
     private custom_list_adapter adapter;
+    private String ad_id;
 
     List<UserUploadProductModel> userUploadProductModels;
 
@@ -52,12 +50,7 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
 
         uploadAuth = FirebaseAuth.getInstance();
 
-        //databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
-                .child(uploadAuth.getCurrentUser().getUid());
         userUploadProductModels = new ArrayList<>();
-        // hardcode adding items to list for testing reasons
-        //userlist.add(new UserUploadProductModel("Shayan","pagaal hy shayan","good","asdasdsadasdadasd"));
 
         // set up the RecyclerView
         recyclerView = view.findViewById(R.id.userAdsRecyclerView);
@@ -67,6 +60,8 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         adapter = new custom_list_adapter(getContext(), userUploadProductModels);
         adapter.setClickListener(this);
 
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child("UserUploads")
+                .child(uploadAuth.getCurrentUser().getUid());
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -94,6 +89,7 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
 
         intent = new Intent(getContext(), MyAdsDetailsActivity.class);
         userUploadProductModel = adapter.getItem(position);
+        ad_id = userUploadProductModel.getAdId();
         String myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
         productName = userUploadProductModel.getProductName();
         productDescription = userUploadProductModel.getProductDescription();
@@ -105,6 +101,7 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         productSingleImage = userUploadProductModel.getmImageUri();
         ArrayList<String> productMultipleImages = userUploadProductModel.getmArrList();
 
+        intent.putExtra("ad_id",ad_id);
         intent.putExtra("Key", myCurrentDateTime);
         intent.putExtra("name", productName);
         intent.putExtra("description", productDescription);
@@ -113,7 +110,6 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         intent.putExtra("type", productType);
         intent.putExtra("category", productCategory);
         intent.putExtra("condition", productCondition);
-
         intent.putExtra("multipleImagesList", productMultipleImages);
         intent.putExtra("singleImage", productSingleImage);
         startActivity(intent);

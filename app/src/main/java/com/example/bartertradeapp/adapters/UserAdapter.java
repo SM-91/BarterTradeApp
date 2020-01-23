@@ -9,10 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bartertradeapp.DataModels.ChatModel;
 import com.example.bartertradeapp.DataModels.UserModel;
-import com.example.bartertradeapp.DataModels.UserUploadProductModel;
-import com.example.bartertradeapp.JavaClasses.MessageListActivity;
 import com.example.bartertradeapp.R;
 
 import java.util.List;

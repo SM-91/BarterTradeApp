@@ -44,7 +44,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".JavaClasses.MessageListActivity"/>
+        <activity android:name=".Fragments.MessageListActivity"/>
     </application>
 
 </manifest>

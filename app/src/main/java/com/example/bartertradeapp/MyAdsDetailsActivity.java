@@ -2,14 +2,11 @@ package com.example.bartertradeapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,11 +14,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
-import com.example.bartertradeapp.JavaClasses.UpdateProductFragment;
-import com.example.bartertradeapp.JavaClasses.ViewPageAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.bartertradeapp.Fragments.UpdateProductFragment;
+import com.example.bartertradeapp.adapters.ViewPageAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,12 +27,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MyAdsDetailsActivity extends AppCompatActivity {
 
     FirebaseAuth uploadAuth;
-
     TextView text_name;
     TextView text_desc;
     TextView text_exch;
@@ -44,26 +38,20 @@ public class MyAdsDetailsActivity extends AppCompatActivity {
     TextView text_type;
     TextView text_category;
     TextView text_condition;
-
     Button btnUpdate, btnDel;
-
     ImageView imageView;
     ViewPager viewPager;
     ViewPageAdapter adapter = null;
-
     RelativeLayout myRelativeLayout;
 
+    UserUploadProductModel userUploadProductModel;
+    UpdateProductFragment updateProductFragment;
+    String ad_id;
+    String user_id;
+    private UserModel postedBy;
 
     private ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
     private ArrayList<String> listimages = new ArrayList<String>();
-
-    UserUploadProductModel userUploadProductModel;
-    private DatabaseReference ref;
-
-
-
-    UpdateProductFragment updateProductFragment;
-
 
 
     @Override
@@ -98,6 +86,7 @@ public class MyAdsDetailsActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         final String myCurrentDataTime = getIntent().getStringExtra("Key");
+        ad_id = getIntent().getStringExtra("ad_id");
         Toast.makeText(getApplicationContext(),myCurrentDataTime,Toast.LENGTH_LONG).show();
         final String name = getIntent().getStringExtra("name");
         final String desc = getIntent().getStringExtra("description");
@@ -138,14 +127,14 @@ public class MyAdsDetailsActivity extends AppCompatActivity {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                ref = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
-                        .child(uploadAuth.getUid()).child(myCurrentDataTime);
+                DatabaseReference ref;
+                ref = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child("UserUploads")
+                        .child(uploadAuth.getUid()).child(ad_id);
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                        String current_ad_id = dataSnapshot.child("adId").getValue(String.class);
                         String updateCurrentDateTime = dataSnapshot.child("currentDateTime").getValue(String.class);
                         String pName = dataSnapshot.child("productName").getValue(String.class);
                         String pDescription = dataSnapshot.child("productDescription").getValue(String.class);
@@ -158,13 +147,19 @@ public class MyAdsDetailsActivity extends AppCompatActivity {
                         ArrayList<String> updateMultipleImageList = new ArrayList<>();
 
                         if (dataSnapshot.child("mArrList").getValue() != null) {
-
                             for (DataSnapshot listSnapshot : dataSnapshot.child("mArrList").getChildren()) {
-                                updateMultipleImageList.add(listSnapshot.child("mArrList").getValue(String.class));
+                                updateMultipleImageList.add(listSnapshot.getValue(String.class));
+                            }
+                        }
+
+                        if(postedBy != null){
+                            for(DataSnapshot postedBySnapshot : dataSnapshot.child("postedBy").getChildren()){
+                                user_id = postedBySnapshot.child("userId").getValue(String.class);
                             }
                         }
 
                         Bundle updateBundle = new Bundle();
+                        updateBundle.putString("ad_id",current_ad_id);
                         updateBundle.putString("Key", updateCurrentDateTime);
                         updateBundle.putString("name", pName);
                         updateBundle.putString("desc", pDescription);
@@ -174,6 +169,8 @@ public class MyAdsDetailsActivity extends AppCompatActivity {
                         updateBundle.putString("type", pType);
                         updateBundle.putString("category", pCategory);
                         updateBundle.putString("condition", pCondition);
+                        updateBundle.putParcelable("postedBy",postedBy);
+                        updateBundle.putString("user_id",user_id);
                         updateBundle.putStringArrayList("updateMultipleImagesList", updateMultipleImageList);
                         updateProductFragment.setArguments(updateBundle);
 
@@ -184,14 +181,11 @@ public class MyAdsDetailsActivity extends AppCompatActivity {
                                 .commit();
 
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 });
-
-
             }
         });
 
@@ -200,23 +194,17 @@ public class MyAdsDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DatabaseReference deleteDatabaseReference;
-                deleteDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
-                        .child(uploadAuth.getCurrentUser().getUid()).child(myCurrentDataTime);
-                deleteDatabaseReference.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
+                deleteDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child("UserUploads")
+                        .child(uploadAuth.getCurrentUser().getUid()).child(ad_id);
+                deleteDatabaseReference.removeValue();
 
-                            DatabaseReference allProductsDeleteReference;
-                            allProductsDeleteReference = FirebaseDatabase.getInstance().getReference("Users").child("AllProducts")
-                                    .child(myCurrentDataTime);
-                            allProductsDeleteReference.removeValue();
-                            Toast.makeText(getApplicationContext(), "Product Deleted", Toast.LENGTH_SHORT).show();
-                            finish();
-                        }
-                    }
-                });
+                DatabaseReference allProductsDeleteReference;
+                allProductsDeleteReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices")
+                        .child(ad_id);
+                allProductsDeleteReference.removeValue();
 
+                Toast.makeText(getApplicationContext(), "Product Deleted", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }

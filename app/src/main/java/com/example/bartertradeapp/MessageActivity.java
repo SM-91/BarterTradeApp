@@ -33,15 +33,9 @@ import java.util.Locale;
 public class MessageActivity extends AppCompatActivity {
 
     FirebaseAuth chatAuth;
-    private DatabaseReference recieverDatabaseReference, chatReference;
-
 
     ImageButton btn_send;
     EditText text_send;
-
-    String userid = "";
-    String recieverId = "";
-//    String pushKey = "";
 
     MessageAdapter messageAdapter;
     List<ChatModel> chatModels = new ArrayList<>();
@@ -49,34 +43,7 @@ public class MessageActivity extends AppCompatActivity {
     RecyclerView recyclerView;
 
     private UserModel sender, receiver;
-
-    /**
-     * Steps:
-     * pushKey => product_id for every conversation
-     * 0.5) humay saray userIDs ki list chaiye hgi <-
-     * 1) Saray messages get kar liye (message, sender, reciever)
-     * 2) Us mai apnay walay messages filter kar liyay
-     * 3) list -> humaray (user1) messages with everyone (user2, user3, user4 etc)
-     * 4) sender ya receiver ki ID ko userIDs ki list se map kar k ek separate list ban jaye gi conversations ki
-     * <p>
-     * SHayan is user1
-     * Adeel is user2
-     * Faran is user3
-     * Moteeb is user4
-     * <p>
-     * user1 is login (shayan)
-     * shayan opens messages
-     * <p>
-     * INTEHAYI BADTEMEEZANA OR SASTI APPROACH
-     * <p>
-     * Message -> message, sender (not ID. full information of User), receiver (not ID. full information of User)
-     * <p>
-     * <p>
-     * 2) get full list of messages -> listOfMessages -> pushkey = product_id.
-     * 3) Message contains (message, sender, reciever)
-     * 4) listOfMessages -> singleMessage jiska sender/receiver was equal to Shayan's ID.
-     * 5) Us message ka humnay dusri ID get kar li.
-     */
+    private String ad_id ,  food_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +52,8 @@ public class MessageActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
-
+            ad_id = bundle.getString("ad_id");
+            food_name = bundle.getString("food_name");
             receiver = bundle.getParcelable("user");
         }
 
@@ -113,8 +81,8 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-        recieverDatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
-                .child("UserDetails");
+        DatabaseReference recieverDatabaseReference;
+        recieverDatabaseReference = FirebaseDatabase.getInstance().getReference("Users");
         recieverDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -136,19 +104,22 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void sendMessage(String message) {
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("sender", this.sender);
-        hashMap.put("reciever", this.receiver);
-        hashMap.put("message", message);
+
+        ChatModel chatModel = new ChatModel();
+        chatModel.setConversationID(ad_id);
+        chatModel.setFoodName(food_name);
+        chatModel.setReciever(this.receiver);
+        chatModel.setSender(this.sender);
+        chatModel.setMessage(message);
 
         DatabaseReference sendMessageReference =
-                FirebaseDatabase.getInstance().getReference("Users").child("Chat").push();
-        sendMessageReference.setValue(hashMap);
+                FirebaseDatabase.getInstance().getReference("Messages");
+        sendMessageReference.child(ad_id).push().setValue(chatModel);
     }
 
-
     private void readMessage() {
-        chatReference = FirebaseDatabase.getInstance().getReference("Users").child("Chat");
+        DatabaseReference chatReference;
+        chatReference = FirebaseDatabase.getInstance().getReference("Messages");
         chatReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -181,38 +152,3 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 }
-
-
-
-
-
-
-//String recieverKey = recieverDatabaseReference.getKey();
-        /**/
-
-
-
-
-/*
-        DatabaseReference userIDReference = FirebaseDatabase.getInstance().getReference("Users")
-                .child("Chat");
-        userIDReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("MessageActivity", "onDataChange called");
-
-                for(DataSnapshot snapshot: dataSnapshot.getChildren()){
-                    UserModel userModel = snapshot.getValue(UserModel.class);
-
-                    if(!chatAuth.getUid().equals(userModel.getuserId())){
-                        recieverId = userModel.getuserId();
-                    }
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/

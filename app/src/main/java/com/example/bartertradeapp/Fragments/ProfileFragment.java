@@ -1,17 +1,12 @@
-package com.example.bartertradeapp.JavaClasses;
+package com.example.bartertradeapp.Fragments;
 
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,13 +16,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.example.bartertradeapp.DataModels.UserModel;
-import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.LogInActivity;
 import com.example.bartertradeapp.R;
-import com.example.bartertradeapp.SignUpActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,17 +28,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -75,8 +62,8 @@ public class ProfileFragment extends BaseFragment {
         progressDialog = new ProgressDialog(getActivity());
 
         firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() == null){
-            startActivity(new Intent(getContext() , LogInActivity.class));
+        if (firebaseAuth.getCurrentUser() == null) {
+            startActivity(new Intent(getContext(), LogInActivity.class));
         }
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -116,7 +103,7 @@ public class ProfileFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         // getting images
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserDetails");
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users");
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -167,12 +154,12 @@ public class ProfileFragment extends BaseFragment {
         }
     }
 
-    public void gettingImageUrl(){
+    public void gettingImageUrl() {
         StorageReference userProfileImage = FirebaseStorage.getInstance().getReference("UserProfilePic");
 
-        if(uImageUri != null){
+        if (uImageUri != null) {
 
-            final StorageReference singleImageName = userProfileImage.child(System.currentTimeMillis() + "." + "Image"+ uImageUri.getLastPathSegment());
+            final StorageReference singleImageName = userProfileImage.child(System.currentTimeMillis() + "." + "Image" + uImageUri.getLastPathSegment());
 
             singleImageName.putFile(uImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -195,8 +182,7 @@ public class ProfileFragment extends BaseFragment {
                     Toast.makeText(getContext(), "Failed:" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-        }
-        else{
+        } else {
             Toast.makeText(getContext(), "Image not Saved", Toast.LENGTH_SHORT).show();
         }
     }
@@ -210,26 +196,23 @@ public class ProfileFragment extends BaseFragment {
         userModel.setUserBio(uBio.getText().toString().trim());
         userModel.setUserImageUrl(image_url);
 
-            if (firebaseAuth.getCurrentUser().getUid() != null) {
-                updateDatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
-                        .child("UserDetails").child(firebaseAuth.getCurrentUser().getUid());
-                updateDatabaseReference.setValue(userModel).addOnCompleteListener(
-                        new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
+        if (firebaseAuth.getCurrentUser().getUid() != null) {
+            updateDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.getCurrentUser().getUid());
+            updateDatabaseReference.setValue(userModel).addOnCompleteListener(
+                    new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
 
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT)
-                                            .show();
-                                }
-                                else {
-                                    Toast.makeText(getContext(), "Rola hy reference me", Toast.LENGTH_SHORT).show();
-                                }
+                            if (task.isSuccessful()) {
+                                Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT)
+                                        .show();
+                            } else {
+                                Toast.makeText(getContext(), "Rola hy reference me", Toast.LENGTH_SHORT).show();
                             }
                         }
-                );
-            }
-
+                    }
+            );
+        }
 
 
     }

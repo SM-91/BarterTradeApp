@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.bartertradeapp.DataModels.UserModel;
-import com.example.bartertradeapp.JavaClasses.ViewPageAdapter;
+import com.example.bartertradeapp.adapters.ViewPageAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -28,13 +28,14 @@ public class DetailedActivity extends BaseActivity {
     ImageView imageView;
     ViewPager viewPager;
     UserModel postedBy;
+    String ad_id;
+    String food_name;
 
     Button chatBtn;
     ViewPageAdapter adapter = null;
 
     private ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
     private ArrayList<String> listimages = new ArrayList<String>() ;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +54,15 @@ public class DetailedActivity extends BaseActivity {
         textView_condition = findViewById(R.id.textview_ad_condition);
         imageView = findViewById(R.id.image_display);
 
-
-
         /*ViewPager*/
         viewPager = findViewById(R.id.view_pager_image);
         adapter = new ViewPageAdapter(this, mArrayUri);
         viewPager.getOffscreenPageLimit();
-
         viewPager.setAdapter(adapter);
 
-
         Bundle bundle = getIntent().getExtras();
-        String name = getIntent().getStringExtra("name");
+        ad_id = getIntent().getStringExtra("ad_id");
+        food_name = getIntent().getStringExtra("name");
         String desc = getIntent().getStringExtra("desc");
         String exch = getIntent().getStringExtra("exchange");
         String est = getIntent().getStringExtra("est");
@@ -76,7 +74,6 @@ public class DetailedActivity extends BaseActivity {
         listimages = getIntent().getStringArrayListExtra("imagelist");
 
         if (bundle!= null) {
-
             if(mimage != null){
                 imageView.setVisibility(View.VISIBLE);
                 Picasso.get().load(mimage)
@@ -93,7 +90,7 @@ public class DetailedActivity extends BaseActivity {
                 }
                 adapter.notifyDataSetChanged();
             }
-            textView_name.setText(name);
+            textView_name.setText(food_name);
             textView_desc.setText(desc);
             textView_exch.setText("Exchange with: " + exch);
             textView_est.setText("Estimated Price: "+est);
@@ -106,11 +103,11 @@ public class DetailedActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(DetailedActivity.this, MessageActivity.class);
+                intent.putExtra("ad_id",ad_id);
+                intent.putExtra("foodName", food_name);
                 intent.putExtra("user", postedBy);
                 startActivity(intent);
             }
         });
     }
-
-
 }

@@ -17,6 +17,7 @@ public class UserUploadProductModel {
     private double longitude;
     private String currentDateTime;
     private UserModel postedBy;
+    private String tag;
 
     private ArrayList<String> mArrList;
     private String mImageUri;
@@ -141,5 +142,13 @@ public class UserUploadProductModel {
 
     public void setPostedBy(UserModel postedBy) {
         this.postedBy = postedBy;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

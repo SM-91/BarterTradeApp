@@ -1,9 +1,9 @@
-package com.example.bartertradeapp.JavaClasses;
+package com.example.bartertradeapp.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,10 +29,10 @@ import java.util.List;
 import java.util.Map;
 
 public class MessageListActivity extends AppCompatActivity implements View.OnClickListener {
+
     private RecyclerView rvMessageList;
-
     private List<UserModel> otherUserList = new ArrayList<>();
-
+    private Map<String, Boolean> otherUserMap = new HashMap<>();
     private String myId;
     private String ad_id = " ";
 
@@ -42,16 +42,38 @@ public class MessageListActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_message_list);
 
         myId = FirebaseAuth.getInstance().getUid();
-
         rvMessageList = findViewById(R.id.rvMessageList);
         rvMessageList.setLayoutManager(new LinearLayoutManager(this));
 
-        DatabaseReference allChatReference = FirebaseDatabase.getInstance().getReference("Users").child("Chat");
+        DatabaseReference getProductAdIdReference = FirebaseDatabase.getInstance().getReference("Users").child("Messages");
+        //Show Progress Dialog
+        getProductAdIdReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //otherUserMap.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String conversationId = snapshot.getKey();
+                    if (!TextUtils.isEmpty(conversationId)) {
+                        ad_id = conversationId;
+                        getUser();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getUser() {
+        DatabaseReference allChatReference = FirebaseDatabase.getInstance().getReference("Messages").child(ad_id);
         //Show Progress Dialog
         allChatReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    //otherUserList.clear();
+                //otherUserList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     ChatModel chatModel = snapshot.getValue(ChatModel.class);
                     UserModel otherUser = null;
@@ -63,7 +85,10 @@ public class MessageListActivity extends AppCompatActivity implements View.OnCli
                     }
 
                     if (otherUser != null) {
-                        otherUserList.add(otherUser);
+                        if (!otherUserMap.containsKey(otherUser.getuserId())) {
+                            otherUserMap.put(otherUser.getuserId(), true);
+                            otherUserList.add(otherUser);
+                        }
                     }
                 }
                 setRVAdapter();
@@ -89,6 +114,7 @@ public class MessageListActivity extends AppCompatActivity implements View.OnCli
         UserModel clickedUserModel = (UserModel) v.getTag();
         Intent messageIntent = new Intent(MessageListActivity.this, MessageActivity.class);
         messageIntent.putExtra("user", clickedUserModel);
+        messageIntent.putExtra("ad_id", ad_id);
         startActivity(messageIntent);
     }
 }

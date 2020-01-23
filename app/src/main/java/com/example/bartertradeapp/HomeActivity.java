@@ -1,46 +1,29 @@
 package com.example.bartertradeapp;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
-import com.example.bartertradeapp.DataModels.UserModel;
-import com.example.bartertradeapp.JavaClasses.AddProductFragment;
-import com.example.bartertradeapp.JavaClasses.BaseFragment;
-import com.example.bartertradeapp.JavaClasses.ChatFragment;
-import com.example.bartertradeapp.JavaClasses.Feedback_postFragment;
-import com.example.bartertradeapp.JavaClasses.HomeFragment;
-import com.example.bartertradeapp.JavaClasses.HomeFragmentExtend;
-import com.example.bartertradeapp.JavaClasses.MapFragment;
-import com.example.bartertradeapp.JavaClasses.MessageListActivity;
-import com.example.bartertradeapp.JavaClasses.Profile_displayFragment;
-import com.example.bartertradeapp.JavaClasses.UserAdsFragment;
-import com.example.bartertradeapp.JavaClasses.UserUploadFragment;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
+import com.example.bartertradeapp.DataModels.UserModel;
+import com.example.bartertradeapp.Fragments.Feedback_postFragment;
+import com.example.bartertradeapp.Fragments.HomeFragment;
+import com.example.bartertradeapp.Fragments.HomeFragmentExtend;
+import com.example.bartertradeapp.Fragments.MapFragment;
+import com.example.bartertradeapp.Fragments.MessageListActivity;
+import com.example.bartertradeapp.Fragments.Profile_displayFragment;
+import com.example.bartertradeapp.Fragments.UserAdsFragment;
+import com.example.bartertradeapp.Fragments.UserUploadFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -49,17 +32,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import android.view.Menu;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -75,8 +47,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference reference = firebaseDatabase.getReference("Users").child("UserDetails");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,17 +59,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         setSupportActionBar(toolbar);
 
         mDrawer = findViewById(R.id.drawer_layout);
-        /*btn_testing = findViewById(R.id.btn_testing);
-        btn_testing2 = findViewById(R.id.btn_testing2);*/
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         /*Navigation Drawer Header*/
         View header_view = navigationView.getHeaderView(0);
-        nav_header_user_name = (TextView) header_view.findViewById(R.id.nav_header_userName);
-        nav_header_user_email = (TextView) header_view.findViewById(R.id.nav_header_userEmail);
-        img1 = (ImageView) header_view.findViewById(R.id.nav_header_userProfilePic);
+        nav_header_user_name = header_view.findViewById(R.id.nav_header_userName);
+        nav_header_user_email = header_view.findViewById(R.id.nav_header_userEmail);
+        img1 = header_view.findViewById(R.id.nav_header_userProfilePic);
         img1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,6 +76,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
         changeStatusBarColor();
+
+        DatabaseReference reference;
+        reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -144,7 +115,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         return true;
 
                     case R.id.add:
-                        loadFragment(new AddProductFragment());
+                        loadFragment(new UserUploadFragment());
                         return true;
 
                     case R.id.map:
@@ -203,12 +174,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_chat:
                 Intent intent = new Intent(HomeActivity.this, MessageListActivity.class);
                 startActivity(intent);
-                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatFragment()).addToBackStack(null).commit();
                 break;
 
-            case R.id.nav_add_new_product:
+            /*case R.id.nav_add_new_product:
                 loadFragment(new UserUploadFragment());
-                break;
+                break;*/
 
             case R.id.nav_myAds:
                 loadFragment(new UserAdsFragment());

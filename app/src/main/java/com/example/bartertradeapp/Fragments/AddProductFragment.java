@@ -1,21 +1,16 @@
-package com.example.bartertradeapp.JavaClasses;
+package com.example.bartertradeapp.Fragments;
 
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,21 +23,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
-import com.example.bartertradeapp.HomeActivity;
 import com.example.bartertradeapp.LogInActivity;
 import com.example.bartertradeapp.R;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.bartertradeapp.adapters.ViewPageAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -59,15 +48,10 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 
 import me.abhinay.input.CurrencyEditText;
 
 public class AddProductFragment extends BaseFragment {
-
- /*   DatabaseReference databaseReference;
-    FirebaseDatabase firebaseDatabase;
-    FirebaseAuth uploadAuth;*/
 
     private static EditText et_name, et_description, et_possible_exchange_with;
     private static CurrencyEditText et_estimated_market_value;
@@ -109,13 +93,10 @@ public class AddProductFragment extends BaseFragment {
         userUploadProductModel = new UserUploadProductModel();
 
         uploadAuth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
 
         if (uploadAuth.getCurrentUser() == null) {
             startActivity(new Intent(getContext(), LogInActivity.class));
         }
-
-        /*Layout Components Casting*/
 
         /*EditText*/
         et_name = view.findViewById(R.id.et_productName);
@@ -128,8 +109,6 @@ public class AddProductFragment extends BaseFragment {
         et_estimated_market_value.setDecimals(true);
         //Make sure that Decimals is set as false if a custom Separator is used
         et_estimated_market_value.setSeparator(".");
-
-
 
         /*ViewPager*/
         viewPager = view.findViewById(R.id.viewPagerProduct);
@@ -208,7 +187,7 @@ public class AddProductFragment extends BaseFragment {
         });
 
         /*Fetching User Model From Firebase*/
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child("UserDetails");
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users");
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -318,7 +297,42 @@ public class AddProductFragment extends BaseFragment {
         }
     }
 
-    /*Posting Functions*/
+    private void uploadSingleImage() {
+
+        StorageReference ImageFolder = FirebaseStorage.getInstance().getReference("UserProductUploads").child("UserProductImages");
+        Log.i("Checking Storage", String.valueOf(ImageFolder));
+
+        final StorageReference singleImageName = ImageFolder.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
+        singleImageName.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                singleImageName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+
+                        String url = String.valueOf(uri);
+                        Log.i("image Url", url);
+                        userUploadProductModel.setmImageUri(url);
+                        storeLink();
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                progressDialog.dismiss();
+                Toast.makeText(getContext().getApplicationContext(), "Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                Log.i("Progress", "checking progress" + progress);
+                progressDialog.setMessage("Uploaded" + (int) progress + "%");
+            }
+        });
+    }
+
     private void uploadMultipleImages() {
 
         progressDialog = ProgressDialog.show(getContext(), "Posting Data",
@@ -366,16 +380,6 @@ public class AddProductFragment extends BaseFragment {
                 }
             });
         }
-
-
-       /* Runnable progressRunnable = new Runnable() {
-            @Override
-            public void run() {
-
-            }
-        };
-        Handler pdCanceller = new Handler();
-        pdCanceller.postDelayed(progressRunnable, 10000);*/
     }
 
     private void uploadData() {
@@ -384,74 +388,31 @@ public class AddProductFragment extends BaseFragment {
         storeLink();
     }
 
-    private void uploadSingleImage() {
-
-        StorageReference ImageFolder = FirebaseStorage.getInstance().getReference("UserProductUploads").child("UserProductImages");
-        Log.i("Checking Storage", String.valueOf(ImageFolder));
-
-        final StorageReference singleImageName = ImageFolder.child(System.currentTimeMillis() + "." + getFileExtension(mImageUri));
-        singleImageName.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                singleImageName.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-
-                        String url = String.valueOf(uri);
-                        Log.i("image Url", url);
-                        userUploadProductModel.setmImageUri(url);
-                        storeLink();
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
-                Toast.makeText(getContext().getApplicationContext(), "Failed" + e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-                Log.i("Progress", "checking progress" + progress);
-                progressDialog.setMessage("Uploaded" + (int) progress + "%");
-            }
-        });
-    }
-
-
     /*Sending Data to DB*/
     private void storeLink() {
 
         final String myCurrentDateTime = DateFormat.getDateTimeInstance()
                 .format(Calendar.getInstance().getTime());
         userUploadProductModel.setCurrentDateTime(myCurrentDateTime);
-
-
         userUploadProductModel.setProductName(et_name.getText().toString().trim());
         userUploadProductModel.setProductDescription(et_description.getText().toString().trim());
         userUploadProductModel.setProductEstimatedMarketValue(et_estimated_market_value.getText().toString().trim());
         userUploadProductModel.setPossibleExchangeWith(et_possible_exchange_with.getText().toString().trim());
         userUploadProductModel.setPostedBy(currentUserModel);
+        userUploadProductModel.setTag("Product");
 
+        DatabaseReference databaseReference;
+        databaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child("UserUploads").child(uploadAuth.getCurrentUser().getUid());
+        String pushkey = databaseReference.push().getKey();
+        userUploadProductModel.setAdId(pushkey);
+        databaseReference.child(pushkey).setValue(userUploadProductModel);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child("UserUploadProducts")
-                .child(uploadAuth.getCurrentUser().getUid()).child(myCurrentDateTime);
-        databaseReference.setValue(userUploadProductModel).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    DatabaseReference allProfuctRef = FirebaseDatabase.getInstance().getReference("Users").child("AllProducts")
-                            .child(myCurrentDateTime);
-                    allProfuctRef.setValue(userUploadProductModel);
+        DatabaseReference allProductRef = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child(pushkey);
+        allProductRef.setValue(userUploadProductModel);
 
-                    Toast.makeText(getContext(),"Product Added",Toast.LENGTH_LONG).show();
-                    //getActivity().finish();
-                }
+        Toast.makeText(getContext(),"Product Added",Toast.LENGTH_LONG).show();
+    }
 
-            }
-        });
 
 
 
@@ -466,7 +427,6 @@ public class AddProductFragment extends BaseFragment {
 
 
 
-    }
 
-    /*Posting End*/
+
 }
