@@ -35,6 +35,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.R;
@@ -209,6 +211,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.option_get_place) {
             showCurrentPlace();
+            writeNewUser(geo);
+            UserUploadFragment useruplaod = new UserUploadFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, useruplaod);
+            fragmentTransaction.addToBackStack(null).commit();;
         }
         return true;
     }
@@ -359,17 +367,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
                             mLastKnownLocation = task.getResult();
+                            Log.i("Last Location", String.valueOf(mLastKnownLocation));
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
                                     new LatLng(mLastKnownLocation.getLatitude(),
                                             mLastKnownLocation.getLongitude()), DEFAULT_ZOOM));
 
                             geo= new GeoPoint((float)mLastKnownLocation.getLatitude(),(float)mLastKnownLocation.getLongitude());
                             curr=new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude());
-                            writeNewUser(geo);
+                            //writeNewUser(geo);
                             circle.setCenter(new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()));
-
-
-
                             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                                 @Override
 

@@ -25,7 +25,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAZwv9njiRlgmhqRr6Dd_c_BwyJd01-anM" />
+            android:value="AIzaSyBBokTr-9jkpGL2J-dEjUicYkiHW8wMz5I" />
 
         <activity
             android:windowSoftInputMode="stateHidden"

@@ -22,6 +22,7 @@ import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.DetailedActivity;
 import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.custom_list_adapter;
+import com.example.bartertradeapp.adapters.custom_nearest_adapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,10 +33,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeFragment extends BaseFragment implements custom_list_adapter.ItemClickListener {
+public class HomeFragment extends BaseFragment implements custom_list_adapter.ItemClickListener, custom_nearest_adapter.ItemClickListener  {
 
     private RecyclerView recyclerView, recyclerView2;
-    private custom_list_adapter adapter, adapter2;
+    private custom_list_adapter adapter2;
+    private custom_nearest_adapter adapter;
     LinearLayoutManager layoutManager, layoutManager2;
 
     FirebaseAuth uploadAuth;
@@ -61,7 +63,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         recyclerView.setLayoutManager(layoutManager);
         recyclerView2.setLayoutManager(layoutManager2);
         // initializing adapter
-        adapter = new custom_list_adapter(getContext(), userlist);
+        adapter = new custom_nearest_adapter(getContext(), userlist);
         adapter.setClickListener(this);
 
         adapter2 = new custom_list_adapter(getContext(), userlist2);

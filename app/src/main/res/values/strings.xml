@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BarterTradeApp</string>
+    <string name="app_name">Tradewise</string>
 
     <string name="email_hint">Enter Email</string>
     <string name="password_hint">Enter Password</string>

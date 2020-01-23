@@ -148,7 +148,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         return true;
 
                     case R.id.map:
-                        loadFragment(new MapFragment());
+                        loadFragment(new Feedback_postFragment());
                         return true;
 
                     case R.id.profile_edit:
@@ -215,7 +215,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
 
             case R.id.nav_maps:
-                loadFragment(new Feedback_postFragment());
+                loadFragment(new MapFragment());
                 break;
 
 

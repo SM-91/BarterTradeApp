@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="180dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/whiteTransparent"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true">
+
+<RelativeLayout
+    android:layout_width="100dp"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+
+
+    <ImageView
+        android:id="@+id/ad_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/default_image"/>
+
+
+        <RelativeLayout
+            android:id="@+id/inside1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ad_image">
+
+            <TextView
+                android:id="@+id/ad_title"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Title" />
+
+            <View
+                android:id="@+id/line"
+                android:layout_above="@+id/tags"
+                android:layout_width="wrap_content"
+                android:layout_height="2dp"
+                android:background="@color/light_grey">
+
+            </View>
+
+            <TextView
+                android:id="@+id/tags"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/grey"
+                android:text="Product Tag"
+                >
+
+            </TextView>
+
+        </RelativeLayout>
+    <View
+        android:layout_width="2dp"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/ad_image"
+        android:background="@color/light_grey">
+
+    </View>
+
+
+</RelativeLayout>
+
+
+
+</androidx.cardview.widget.CardView>
