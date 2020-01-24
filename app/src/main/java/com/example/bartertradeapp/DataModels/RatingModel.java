@@ -3,7 +3,21 @@ package com.example.bartertradeapp.DataModels;
 
 public class RatingModel {
 
-    private String feedback,sellerid,buyerid,currentDateTime, imageUri;
+    private String feedback;
+    private String sellerid;
+    private String buyerid;
+    private String currentDateTime;
+    private String imageUri;
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    public void setUserName(String userName) {
+        UserName = userName;
+    }
+
+    private String UserName;
     private int rating,avg_rating;
 
     public String getImageUri() {

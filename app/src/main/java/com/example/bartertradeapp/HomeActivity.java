@@ -15,7 +15,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.bartertradeapp.DataModels.UserModel;
-import com.example.bartertradeapp.Fragments.Feedback_postFragment;
 import com.example.bartertradeapp.Fragments.HomeFragment;
 import com.example.bartertradeapp.Fragments.HomeFragmentExtend;
 import com.example.bartertradeapp.Fragments.MapFragment;
@@ -36,7 +35,6 @@ import com.squareup.picasso.Picasso;
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawer;
-    //BottomNavigationView nav_bar;
 
     UserModel userModel;
 
@@ -117,7 +115,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         return true;
 
                     case R.id.map:
-                        loadFragment(new Feedback_postFragment());
+                        loadFragment(new MapFragment());
                         return true;
 
                     case R.id.profile_edit:

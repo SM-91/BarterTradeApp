@@ -62,7 +62,6 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
 
                 Picasso.get().load(list.getmImageUri())
                         .fit()
-                        .centerCrop()
                         .into(holder.image);
 
             } else {
@@ -72,7 +71,6 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
                     Uri uri = Uri.parse(imageList.get(0));
                     Picasso.get().load(uri)
                             .fit()
-                            .centerCrop()
                             .into(holder.image);
                 }
             }

@@ -80,7 +80,7 @@ public class Profile_displayFragment extends BaseFragment implements user_feedba
         // Path dena hy abi
         String Ad_id = uploadAuth.getCurrentUser().getUid();
 
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserRating").child(Ad_id);
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserFeedback").child(Ad_id);
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
