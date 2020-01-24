@@ -45,7 +45,7 @@ public class MessageListActivity extends AppCompatActivity implements View.OnCli
         rvMessageList = findViewById(R.id.rvMessageList);
         rvMessageList.setLayoutManager(new LinearLayoutManager(this));
 
-        DatabaseReference getProductAdIdReference = FirebaseDatabase.getInstance().getReference("Users").child("Messages");
+        DatabaseReference getProductAdIdReference = FirebaseDatabase.getInstance().getReference("Messages");
         //Show Progress Dialog
         getProductAdIdReference.addValueEventListener(new ValueEventListener() {
             @Override

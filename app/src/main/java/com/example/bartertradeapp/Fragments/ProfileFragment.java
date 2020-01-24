@@ -103,22 +103,19 @@ public class ProfileFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         // getting images
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users");
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.getUid());
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
-                    UserModel userModel = usersSnapshot.getValue(UserModel.class);
+                    UserModel userModel = dataSnapshot.getValue(UserModel.class);
                     uName.setText(userModel.getUserName());
                     uEmail.setText(userModel.getUserEmail());
                     Picasso.get().load(userModel.getUserImageUrl())
                             .fit()
-                            .centerCrop()
                             .into(uImage);
                 }
 
-            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -148,7 +145,6 @@ public class ProfileFragment extends BaseFragment {
                 gettingImageUrl();
                 Picasso.get().load(uImageUri)
                         .fit()
-                        .centerCrop()
                         .into(uImage);
             }
         }

@@ -102,19 +102,17 @@ public class Profile_displayFragment extends BaseFragment implements user_feedba
             }
         });
 
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users");
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(uploadAuth.getUid());
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
-                    UserModel userModel = usersSnapshot.getValue(UserModel.class);
+                    UserModel userModel = dataSnapshot.getValue(UserModel.class);
                     username.setText(userModel.getUserName());
                     Picasso.get().load(userModel.getUserImageUrl())
                             .fit()
-                            .centerCrop()
                             .into(image_profile);
-                }
+
             }
 
             @Override

@@ -60,7 +60,7 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         adapter = new custom_list_adapter(getContext(), userUploadProductModels);
         adapter.setClickListener(this);
 
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child("UserUploads")
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserUploads")
                 .child(uploadAuth.getCurrentUser().getUid());
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override

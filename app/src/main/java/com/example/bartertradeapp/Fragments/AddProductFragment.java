@@ -284,7 +284,6 @@ public class AddProductFragment extends BaseFragment {
                     Picasso.get()
                             .load(mImageUri)
                             .fit()
-                            .centerCrop()
                             .into(imageView);
                     viewPager.setVisibility(View.GONE);
                     imageView.setVisibility(View.VISIBLE);
@@ -402,7 +401,7 @@ public class AddProductFragment extends BaseFragment {
         userUploadProductModel.setTag("Product");
 
         DatabaseReference databaseReference;
-        databaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child("UserUploads").child(uploadAuth.getCurrentUser().getUid());
+        databaseReference = FirebaseDatabase.getInstance().getReference("UserUploads").child(uploadAuth.getCurrentUser().getUid());
         String pushkey = databaseReference.push().getKey();
         userUploadProductModel.setAdId(pushkey);
         databaseReference.child(pushkey).setValue(userUploadProductModel);

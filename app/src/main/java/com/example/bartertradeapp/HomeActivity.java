@@ -78,20 +78,18 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         changeStatusBarColor();
 
         DatabaseReference reference;
-        reference = FirebaseDatabase.getInstance().getReference("Users");
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.getUid());
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot userSnapshot: dataSnapshot.getChildren()){
-                    UserModel userModel = userSnapshot.getValue(UserModel.class);
+                    UserModel userModel = dataSnapshot.getValue(UserModel.class);
                     nav_header_user_name.setText(userModel.getUserName());
                     nav_header_user_email.setText(userModel.getUserEmail());
                     Picasso.get().load(userModel.getUserImageUrl())
                             .fit()
-                            .centerCrop()
                             .into(img1);
-                }
+
             }
 
             @Override

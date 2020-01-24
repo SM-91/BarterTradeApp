@@ -78,7 +78,6 @@ public class DetailedActivity extends BaseActivity {
                 imageView.setVisibility(View.VISIBLE);
                 Picasso.get().load(mimage)
                         .fit()
-                        .centerCrop()
                         .into(imageView);
             }
             else if (!listimages.isEmpty()){

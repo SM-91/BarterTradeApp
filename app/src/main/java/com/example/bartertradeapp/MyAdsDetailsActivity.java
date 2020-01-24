@@ -103,7 +103,6 @@ public class MyAdsDetailsActivity extends AppCompatActivity {
             if (mimage != null) {
                 Picasso.get().load(mimage)
                         .fit()
-                        .centerCrop()
                         .into(imageView);
                 imageView.setVisibility(View.VISIBLE);
             } else if (!listimages.isEmpty()) {
@@ -128,7 +127,7 @@ public class MyAdsDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DatabaseReference ref;
-                ref = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child("UserUploads")
+                ref = FirebaseDatabase.getInstance().getReference("UserUploads")
                         .child(uploadAuth.getUid()).child(ad_id);
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -194,7 +193,7 @@ public class MyAdsDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 DatabaseReference deleteDatabaseReference;
-                deleteDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child("UserUploads")
+                deleteDatabaseReference = FirebaseDatabase.getInstance().getReference("UserUploads")
                         .child(uploadAuth.getCurrentUser().getUid()).child(ad_id);
                 deleteDatabaseReference.removeValue();
 

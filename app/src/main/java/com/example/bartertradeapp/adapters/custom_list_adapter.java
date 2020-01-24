@@ -46,6 +46,7 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
     public void onBindViewHolder(final ViewHolder holder, int position) {
         UserUploadProductModel list = userlist.get(position);
         holder.title.setText(list.getProductName());
+        holder.tags.setText(list.getTag());
         holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,6 +97,7 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
         TextView title;
         TextView type;
         TextView estimation;
+        TextView tags;
         ImageView image;
         ArrayList<String> imagelist;
         Uri uri;
@@ -105,6 +107,7 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
             title = itemView.findViewById(R.id.ad_title);
             type = itemView.findViewById(R.id.ad_type);
             estimation = itemView.findViewById(R.id.ad_estimation);
+            tags = itemView.findViewById(R.id.tags);
             image = itemView.findViewById(R.id.ad_image);
             itemView.setOnClickListener(this);
         }

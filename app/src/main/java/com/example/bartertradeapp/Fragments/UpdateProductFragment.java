@@ -257,7 +257,6 @@ public class UpdateProductFragment extends BaseFragment {
                 updateImageView.setVisibility(View.VISIBLE);
                 Picasso.get().load(productSingleImage)
                         .fit()
-                        .centerCrop()
                         .into(updateImageView);
                 userUploadProductModel.setmImageUri(productSingleImage);
 
@@ -381,7 +380,6 @@ public class UpdateProductFragment extends BaseFragment {
                     Picasso.get()
                             .load(mImageUri)
                             .fit()
-                            .centerCrop()
                             .into(updateImageView);
                     viewPager.setVisibility(View.GONE);
                     updateImageView.setVisibility(View.VISIBLE);
@@ -507,7 +505,7 @@ public class UpdateProductFragment extends BaseFragment {
         }
 
         DatabaseReference updateDatabaseReference;
-        updateDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child("UserUploads")
+        updateDatabaseReference = FirebaseDatabase.getInstance().getReference("UserUploads")
                 .child(uploadAuth.getCurrentUser().getUid()).child(ad_id);
         updateDatabaseReference.setValue(userUploadProductModel);
 

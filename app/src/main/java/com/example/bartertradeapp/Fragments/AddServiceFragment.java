@@ -137,8 +137,7 @@ public class AddServiceFragment extends BaseFragment {
         userUploadServiceModel.setTag(tag);
 
         DatabaseReference uploadServiceReference;
-        uploadServiceReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices")
-                .child("UserUploads").child(uploadAuth.getUid());
+        uploadServiceReference = FirebaseDatabase.getInstance().getReference("UserUploads").child(uploadAuth.getUid());
         String pushkey = uploadServiceReference.push().getKey();
         userUploadServiceModel.setAd_id(pushkey);
         uploadServiceReference.child(pushkey).setValue(userUploadServiceModel);

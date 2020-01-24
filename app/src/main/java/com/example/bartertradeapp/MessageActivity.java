@@ -119,7 +119,7 @@ public class MessageActivity extends AppCompatActivity {
 
     private void readMessage() {
         DatabaseReference chatReference;
-        chatReference = FirebaseDatabase.getInstance().getReference("Messages");
+        chatReference = FirebaseDatabase.getInstance().getReference("Messages").child(ad_id);
         chatReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
