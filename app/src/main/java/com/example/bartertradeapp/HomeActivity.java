@@ -174,9 +174,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(intent);
                 break;
 
-            /*case R.id.nav_add_new_product:
-                loadFragment(new UserUploadFragment());
-                break;*/
+            case R.id.nav_add_new_product:
+                Intent requestIntent = new Intent(HomeActivity.this, RequestListActivity.class);
+                startActivity(requestIntent);
+                break;
 
             case R.id.nav_myAds:
                 loadFragment(new UserAdsFragment());

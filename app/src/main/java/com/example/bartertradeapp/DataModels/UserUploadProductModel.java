@@ -13,11 +13,19 @@ public class UserUploadProductModel {
     private String productEstimatedMarketValue;
     private String possibleExchangeWith;
     private String productCategoryList;
+    private String serviceName;
+    private String serviceCategory;
+    private String serviceDescription;
+    private String serviceEstimatedMarketValue;
+    private String servicePossibleExchangeWith;
+    private String serviceImageUri;
     private double latitude;
     private double longitude;
     private String currentDateTime;
     private UserModel postedBy;
     private String tag;
+
+
 
     private ArrayList<String> mArrList;
     private String mImageUri;
@@ -150,5 +158,53 @@ public class UserUploadProductModel {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public String getServiceCategory() {
+        return serviceCategory;
+    }
+
+    public void setServiceCategory(String serviceCategory) {
+        this.serviceCategory = serviceCategory;
+    }
+
+    public String getServiceDescription() {
+        return serviceDescription;
+    }
+
+    public void setServiceDescription(String serviceDescription) {
+        this.serviceDescription = serviceDescription;
+    }
+
+    public String getServiceEstimatedMarketValue() {
+        return serviceEstimatedMarketValue;
+    }
+
+    public void setServiceEstimatedMarketValue(String serviceEstimatedMarketValue) {
+        this.serviceEstimatedMarketValue = serviceEstimatedMarketValue;
+    }
+
+    public String getServicePossibleExchangeWith() {
+        return servicePossibleExchangeWith;
+    }
+
+    public void setServicePossibleExchangeWith(String servicePossibleExchangeWith) {
+        this.servicePossibleExchangeWith = servicePossibleExchangeWith;
+    }
+
+    public String getServiceImageUri() {
+        return serviceImageUri;
+    }
+
+    public void setServiceImageUri(String serviceImageUri) {
+        this.serviceImageUri = serviceImageUri;
     }
 }

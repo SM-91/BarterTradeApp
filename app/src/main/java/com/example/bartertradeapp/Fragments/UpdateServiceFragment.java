@@ -1,5 +1,6 @@
 package com.example.bartertradeapp.Fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +11,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.R;
+import com.example.bartertradeapp.adapters.ViewPageAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +34,7 @@ import java.util.Calendar;
 
 import me.abhinay.input.CurrencyEditText;
 
-public class AddServiceFragment extends BaseFragment {
+public class UpdateServiceFragment extends Fragment {
 
     private static ImageView serviceImageView;
     private static CurrencyEditText editTextPrice;
@@ -39,15 +42,34 @@ public class AddServiceFragment extends BaseFragment {
     private static Spinner serviceCategory;
     private Button btn_submit;
 
+    private UserModel userModel;
     private UserModel currentUserModel = null;
+    private UserUploadProductModel userUploadProductModel;
+    private FirebaseAuth uploadAuth;
+
+    private String ad_id;
+    private String user_id;
+    private String myCurrentDateTime;
+    private UserModel postedBy;
+    private String serviceImageUri;
 
     private String[] serviceCategories = {"Tutoring", "Designing", "Electrical work", "Mechanical work", "Wood work", "Cleaning"};
+    ArrayAdapter<String> categoriesAdapter;
 
-    @Nullable
+    public UpdateServiceFragment() {
+        // Required empty public constructor
+    }
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_new_service, container, false);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_add_new_service, container, false);
         userUploadProductModel = new UserUploadProductModel();
         userModel = new UserModel();
         uploadAuth = FirebaseAuth.getInstance();
@@ -76,7 +98,6 @@ public class AddServiceFragment extends BaseFragment {
             }
         });
 
-
         et_serviceName = view.findViewById(R.id.et_serviceName);
         et_serviceDescription = view.findViewById(R.id.et_serviceDescription);
         et_servicePossibleExchangeWith = view.findViewById(R.id.et_servicePossibleExchange);
@@ -100,7 +121,7 @@ public class AddServiceFragment extends BaseFragment {
         /*Spinner*/
         serviceCategory = view.findViewById(R.id.spinnerServiceCategory);
         /*Spinner Listener*/
-        ArrayAdapter<String> categoriesAdapter = new ArrayAdapter<String>(
+        categoriesAdapter = new ArrayAdapter<String>(
                 getContext(), android.R.layout.simple_spinner_dropdown_item, serviceCategories);
         serviceCategory.setAdapter(categoriesAdapter);
 
@@ -117,14 +138,46 @@ public class AddServiceFragment extends BaseFragment {
             }
         });
 
+        getUpdateData();
+
         return view;
     }
 
+    private void getUpdateData() {
 
-    private void storeLink() {
+        Bundle updateServiceBundle = getArguments();
 
-        String myCurrentDateTime = DateFormat.getDateTimeInstance()
-                .format(Calendar.getInstance().getTime());
+        ad_id = getArguments().getString("ad_id");
+        user_id = getArguments().getString("user_id");
+        myCurrentDateTime = getArguments().getString("Key");
+        String serviceName = getArguments().getString("serviceName");
+        String serviceDescription = getArguments().getString("serviceDescription");
+        String servicePossibleExchangeWith = getArguments().getString("servicePossibleExchangeWith");
+        String serviceEstimatedMarketPrice = getArguments().getString("serviceEstimatedMarketPrice");
+        String serviceCategories = getArguments().getString("serviceCategory");
+        postedBy = getArguments().getParcelable("postedBy");
+        serviceImageUri = getArguments().getString("serviceImageUri");
+
+        if (updateServiceBundle != null) {
+            if (serviceImageUri != null) {
+                Picasso.get().load(serviceImageUri)
+                        .fit()
+                        .into(serviceImageView);
+                userUploadProductModel.setServiceImageUri(serviceImageUri);
+            }
+            et_serviceName.setText(serviceName);
+            et_serviceDescription.setText(serviceDescription);
+            et_servicePossibleExchangeWith.setText(servicePossibleExchangeWith);
+            editTextPrice.setText(serviceEstimatedMarketPrice);
+
+            if (serviceCategories != null) {
+                int spinnerPosition = categoriesAdapter.getPosition(serviceCategories);
+                serviceCategory.setSelection(spinnerPosition);
+            }
+        }
+    }
+
+    private void storeLink(){
 
         userUploadProductModel.setServiceName(et_serviceName.getText().toString().trim());
         userUploadProductModel.setServiceDescription(et_serviceDescription.getText().toString().trim());
@@ -132,19 +185,21 @@ public class AddServiceFragment extends BaseFragment {
         userUploadProductModel.setServiceEstimatedMarketValue(editTextPrice.getText().toString().trim());
         userUploadProductModel.setPostedBy(currentUserModel);
         userUploadProductModel.setCurrentDateTime(myCurrentDateTime);
+        userUploadProductModel.setAdId(ad_id);
         String tag = "Service";
         userUploadProductModel.setTag(tag);
 
         DatabaseReference uploadServiceReference;
-        uploadServiceReference = FirebaseDatabase.getInstance().getReference("UserUploads").child(uploadAuth.getUid());
-        String pushkey = uploadServiceReference.push().getKey();
-        userUploadProductModel.setAdId(pushkey);
-        uploadServiceReference.child(pushkey).setValue(userUploadProductModel);
+        uploadServiceReference = FirebaseDatabase.getInstance().getReference("UserUploads").child(uploadAuth.getUid())
+        .child(ad_id);
+        uploadServiceReference.setValue(userUploadProductModel);
 
         DatabaseReference uploadAllServices;
-        uploadAllServices = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child(pushkey);
+        uploadAllServices = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child(ad_id);
         uploadAllServices.setValue(userUploadProductModel);
 
-        Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Service Updated", Toast.LENGTH_SHORT)
+                .show();
     }
+
 }

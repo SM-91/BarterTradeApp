@@ -116,7 +116,7 @@ public class AddProductFragment extends BaseFragment {
         viewPager.setAdapter(adapter);
 
         /*ImageView*/
-        imageView = (ImageView) view.findViewById(R.id.tempImgView);
+        imageView = view.findViewById(R.id.tempImgView);
 
         /*RadioGroups*/
         radioProductTypeGroup = view.findViewById(R.id.radioProductTypeGroup);

@@ -8,12 +8,12 @@ public class ChatModel {
     private UserModel reciever;
     private String message;
     private String conversationID;
-    private String foodName;
+    private String name;
 
-    public ChatModel(String ad_id, String food_name, UserModel sender, UserModel reciever, String message) {
+    public ChatModel(String ad_id, String name, UserModel sender, UserModel reciever, String message) {
 
         this.conversationID = ad_id;
-        this.foodName = food_name;
+        this.name = name;
         this.sender = sender;
         this.reciever = reciever;
         this.message = message;
@@ -31,12 +31,12 @@ public class ChatModel {
         this.conversationID = conversationID;
     }
 
-    public String getFoodName() {
-        return foodName;
+    public String getName() {
+        return name;
     }
 
-    public void setFoodName(String foodName) {
-        this.foodName = foodName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public UserModel getSender() {

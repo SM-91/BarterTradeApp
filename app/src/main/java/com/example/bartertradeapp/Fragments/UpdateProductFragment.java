@@ -500,9 +500,8 @@ public class UpdateProductFragment extends BaseFragment {
         userUploadProductModel.setCurrentDateTime(myCurrentDateTime);
         userUploadProductModel.setAdId(ad_id);
 
-        if(userUploadProductModel.getTag() == "Product"){
-            userUploadProductModel.setTag("Product");
-        }
+        String tag = "Product";
+        userUploadProductModel.setTag(tag);
 
         DatabaseReference updateDatabaseReference;
         updateDatabaseReference = FirebaseDatabase.getInstance().getReference("UserUploads")

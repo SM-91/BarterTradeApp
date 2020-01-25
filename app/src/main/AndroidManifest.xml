@@ -19,8 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MessageActivity"></activity>
-
+        <activity android:name=".RequestListActivity"></activity>
+        <activity android:name=".MessageActivity" />
         <activity android:name=".MyAdsDetailsActivity" />
 
         <meta-data
@@ -28,10 +28,10 @@
             android:value="AIzaSyBBokTr-9jkpGL2J-dEjUicYkiHW8wMz5I" />
 
         <activity
-            android:windowSoftInputMode="stateHidden"
             android:name=".HomeActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".LogInActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".DetailedActivity" />
@@ -44,7 +44,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Fragments.MessageListActivity"/>
+        <activity android:name=".Fragments.MessageListActivity" />
     </application>
 
 </manifest>

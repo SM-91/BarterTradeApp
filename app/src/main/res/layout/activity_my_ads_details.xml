@@ -36,7 +36,7 @@
 
             </LinearLayout>
 
-            <RelativeLayout
+           <!-- <RelativeLayout
                 android:id="@+id/relative_layout_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -201,6 +201,229 @@
                     android:paddingTop="10dp"
                     android:text="estimated price"
                     android:textSize="20sp" />
+            </RelativeLayout>-->
+
+            <RelativeLayout
+                android:id="@+id/relative_layout_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linear_layout_image"
+                android:background="@drawable/ad_detail_view">
+
+                <LinearLayout
+                    android:id="@+id/linear_layout_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textview_ad_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingLeft="5dp"
+                        android:text="Name"
+                        android:textColor="@color/black"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/grey">
+
+                    </View>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textview_Text"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="10dp"
+                            android:text="Category"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/textview_ad_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/textview_ad_condition"
+                            android:layout_weight="1"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="10dp"
+                            android:text="category"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/detailsLayout"
+                    android:visibility="visible"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/linear_layout_1"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/textview_Text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="10dp"
+                        android:text="Product Detail"
+                        android:textColor="@color/black"
+                        android:textSize="25sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_below="@id/textview_Text"
+                        android:layout_height="2dp"
+                        android:background="@color/grey">
+
+                    </View>
+
+                    <LinearLayout
+                        android:id="@+id/linear_layout_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/textview_Text"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="10dp"
+                            android:text="Type"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/textview_ad_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="10dp"
+                            android:text="type"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear_layout_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/linear_layout_2"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="10dp"
+                            android:text="Condition"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/textview_ad_condition"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:paddingLeft="5dp"
+                            android:paddingTop="10dp"
+                            android:text="condition"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+
+                <TextView
+                    android:id="@+id/textview_Description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/detailsLayout"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="10dp"
+                    android:text="Description"
+                    android:textColor="@color/black"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/textview_Description"
+                    android:layout_height="2dp"
+                    android:background="@color/grey">
+
+                </View>
+
+
+                <TextView
+                    android:id="@+id/textview_ad_desc"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textview_Description"
+                    android:paddingLeft="5dp"
+                    android:text="Description"
+                    android:textSize="20sp" />
+
+
+                <TextView
+                    android:id="@+id/textview_Possibilities"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textview_ad_desc"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="10dp"
+                    android:text="Possibilities"
+                    android:textColor="@color/black"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/textview_Possibilities"
+                    android:layout_height="2dp"
+                    android:background="@color/grey">
+
+                </View>
+
+
+                <TextView
+                    android:id="@+id/textview_ad_exchange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textview_Possibilities"
+                    android:layout_marginTop="5dp"
+                    android:paddingLeft="5dp"
+                    android:text="Possible exchange with"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textview_ad_estimated"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/textview_ad_exchange"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:paddingTop="10dp"
+                    android:text="estimated price"
+                    android:textSize="20sp" />
+
+
             </RelativeLayout>
 
             <RelativeLayout

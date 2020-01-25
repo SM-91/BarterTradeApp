@@ -1,5 +1,6 @@
 package com.example.bartertradeapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -42,44 +43,64 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
     }
 
     // binds the data to the TextView in each row
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         UserUploadProductModel list = userlist.get(position);
-        holder.title.setText(list.getProductName());
-        holder.tags.setText(list.getTag());
-        holder.title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "" + holder.title.getText().toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        if(list.getTag().equals("Product")){
+            holder.title.setText(list.getProductName());
+            holder.tags.setText(list.getTag());
+            holder.title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "" + holder.title.getText().toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
 
-        holder.type.setText("Type: " + list.getProductType());
-        holder.estimation.setText("Estimated price: " + list.getProductEstimatedMarketValue());
+            holder.type.setText("Type: " + list.getProductType());
+            holder.estimation.setText("Estimated price: " + list.getProductEstimatedMarketValue());
 
-        try {
-            if (list.getmImageUri() != null) {
+            try {
+                if (list.getmImageUri() != null) {
 
-                Picasso.get().load(list.getmImageUri())
-                        .fit()
-                        .centerCrop()
-                        .into(holder.image);
-
-            } else {
-
-                imageList = list.getmArrList();
-                if (imageList != null) {
-                    Uri uri = Uri.parse(imageList.get(0));
-                    Picasso.get().load(uri)
+                    Picasso.get().load(list.getmImageUri())
                             .fit()
                             .centerCrop()
                             .into(holder.image);
-                }
-            }
 
-        } catch (Exception e) {
-            System.out.println("Error " + e.getMessage());
-            //Toast.makeText(this.context,"Error in multiple images" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                } else {
+
+                    imageList = list.getmArrList();
+                    if (imageList != null) {
+                        Uri uri = Uri.parse(imageList.get(0));
+                        Picasso.get().load(uri)
+                                .fit()
+                                .centerCrop()
+                                .into(holder.image);
+                    }
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error " + e.getMessage());
+                //Toast.makeText(this.context,"Error in multiple images" + e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            holder.title.setText(list.getServiceName());
+            holder.tags.setText(list.getTag());
+            holder.title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "" + holder.title.getText().toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            holder.type.setText("Category: " + list.getServiceCategory());
+            holder.estimation.setText("Estimated price: " + list.getServiceEstimatedMarketValue());
+
+            Picasso.get().load(list.getServiceImageUri())
+                    .fit()
+                    .centerCrop()
+                    .into(holder.image);
         }
 
 

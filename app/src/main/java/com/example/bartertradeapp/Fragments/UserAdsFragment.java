@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.MyAdsDetailsActivity;
 import com.example.bartertradeapp.R;
@@ -37,6 +38,7 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
 
     List<UserUploadProductModel> userUploadProductModels;
 
+
     public UserAdsFragment() {
         // Required empty public constructor
     }
@@ -49,7 +51,6 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         View view = inflater.inflate(R.layout.fragment_user_ads, container, false);
 
         uploadAuth = FirebaseAuth.getInstance();
-
         userUploadProductModels = new ArrayList<>();
 
         // set up the RecyclerView
@@ -67,6 +68,7 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 userUploadProductModels.clear();
+
                 for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     UserUploadProductModel users = usersSnapshot.getValue(UserUploadProductModel.class);
                     userUploadProductModels.add(users);
@@ -99,9 +101,17 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         productCategory = userUploadProductModel.getProductCategoryList();
         productCondition = userUploadProductModel.getProductCondition();
         productSingleImage = userUploadProductModel.getmImageUri();
+        String serviceName = userUploadProductModel.getServiceName();
+        String serviceCategory = userUploadProductModel.getServiceCategory();
+        String serviceDescription = userUploadProductModel.getServiceDescription();
+        String serviceEstimatedMarketValue = userUploadProductModel.getServiceEstimatedMarketValue();
+        String servicePossibleExchangeWith = userUploadProductModel.getServicePossibleExchangeWith();
+        String tag = userUploadProductModel.getTag();
+        UserModel postedBy = userUploadProductModel.getPostedBy();
+        String serviceImageUri = userUploadProductModel.getServiceImageUri();
         ArrayList<String> productMultipleImages = userUploadProductModel.getmArrList();
 
-        intent.putExtra("ad_id",ad_id);
+        intent.putExtra("ad_id", ad_id);
         intent.putExtra("Key", myCurrentDateTime);
         intent.putExtra("name", productName);
         intent.putExtra("description", productDescription);
@@ -110,6 +120,14 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         intent.putExtra("type", productType);
         intent.putExtra("category", productCategory);
         intent.putExtra("condition", productCondition);
+        intent.putExtra("serviceName", serviceName);
+        intent.putExtra("serviceCategory", serviceCategory);
+        intent.putExtra("serviceDescription", serviceDescription);
+        intent.putExtra("serviceEstimatedMarketValue", serviceEstimatedMarketValue);
+        intent.putExtra("servicePossibleExchangeWith", servicePossibleExchangeWith);
+        intent.putExtra("serviceImageUri", serviceImageUri);
+        intent.putExtra("tag", tag);
+        intent.putExtra("postedBy", postedBy);
         intent.putExtra("multipleImagesList", productMultipleImages);
         intent.putExtra("singleImage", productSingleImage);
         startActivity(intent);

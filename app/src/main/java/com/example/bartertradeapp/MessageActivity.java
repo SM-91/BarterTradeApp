@@ -43,7 +43,7 @@ public class MessageActivity extends AppCompatActivity {
     RecyclerView recyclerView;
 
     private UserModel sender, receiver;
-    private String ad_id ,  food_name;
+    private String ad_id ,  product_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class MessageActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             ad_id = bundle.getString("ad_id");
-            food_name = bundle.getString("food_name");
+            product_name = bundle.getString("product_name");
             receiver = bundle.getParcelable("user");
         }
 
@@ -107,7 +107,7 @@ public class MessageActivity extends AppCompatActivity {
 
         ChatModel chatModel = new ChatModel();
         chatModel.setConversationID(ad_id);
-        chatModel.setFoodName(food_name);
+        chatModel.setName(product_name);
         chatModel.setReciever(this.receiver);
         chatModel.setSender(this.sender);
         chatModel.setMessage(message);

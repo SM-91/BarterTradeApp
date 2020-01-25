@@ -89,6 +89,7 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
         intent = new Intent(getContext(), DetailedActivity.class);
         userUploadProductModel = adapter.getItem(position);
         ad_id = userUploadProductModel.getAdId();
+        String myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
         pname = userUploadProductModel.getProductName();
         pdesc = userUploadProductModel.getProductDescription();
         pexch = userUploadProductModel.getPossibleExchangeWith();
@@ -96,6 +97,13 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
         ptype = userUploadProductModel.getProductType();
         pcategory = userUploadProductModel.getProductCategoryList();
         pcondition = userUploadProductModel.getProductCondition();
+        String serviceName = userUploadProductModel.getServiceName();
+        String serviceCategory = userUploadProductModel.getServiceCategory();
+        String serviceDescription = userUploadProductModel.getServiceDescription();
+        String serviceEstimatedMarketValue = userUploadProductModel.getServiceEstimatedMarketValue();
+        String servicePossibleExchangeWith = userUploadProductModel.getServicePossibleExchangeWith();
+        String serviceImageUri = userUploadProductModel.getServiceImageUri();
+        String tag = userUploadProductModel.getTag();
         UserModel postedBy = userUploadProductModel.getPostedBy();
         ArrayList<String> pimagelist = userUploadProductModel.getmArrList();
 
@@ -111,7 +119,14 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
         intent.putExtra("category", pcategory);
         intent.putExtra("condition", pcondition);
         intent.putExtra("exch", pexch);
-        intent.putExtra("worth", pest);
+        intent.putExtra("worth", pest); intent.putExtra("Key", myCurrentDateTime);
+        intent.putExtra("serviceName", serviceName);
+        intent.putExtra("serviceCategory", serviceCategory);
+        intent.putExtra("serviceDescription", serviceDescription);
+        intent.putExtra("serviceEstimatedMarketValue", serviceEstimatedMarketValue);
+        intent.putExtra("servicePossibleExchangeWith", servicePossibleExchangeWith);
+        intent.putExtra("serviceImageUri", serviceImageUri);
+        intent.putExtra("tag", tag);
         intent.putExtra("imagelist", pimagelist);
         intent.putExtra("image", pimg);
         intent.putExtra("user", postedBy);

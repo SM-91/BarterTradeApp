@@ -95,88 +95,93 @@
 
             </LinearLayout>
 
-
-            <TextView
-                android:id="@+id/textview_Text"
+            <RelativeLayout
+                android:id="@+id/detailsLayout"
+                android:visibility="visible"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:layout_below="@+id/linear_layout_1"
-                android:paddingLeft="5dp"
-                android:paddingTop="10dp"
-                android:text="Product Detail"
-                android:textColor="@color/black"
-                android:textSize="25sp"
-                android:textStyle="bold" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_below="@id/textview_Text"
-                android:layout_height="2dp"
-                android:background="@color/grey">
-
-            </View>
-
-            <LinearLayout
-                android:id="@+id/linear_layout_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textview_Text"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/textview_Text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:paddingLeft="5dp"
                     android:paddingTop="10dp"
-                    android:text="Type"
-                    android:textSize="20sp" />
+                    android:text="Product Detail"
+                    android:textColor="@color/black"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textview_ad_type"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_below="@id/textview_Text"
+                    android:layout_height="2dp"
+                    android:background="@color/grey">
+
+                </View>
+
+                <LinearLayout
+                    android:id="@+id/linear_layout_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="10dp"
-                    android:text="type"
-                    android:textSize="20sp" />
-            </LinearLayout>
+                    android:layout_below="@id/textview_Text"
+                    android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/linear_layout_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/linear_layout_2"
-                android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="10dp"
+                        android:text="Type"
+                        android:textSize="20sp" />
 
-                <TextView
+                    <TextView
+                        android:id="@+id/textview_ad_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="10dp"
+                        android:text="type"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linear_layout_3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="10dp"
-                    android:text="Condition"
-                    android:textSize="20sp" />
+                    android:layout_below="@id/linear_layout_2"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/textview_ad_condition"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:paddingLeft="5dp"
-                    android:paddingTop="10dp"
-                    android:text="condition"
-                    android:textSize="20sp" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="10dp"
+                        android:text="Condition"
+                        android:textSize="20sp" />
 
+                    <TextView
+                        android:id="@+id/textview_ad_condition"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:paddingLeft="5dp"
+                        android:paddingTop="10dp"
+                        android:text="condition"
+                        android:textSize="20sp" />
 
-            </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
 
             <TextView
                 android:id="@+id/textview_Description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/linear_layout_3"
+                android:layout_below="@+id/detailsLayout"
                 android:paddingLeft="5dp"
                 android:paddingTop="10dp"
                 android:text="Description"
@@ -264,6 +269,16 @@
                 android:text="Chat"
                 android:textColor="#ffffff"
                 />
+
+            <Button
+                android:id="@+id/bid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/chatBtn"
+                android:text="Bid"
+                android:visibility="visible"
+                android:background="@drawable/button_shape"
+                android:textColor="#fff"/>
 
         </RelativeLayout>
 

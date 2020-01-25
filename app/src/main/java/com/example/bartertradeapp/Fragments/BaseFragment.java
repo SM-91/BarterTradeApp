@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
-import com.example.bartertradeapp.DataModels.UserUploadServiceModel;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -47,7 +46,6 @@ public class BaseFragment extends Fragment {
 
     /*Model Class*/
     UserUploadProductModel userUploadProductModel;
-    UserUploadServiceModel userUploadServiceModel;
     UserModel userModel;
 
 
