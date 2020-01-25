@@ -50,22 +50,17 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
         if(list.getTag().equals("Product")){
             holder.title.setText(list.getProductName());
             holder.tags.setText(list.getTag());
-            holder.title.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "" + holder.title.getText().toString(), Toast.LENGTH_SHORT).show();
-                }
-            });
-
             holder.type.setText("Type: " + list.getProductType());
             holder.estimation.setText("Estimated price: " + list.getProductEstimatedMarketValue());
+            Picasso.get().load(list.getmImageUri())
+                    .fit()
+                    .into(holder.image);
 
             try {
                 if (list.getmImageUri() != null) {
 
                     Picasso.get().load(list.getmImageUri())
                             .fit()
-                            .centerCrop()
                             .into(holder.image);
 
                 } else {

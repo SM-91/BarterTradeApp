@@ -6,16 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
-import com.example.bartertradeapp.DataModels.ChatModel;
 import com.example.bartertradeapp.DataModels.RequestModel;
 import com.example.bartertradeapp.DataModels.UserModel;
-import com.example.bartertradeapp.Fragments.MessageListActivity;
 import com.example.bartertradeapp.adapters.UserAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;

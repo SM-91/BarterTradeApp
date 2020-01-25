@@ -50,9 +50,12 @@ public class user_feedback_adapter extends RecyclerView.Adapter<user_feedback_ad
 
         holder.feedback_bar.setIsIndicator(true);
         holder.feedback_bar.setRating(list.getRating());
-        holder.username.setText(""+list.getBuyerid());
+        holder.username.setText(""+list.getUserName());
         holder.feedback_text.setText(""+list.getFeedback());
-        //holder.user_image.se
+        Picasso.get().load(list.getImageUri())
+                           .fit()
+                           .centerCrop()
+                           .into(holder.user_image);
 
 //        try {
 //            if (list.getmImageUri() != null) {

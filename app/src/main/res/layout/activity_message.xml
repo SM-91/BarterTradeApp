@@ -7,10 +7,116 @@
     android:background="#e6e6e6"
     tools:context=".MessageActivity">
 
+
+    <RelativeLayout
+        android:id="@+id/layout_questions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ad_detail_view">
+
+        <LinearLayout
+            android:id="@+id/trade_done"
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:text="Do you have completed your trade ?? "
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:textAlignment="center">
+
+            </TextView>
+
+            <RadioGroup
+                android:id="@+id/radiogroup_trade_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/btn_radio_trade_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="YES">
+
+                </RadioButton>
+
+                <RadioButton
+                    android:id="@+id/btn_radio_trade_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NO">
+
+                </RadioButton>
+
+            </RadioGroup>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/feedback_ask"
+            android:layout_width="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:text="Do you want to give Feedback?? "
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:textAlignment="center">
+
+            </TextView>
+
+            <RadioGroup
+                android:id="@+id/radiogroup_yesno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/btn_radio_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="YES">
+
+                </RadioButton>
+
+                <RadioButton
+                    android:id="@+id/btn_radio_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NO">
+
+                </RadioButton>
+
+            </RadioGroup>
+
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/recyclerViewChat"
+        android:layout_below="@+id/layout_questions"
         android:layout_above="@+id/bottom_layout"/>
 
 

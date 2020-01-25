@@ -1,25 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/whiteTransparent">
-    <TextView
-        android:id="@+id/all"
+
+    <LinearLayout
+        android:id="@+id/search_layout"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:text="All Uploads"
-        android:textColor="@color/black"
-        android:textSize="35sp">
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary">
 
-    </TextView>
+        <TextView
+            android:id="@+id/textview_search_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:text="Search"
+            android:textColor="@color/black"
+            android:textSize="18sp">
+
+        </TextView>
+
+        <SearchView
+            android:id="@+id/search_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:queryHint="Search by Name">
+
+        </SearchView>
+
+    </LinearLayout>
+
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView22"
-        android:layout_below="@+id/all"
+        android:id="@+id/recyclerView_allproducts"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search_layout" />
 
 
 </RelativeLayout>

@@ -15,11 +15,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.bartertradeapp.DataModels.UserModel;
-import com.example.bartertradeapp.Fragments.Feedback_postFragment;
 import com.example.bartertradeapp.Fragments.HomeFragment;
 import com.example.bartertradeapp.Fragments.HomeFragmentExtend;
-import com.example.bartertradeapp.Fragments.MapFragment;
-import com.example.bartertradeapp.Fragments.MessageListActivity;
 import com.example.bartertradeapp.Fragments.Profile_displayFragment;
 import com.example.bartertradeapp.Fragments.UserAdsFragment;
 import com.example.bartertradeapp.Fragments.UserUploadFragment;
@@ -36,7 +33,6 @@ import com.squareup.picasso.Picasso;
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawer;
-    //BottomNavigationView nav_bar;
 
     UserModel userModel;
 
@@ -116,10 +112,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         loadFragment(new UserUploadFragment());
                         return true;
 
-                    case R.id.map:
-                        loadFragment(new Feedback_postFragment());
-                        return true;
-
                     case R.id.profile_edit:
                         loadFragment(new Profile_displayFragment());
                         return true;
@@ -174,7 +166,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(intent);
                 break;
 
-            case R.id.nav_add_new_product:
+            case R.id.nav_requests:
                 Intent requestIntent = new Intent(HomeActivity.this, RequestListActivity.class);
                 startActivity(requestIntent);
                 break;
@@ -182,11 +174,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.nav_myAds:
                 loadFragment(new UserAdsFragment());
                 break;
-
-            case R.id.nav_maps:
-                loadFragment(new MapFragment());
-                break;
-
 
             case R.id.nav_signOut:
                 //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();

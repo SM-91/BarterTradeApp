@@ -58,7 +58,6 @@ public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_
 
                 Picasso.get().load(list.getmImageUri())
                         .fit()
-                        .centerCrop()
                         .into(holder.image);
 
             } else {
@@ -68,7 +67,6 @@ public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_
                     Uri uri = Uri.parse(imageList.get(0));
                     Picasso.get().load(uri)
                             .fit()
-                            .centerCrop()
                             .into(holder.image);
                 }
             }
