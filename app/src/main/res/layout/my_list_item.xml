@@ -43,7 +43,7 @@
                     android:textColor="@color/black"
                     android:textStyle="bold"
                     android:layout_weight="1"
-                    android:textAllCaps="true"
+                    android:textAllCaps="false"
                     android:textSize="16sp"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"

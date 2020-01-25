@@ -108,8 +108,7 @@ public class FeedbackActivity extends BaseActivity {
 
         DatabaseReference databaseReference;
         databaseReference = FirebaseDatabase.getInstance().getReference("UserFeedback")
-                .child(RecieverUid)
-                .child(myCurrentDateTime);
+                .child(RecieverUid).child(uploadAuth.getCurrentUser().getUid());
         databaseReference.setValue(ratingdata);
     }
 

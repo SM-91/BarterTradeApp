@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bartertradeapp.BaseActivity;
 import com.example.bartertradeapp.DataModels.ChatModel;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.MessageActivity;
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MessageListActivity extends AppCompatActivity implements View.OnClickListener {
+public class MessageListActivity extends BaseActivity implements View.OnClickListener {
 
     private RecyclerView rvMessageList;
     private List<UserModel> otherUserList = new ArrayList<>();
@@ -40,7 +41,7 @@ public class MessageListActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_list);
-
+        changeStatusBarColor();
         myId = FirebaseAuth.getInstance().getUid();
         rvMessageList = findViewById(R.id.rvMessageList);
         rvMessageList.setLayoutManager(new LinearLayoutManager(this));

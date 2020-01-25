@@ -114,10 +114,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                         loadFragment(new UserUploadFragment());
                         return true;
 
-                    case R.id.map:
-                        loadFragment(new MapFragment());
-                        return true;
-
                     case R.id.profile_edit:
                         loadFragment(new Profile_displayFragment());
                         return true;
@@ -172,18 +168,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(intent);
                 break;
 
-            /*case R.id.nav_add_new_product:
-                loadFragment(new UserUploadFragment());
-                break;*/
-
             case R.id.nav_myAds:
                 loadFragment(new UserAdsFragment());
                 break;
-
-            case R.id.nav_maps:
-                loadFragment(new MapFragment());
-                break;
-
 
             case R.id.nav_signOut:
                 //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();

@@ -33,7 +33,6 @@
                 android:id="@+id/ad_title"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textAllCaps="true"
                 android:textSize="12sp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"

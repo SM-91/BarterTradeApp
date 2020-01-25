@@ -28,7 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class MyAdsDetailsActivity extends AppCompatActivity {
+public class MyAdsDetailsActivity extends BaseActivity {
 
     FirebaseAuth uploadAuth;
     TextView text_name;
@@ -58,7 +58,7 @@ public class MyAdsDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_ads_details);
-
+        changeStatusBarColor();
         uploadAuth = FirebaseAuth.getInstance();
         userUploadProductModel = new UserUploadProductModel();
         updateProductFragment = new UpdateProductFragment();

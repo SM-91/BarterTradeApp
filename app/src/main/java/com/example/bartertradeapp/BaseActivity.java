@@ -23,6 +23,7 @@ public class BaseActivity extends AppCompatActivity {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(Color.rgb(100,181,246));
+            window.setNavigationBarColor(Color.rgb(0,0,0));
         }
     }
 

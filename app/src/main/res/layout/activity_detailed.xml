@@ -54,7 +54,7 @@
                     android:paddingLeft="5dp"
                     android:text="Name"
                     android:textColor="@color/black"
-                    android:textSize="30sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <View
@@ -77,7 +77,7 @@
                         android:paddingLeft="5dp"
                         android:paddingTop="10dp"
                         android:text="Category"
-                        android:textSize="20sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/textview_ad_category"
@@ -88,7 +88,7 @@
                         android:paddingLeft="5dp"
                         android:paddingTop="10dp"
                         android:text="category"
-                        android:textSize="20sp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
 
 
@@ -105,7 +105,7 @@
                 android:paddingTop="10dp"
                 android:text="Product Detail"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <View
@@ -130,7 +130,7 @@
                     android:paddingLeft="5dp"
                     android:paddingTop="10dp"
                     android:text="Type"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/textview_ad_type"
@@ -140,7 +140,7 @@
                     android:paddingLeft="5dp"
                     android:paddingTop="10dp"
                     android:text="type"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -157,7 +157,7 @@
                     android:paddingLeft="5dp"
                     android:paddingTop="10dp"
                     android:text="Condition"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/textview_ad_condition"
@@ -167,7 +167,7 @@
                     android:paddingLeft="5dp"
                     android:paddingTop="10dp"
                     android:text="condition"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
 
             </LinearLayout>
@@ -181,7 +181,7 @@
                 android:paddingTop="10dp"
                 android:text="Description"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <View
@@ -201,7 +201,7 @@
                 android:layout_below="@+id/textview_Description"
                 android:paddingLeft="5dp"
                 android:text="Description"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
 
             <TextView
@@ -213,7 +213,7 @@
                 android:paddingTop="10dp"
                 android:text="Possibilities"
                 android:textColor="@color/black"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <View
@@ -233,7 +233,7 @@
                 android:layout_marginTop="5dp"
                 android:paddingLeft="5dp"
                 android:text="Possible exchange with"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/textview_ad_estimated"
@@ -244,7 +244,7 @@
                 android:paddingRight="5dp"
                 android:paddingTop="10dp"
                 android:text="estimated price"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
 
         </RelativeLayout>

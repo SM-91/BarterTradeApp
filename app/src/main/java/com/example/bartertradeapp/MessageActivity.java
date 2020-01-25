@@ -55,7 +55,7 @@ public class MessageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-
+        changeStatusBarColor();
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             ad_id = bundle.getString("ad_id");

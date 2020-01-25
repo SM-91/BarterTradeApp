@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,54 +26,73 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
-public class HomeFragmentExtend extends BaseFragment implements custom_list_adapter.ItemClickListener{
+public class HomeFragmentExtend extends BaseFragment implements custom_list_adapter.ItemClickListener {
 
     private RecyclerView recyclerView;
     private custom_list_adapter adapter;
     LinearLayoutManager layoutManager;
-
+    SearchView searchbar;
     FirebaseAuth uploadAuth;
     List<UserUploadProductModel> userlist;
+    TextView text_search;
+
 
     private String ad_id;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home_fragment_extend,container,false);
+        View view = inflater.inflate(R.layout.fragment_home_fragment_extend, container, false);
 
 
         uploadAuth = FirebaseAuth.getInstance();
         userlist = new ArrayList<>();
-        // hardcode adding items to list for testing reasons
-        //userlist.add(new UserUploadProductModel("Shayan","pagaal hy shayan","good","asdasdsadasdadasd"));
 
         // set up the RecyclerView
-        recyclerView = view.findViewById(R.id.recyclerView22);
-        //layoutManager = new LinearLayoutManager(getContext());
+        recyclerView = view.findViewById(R.id.recyclerView_allproducts);
+        searchbar = view.findViewById(R.id.search_bar);
+        text_search = view.findViewById(R.id.textview_search_text);
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         // initializing adapter
-        adapter = new custom_list_adapter (getContext(), userlist);
+        adapter = new custom_list_adapter(getContext(), userlist);
         adapter.setClickListener(this);
 
+        text_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchbar.onActionViewExpanded();
+            }
+        });
 
-        //databaseReference = FirebaseDatabase.getInstance().getReference().child(FirebaseAuth.getInstance().getUid()).child("UserUploadProducts");
+        searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                search(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                search(newText);
+                return false;
+            }
+        });
+
         viewDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
-
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 userlist.clear();
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     UserUploadProductModel users = usersSnapshot.getValue(UserUploadProductModel.class);
                     userlist.add(users);
                 }
                 // setting adapter to recycler View
                 recyclerView.setAdapter(adapter);
-
             }
 
             @Override
@@ -83,6 +104,7 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
 
         return view;
     }
+
     @Override
     public void onItemClick(View view, int position) {
 
@@ -104,7 +126,7 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
 
         intent.putExtra("name", pname);
         intent.putExtra("desc", pdesc);
-        intent.putExtra("ad_id",ad_id);
+        intent.putExtra("ad_id", ad_id);
         intent.putExtra("exchange", pexch);
         intent.putExtra("est", pest);
         intent.putExtra("type", ptype);
@@ -118,4 +140,33 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
         startActivity(intent);
 
     }
+
+    public void search(final String query) {
+        text_search.setVisibility(View.GONE);
+        searchbar.setMaxWidth(1000);
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
+
+        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                userlist.clear();
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
+                    UserUploadProductModel searchedusers = usersSnapshot.getValue(UserUploadProductModel.class);
+                    if (Pattern.compile(Pattern.quote(query), Pattern.CASE_INSENSITIVE).matcher(searchedusers.getProductName()).find()) {
+                        userlist.add(searchedusers);
+                    }
+                }
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+
 }
