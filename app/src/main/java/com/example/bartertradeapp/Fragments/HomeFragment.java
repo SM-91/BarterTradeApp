@@ -31,6 +31,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static com.example.bartertradeapp.HomeActivity.curr;
+
 public class HomeFragment extends BaseFragment implements custom_list_adapter.ItemClickListener, custom_nearest_adapter.ItemClickListener  {
 
     private RecyclerView recyclerView_latest, recyclerView_history,recyclerView_nearest;
@@ -47,7 +49,6 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
     private String ad_id,category;
 
     //Location
-    double my_longitude=11.534293,my_latitude=49.943672;
 
     @Nullable
     @Override
@@ -301,7 +302,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
                     UserUploadProductModel nearest = usersSnapshot.getValue(UserUploadProductModel.class);
 
                     float distance;
-                    distance = calculateDistance(my_latitude,my_longitude,nearest.getLatitude(),nearest.getLongitude());
+                    distance = calculateDistance(curr.latitude,curr.longitude,nearest.getLatitude(),nearest.getLongitude());
                     Toast.makeText(getContext(), "distance"+distance, Toast.LENGTH_SHORT).show();
                     // distance is in KM
                     if (distance < 3) {
