@@ -44,7 +44,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import me.abhinay.input.CurrencyEditText;
 
@@ -88,7 +91,6 @@ public class UpdateProductFragment extends BaseFragment {
 
 
     private String singleImageUrl;
-    String myCurrentDateTime;
 
     private UserModel currentUserModel = null;
     UserModel postedBy;
@@ -239,7 +241,7 @@ public class UpdateProductFragment extends BaseFragment {
         //Log.i("ad id",id);
         ad_id = getArguments().getString("ad_id");
         user_id = getArguments().getString("user_id");
-        myCurrentDateTime = getArguments().getString("Key");
+        //myCurrentDateTimeString = getArguments().getString("myCurrentDateTimeString");
         String productName = getArguments().getString("name");
         String productDescription = getArguments().getString("desc");
         String productPossibleExchangeWith = getArguments().getString("exch");
@@ -492,12 +494,17 @@ public class UpdateProductFragment extends BaseFragment {
     /*Sending Data to DB*/
     private void storeLink() {
 
+        String myCurrentDateTimeString = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+        Date currentdate = Calendar.getInstance().getTime();
+
+
         userUploadProductModel.setProductName(et_name.getText().toString().trim());
         userUploadProductModel.setProductDescription(et_description.getText().toString().trim());
         userUploadProductModel.setProductEstimatedMarketValue(et_estimated_market_value.getText().toString().trim());
         userUploadProductModel.setPossibleExchangeWith(et_possible_exchange_with.getText().toString().trim());
         userUploadProductModel.setPostedBy(currentUserModel);
-        userUploadProductModel.setCurrentDateTime(myCurrentDateTime);
+        userUploadProductModel.setCurrentDateTimeString(myCurrentDateTimeString);
+        userUploadProductModel.setCurrentDateTime(currentdate);
         userUploadProductModel.setAdId(ad_id);
 
         String tag = "Product";

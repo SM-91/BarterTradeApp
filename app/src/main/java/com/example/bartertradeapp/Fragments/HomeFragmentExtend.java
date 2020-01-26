@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -111,7 +112,8 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
         intent = new Intent(getContext(), DetailedActivity.class);
         userUploadProductModel = adapter.getItem(position);
         ad_id = userUploadProductModel.getAdId();
-        String myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
+        Date myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
+        String myCurrentDateTimeString = userUploadProductModel.getCurrentDateTimeString();
         pname = userUploadProductModel.getProductName();
         pdesc = userUploadProductModel.getProductDescription();
         pexch = userUploadProductModel.getPossibleExchangeWith();
@@ -141,7 +143,9 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
         intent.putExtra("category", pcategory);
         intent.putExtra("condition", pcondition);
         intent.putExtra("exch", pexch);
-        intent.putExtra("worth", pest); intent.putExtra("Key", myCurrentDateTime);
+        intent.putExtra("worth", pest);
+        intent.putExtra("Key", myCurrentDateTime);
+        intent.putExtra("myCurrentDateTimeString", myCurrentDateTimeString);
         intent.putExtra("serviceName", serviceName);
         intent.putExtra("serviceCategory", serviceCategory);
         intent.putExtra("serviceDescription", serviceDescription);

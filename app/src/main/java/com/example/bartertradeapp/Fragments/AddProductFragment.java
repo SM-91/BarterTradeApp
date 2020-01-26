@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import me.abhinay.input.CurrencyEditText;
 
@@ -390,9 +391,11 @@ public class AddProductFragment extends BaseFragment {
     /*Sending Data to DB*/
     private void storeLink() {
 
-        final String myCurrentDateTime = DateFormat.getDateTimeInstance()
-                .format(Calendar.getInstance().getTime());
+        String myCurrentDateTimeString = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+
+        Date myCurrentDateTime = Calendar.getInstance().getTime();
         userUploadProductModel.setCurrentDateTime(myCurrentDateTime);
+        userUploadProductModel.setCurrentDateTimeString(myCurrentDateTimeString);
         userUploadProductModel.setProductName(et_name.getText().toString().trim());
         userUploadProductModel.setProductDescription(et_description.getText().toString().trim());
         userUploadProductModel.setProductEstimatedMarketValue(et_estimated_market_value.getText().toString().trim());

@@ -31,6 +31,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import me.abhinay.input.CurrencyEditText;
 
@@ -49,7 +50,6 @@ public class UpdateServiceFragment extends Fragment {
 
     private String ad_id;
     private String user_id;
-    private String myCurrentDateTime;
     private UserModel postedBy;
     private String serviceImageUri;
 
@@ -149,7 +149,7 @@ public class UpdateServiceFragment extends Fragment {
 
         ad_id = getArguments().getString("ad_id");
         user_id = getArguments().getString("user_id");
-        myCurrentDateTime = getArguments().getString("Key");
+        //myCurrentDateTimeString = getArguments().getString("myCurrentDateTimeString");
         String serviceName = getArguments().getString("serviceName");
         String serviceDescription = getArguments().getString("serviceDescription");
         String servicePossibleExchangeWith = getArguments().getString("servicePossibleExchangeWith");
@@ -179,12 +179,16 @@ public class UpdateServiceFragment extends Fragment {
 
     private void storeLink(){
 
+        Date currentdate = Calendar.getInstance().getTime();
+        String myCurrentDateTimeString = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+
         userUploadProductModel.setServiceName(et_serviceName.getText().toString().trim());
         userUploadProductModel.setServiceDescription(et_serviceDescription.getText().toString().trim());
         userUploadProductModel.setServicePossibleExchangeWith(et_servicePossibleExchangeWith.getText().toString().trim());
         userUploadProductModel.setServiceEstimatedMarketValue(editTextPrice.getText().toString().trim());
         userUploadProductModel.setPostedBy(currentUserModel);
-        userUploadProductModel.setCurrentDateTime(myCurrentDateTime);
+        userUploadProductModel.setCurrentDateTimeString(myCurrentDateTimeString);
+        userUploadProductModel.setCurrentDateTime(currentdate);
         userUploadProductModel.setAdId(ad_id);
         String tag = "Service";
         userUploadProductModel.setTag(tag);

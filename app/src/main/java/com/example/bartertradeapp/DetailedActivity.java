@@ -27,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,7 +102,8 @@ public class DetailedActivity extends BaseActivity {
         String servicePossibleExchangeWith = getIntent().getStringExtra("servicePossibleExchangeWith");
         String serviceImageUri = getIntent().getStringExtra("serviceImageUri");
         String tag = getIntent().getStringExtra("tag");
-        String myCurrentDataTime = getIntent().getStringExtra("Key");
+        String myCurrentDataTimeString = getIntent().getStringExtra("myCurrentDateTimeString");
+        Date myCurrentDataTime = getIntent().getParcelableExtra("Key");
         String mimage = getIntent().getStringExtra("image");
         receiver = getIntent().getParcelableExtra("user");
         listimages = getIntent().getStringArrayListExtra("imagelist");
