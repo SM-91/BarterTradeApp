@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.bartertradeapp.DataModels.ChatModel;
 import com.example.bartertradeapp.DataModels.RatingModel;
+import com.example.bartertradeapp.DataModels.UserHistoryModel;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.adapters.MessageAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +29,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static android.view.View.GONE;
@@ -46,7 +49,7 @@ public class MessageActivity extends BaseActivity {
     RecyclerView recyclerView;
 
     private UserModel sender, receiver;
-    private String ad_id ,  product_name;
+    private String ad_id ,  product_name, category;
 
     LinearLayout feedback_layout,trade_layout;
     private RadioButton radio_btn_no,radio_btn_yes,trade_yes,trade_no;
@@ -61,6 +64,7 @@ public class MessageActivity extends BaseActivity {
             Bundle bundle = getIntent().getExtras();
             ad_id = bundle.getString("ad_id");
             product_name = bundle.getString("product_name");
+            category = bundle.getString("category");
             receiver = bundle.getParcelable("user");
         }
 
@@ -90,6 +94,7 @@ public class MessageActivity extends BaseActivity {
                     feedback_layout.setVisibility(GONE);
                 } else if (radio_btn_yes.isChecked()){
                     radio_btn_no.setChecked(false);
+                    postUserHistory();
                     finish();
                     Intent intent = new Intent(MessageActivity.this, FeedbackActivity.class);
                     intent.putExtra("image_data", sender.getUserImageUrl());
@@ -220,5 +225,24 @@ public class MessageActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void postUserHistory(){
+
+        String dateAndTime = DateFormat.getDateTimeInstance()
+                .format(Calendar.getInstance().getTime());
+
+        UserHistoryModel userHistoryModel = new UserHistoryModel();
+        userHistoryModel.setAdId(ad_id);
+        userHistoryModel.setName(product_name);
+        userHistoryModel.setCategory(category);
+        userHistoryModel.setReciever(this.receiver);
+        userHistoryModel.setSender(this.sender);
+        userHistoryModel.setDateAndTime(dateAndTime);
+
+        DatabaseReference userHistoryReference;
+        userHistoryReference = FirebaseDatabase.getInstance().getReference("UserHistory")
+                .child(chatAuth.getUid()).child(ad_id);
+        userHistoryReference.setValue(userHistoryModel);
     }
 }

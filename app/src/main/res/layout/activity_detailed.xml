@@ -249,35 +249,51 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/chatBtnLayout"
+            android:layout_marginTop="60dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:background="@color/colorPrimary"
+            android:visibility="visible"
             android:layout_below="@+id/relative_layout_1">
 
             <Button
                 android:id="@+id/chatBtn"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/button_shape"
                 android:text="Chat"
+                android:visibility="gone"
+                style="?android:attr/borderlessButtonStyle"
                 android:textColor="#ffffff" />
 
             <Button
                 android:id="@+id/bid"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/chatBtn"
-                android:background="@drawable/button_shape"
                 android:text="Bid"
+                style="?android:attr/borderlessButtonStyle"
                 android:textColor="#fff"
                 android:visibility="visible" />
 
-        </RelativeLayout>
+            <Button
+                android:id="@+id/getLocation"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Get Location"
+                android:visibility="gone"
+                style="?android:attr/borderlessButtonStyle"
+                android:textColor="#fff" />
 
+        </LinearLayout>
 
     </RelativeLayout>
+
+
 
 
 </ScrollView>

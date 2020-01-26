@@ -192,59 +192,64 @@ public class MyAdsDetailsActivity extends BaseActivity {
                             }
                         }
 
-                        if (tag.equals("Product")) {
-                            Bundle updateBundle = new Bundle();
-                            updateBundle.putString("tag", tag);
-                            updateBundle.putString("ad_id", current_ad_id);
-                            updateBundle.putString("Key", updateCurrentDateTime);
-                            updateBundle.putString("name", pName);
-                            updateBundle.putString("desc", pDescription);
-                            updateBundle.putString("exch", pPossibleExchangeWith);
-                            updateBundle.putString("worth", pEstimatedMarketValue);
-                            updateBundle.putString("image", pImageUrl);
-                            updateBundle.putString("type", pType);
-                            updateBundle.putString("category", pCategory);
-                            updateBundle.putString("condition", pCondition);
-                            updateBundle.putString("serviceImageUri", serviceImageUri);
-                            updateBundle.putString("serviceName", serviceName);
-                            updateBundle.putString("serviceDescription", serviceDescription);
-                            updateBundle.putString("servicePossibleExchangeWith", servicePossibleExchangeWith);
-                            updateBundle.putString("serviceEstimatedMarketValue", serviceEstimatedMarketValue);
-                            updateBundle.putString("serviceCategory", serviceCategory);
-                            updateBundle.putParcelable("postedBy", postedBy);
-                            updateBundle.putString("user_id", user_id);
-                            updateBundle.putStringArrayList("updateMultipleImagesList", updateMultipleImageList);
-                            updateProductFragment.setArguments(updateBundle);
+                        try{
+                            if (tag.equals("Product")) {
+                                Bundle updateBundle = new Bundle();
+                                updateBundle.putString("tag", tag);
+                                updateBundle.putString("ad_id", current_ad_id);
+                                updateBundle.putString("Key", updateCurrentDateTime);
+                                updateBundle.putString("name", pName);
+                                updateBundle.putString("desc", pDescription);
+                                updateBundle.putString("exch", pPossibleExchangeWith);
+                                updateBundle.putString("worth", pEstimatedMarketValue);
+                                updateBundle.putString("image", pImageUrl);
+                                updateBundle.putString("type", pType);
+                                updateBundle.putString("category", pCategory);
+                                updateBundle.putString("condition", pCondition);
+                                updateBundle.putString("serviceImageUri", serviceImageUri);
+                                updateBundle.putString("serviceName", serviceName);
+                                updateBundle.putString("serviceDescription", serviceDescription);
+                                updateBundle.putString("servicePossibleExchangeWith", servicePossibleExchangeWith);
+                                updateBundle.putString("serviceEstimatedMarketValue", serviceEstimatedMarketValue);
+                                updateBundle.putString("serviceCategory", serviceCategory);
+                                updateBundle.putParcelable("postedBy", postedBy);
+                                updateBundle.putString("user_id", user_id);
+                                updateBundle.putStringArrayList("updateMultipleImagesList", updateMultipleImageList);
+                                updateProductFragment.setArguments(updateBundle);
 
-                            FragmentManager fragmentManager = getSupportFragmentManager();
-                            myRelativeLayout.setVisibility(View.GONE);
-                            fragmentManager.beginTransaction()
-                                    .replace(R.id.fragment_container, updateProductFragment)
-                                    .commit();
-                        } else {
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                myRelativeLayout.setVisibility(View.GONE);
+                                fragmentManager.beginTransaction()
+                                        .replace(R.id.fragment_container, updateProductFragment)
+                                        .commit();
+                            } else {
 
-                            Bundle updateServiceBundle = new Bundle();
-                            updateServiceBundle.putString("tag", tag);
-                            updateServiceBundle.putString("ad_id", current_ad_id);
-                            updateServiceBundle.putString("Key", updateCurrentDateTime);
-                            updateServiceBundle.putString("serviceImageUri", serviceImageUri);
-                            updateServiceBundle.putString("serviceName", serviceName);
-                            updateServiceBundle.putString("serviceDescription", serviceDescription);
-                            updateServiceBundle.putString("servicePossibleExchangeWith", servicePossibleExchangeWith);
-                            updateServiceBundle.putString("serviceEstimatedMarketValue", serviceEstimatedMarketValue);
-                            updateServiceBundle.putString("serviceCategory", serviceCategory);
-                            updateServiceBundle.putParcelable("postedBy", postedBy);
-                            updateServiceBundle.putString("user_id", user_id);
-                            updateServiceFragment.setArguments(updateServiceBundle);
+                                Bundle updateServiceBundle = new Bundle();
+                                updateServiceBundle.putString("tag", tag);
+                                updateServiceBundle.putString("ad_id", current_ad_id);
+                                updateServiceBundle.putString("Key", updateCurrentDateTime);
+                                updateServiceBundle.putString("serviceImageUri", serviceImageUri);
+                                updateServiceBundle.putString("serviceName", serviceName);
+                                updateServiceBundle.putString("serviceDescription", serviceDescription);
+                                updateServiceBundle.putString("servicePossibleExchangeWith", servicePossibleExchangeWith);
+                                updateServiceBundle.putString("serviceEstimatedMarketValue", serviceEstimatedMarketValue);
+                                updateServiceBundle.putString("serviceCategory", serviceCategory);
+                                updateServiceBundle.putParcelable("postedBy", postedBy);
+                                updateServiceBundle.putString("user_id", user_id);
+                                updateServiceFragment.setArguments(updateServiceBundle);
 
-                            FragmentManager fragmentManager = getSupportFragmentManager();
-                            myRelativeLayout.setVisibility(View.GONE);
-                            fragmentManager.beginTransaction()
-                                    .replace(R.id.fragment_container, updateServiceFragment)
-                                    .commit();
+                                FragmentManager fragmentManager = getSupportFragmentManager();
+                                myRelativeLayout.setVisibility(View.GONE);
+                                fragmentManager.beginTransaction()
+                                        .replace(R.id.fragment_container, updateServiceFragment)
+                                        .commit();
+                            }
+
+                        } catch (Exception e){
+                            e.printStackTrace();
+                            Toast.makeText(MyAdsDetailsActivity.this,"DB refreshed",Toast.LENGTH_LONG).show();
                         }
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 

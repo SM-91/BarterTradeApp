@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,14 +43,18 @@ public class DetailedActivity extends BaseActivity {
     ImageView imageView;
     ViewPager viewPager;
     UserModel postedBy;
+    String category;
     String ad_id;
-    String product_name;
+    private String myId;
+    private String user_id;
+    private String product_name;
     private UserModel sender, receiver;
     private boolean accepted;
 
 
-    Button chatBtn, bidBtn;
+    Button chatBtn, bidBtn, btnMap;
     RelativeLayout relativeLayout;
+    LinearLayout buttonLayout;
     ViewPageAdapter adapter = null;
 
     FirebaseAuth uploadAuth;
@@ -65,8 +70,10 @@ public class DetailedActivity extends BaseActivity {
 
         chatBtn = findViewById(R.id.chatBtn);
         bidBtn = findViewById(R.id.bid);
+        btnMap = findViewById(R.id.getLocation);
 
         uploadAuth = FirebaseAuth.getInstance();
+        myId = FirebaseAuth.getInstance().getUid();
 
         textView_name = findViewById(R.id.textview_ad_name);
         textView_desc = findViewById(R.id.textview_ad_desc);
@@ -78,12 +85,16 @@ public class DetailedActivity extends BaseActivity {
         imageView = findViewById(R.id.image_display);
 
         relativeLayout = findViewById(R.id.detailsLayout);
+        buttonLayout = findViewById(R.id.chatBtnLayout);
 
         /*ViewPager*/
         viewPager = findViewById(R.id.view_pager_image);
         adapter = new ViewPageAdapter(this, mArrayUri);
         viewPager.getOffscreenPageLimit();
         viewPager.setAdapter(adapter);
+
+
+
 
         Bundle bundle = getIntent().getExtras();
         ad_id = getIntent().getStringExtra("ad_id");
@@ -92,7 +103,7 @@ public class DetailedActivity extends BaseActivity {
         String exch = getIntent().getStringExtra("exchange");
         String est = getIntent().getStringExtra("est");
         String type = getIntent().getStringExtra("type");
-        String category = getIntent().getStringExtra("category");
+        category = getIntent().getStringExtra("category");
         String condition = getIntent().getStringExtra("condition");
         String serviceName = getIntent().getStringExtra("serviceName");
         String serviceCategory = getIntent().getStringExtra("serviceCategory");
@@ -106,8 +117,8 @@ public class DetailedActivity extends BaseActivity {
         receiver = getIntent().getParcelableExtra("user");
         listimages = getIntent().getStringArrayListExtra("imagelist");
 
-        if (bundle != null) {
 
+        if (bundle != null) {
             if (tag.equals("Product")) {
                 if (mimage != null) {
                     imageView.setVisibility(View.VISIBLE);
@@ -146,8 +157,7 @@ public class DetailedActivity extends BaseActivity {
             }
 
         }
-        /*Check the value of accepted*/
-        getAccepted();
+
 
         DatabaseReference recieverDatabaseReference;
         recieverDatabaseReference = FirebaseDatabase.getInstance().getReference("Users");
@@ -159,6 +169,7 @@ public class DetailedActivity extends BaseActivity {
 
                     if (userModel.getuserId().equals(uploadAuth.getUid())) {
                         sender = userModel;
+                        hideLayout();
                     }
                 }
             }
@@ -169,6 +180,11 @@ public class DetailedActivity extends BaseActivity {
             }
         });
 
+        /*Check the value of accepted*/
+        getAccepted();
+        /*Hide Button Layout on user ads*/
+       // hideLayout();
+
         chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,6 +192,7 @@ public class DetailedActivity extends BaseActivity {
                 intent.putExtra("ad_id", ad_id);
                 intent.putExtra("product_name", product_name);
                 intent.putExtra("user", receiver);
+                intent.putExtra("category", category);
                 startActivity(intent);
             }
         });
@@ -214,11 +231,35 @@ public class DetailedActivity extends BaseActivity {
                     accepted = requestModel.isAccepted();
 
                     if(accepted = true){
-                        bidBtn.setVisibility(View.GONE);
+                        if(myId.equals(requestModel.getSender().getuserId())){
+                            bidBtn.setVisibility(View.GONE);
+                            chatBtn.setVisibility(View.VISIBLE);
+                            btnMap.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
             }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void hideLayout(){
+
+        DatabaseReference getUserReference;
+        getUserReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices")
+                .child(ad_id);
+        getUserReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                user_id = dataSnapshot.child("postedBy").child("userId").getValue(String.class);
+                if (myId.equals(user_id)) {
+                    buttonLayout.setVisibility(View.GONE);
+                }
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
