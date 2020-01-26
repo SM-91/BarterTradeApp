@@ -27,6 +27,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
+import com.example.bartertradeapp.HomeActivity;
 import com.example.bartertradeapp.LogInActivity;
 import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.ViewPageAdapter;
@@ -79,6 +80,7 @@ public class AddProductFragment extends BaseFragment {
 
 
     ProgressDialog progressDialog;
+    private HomeActivity home = new HomeActivity();
 
     private static final int MULTIPLE_IMAGE_REQUEST = 2;
     int uploadCount = 0;
@@ -91,6 +93,7 @@ public class AddProductFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_add_new_product, container, false);
 
         userUploadProductModel = new UserUploadProductModel();
+
 
         uploadAuth = FirebaseAuth.getInstance();
 
@@ -400,6 +403,9 @@ public class AddProductFragment extends BaseFragment {
         userUploadProductModel.setPostedBy(currentUserModel);
         userUploadProductModel.setTag("Product");
 
+        userUploadProductModel.setLatitude( home.curr.latitude );
+        userUploadProductModel.setLongitude( home.curr.longitude );
+
         DatabaseReference databaseReference;
         databaseReference = FirebaseDatabase.getInstance().getReference("UserUploads").child(uploadAuth.getCurrentUser().getUid());
         String pushkey = databaseReference.push().getKey();
@@ -411,21 +417,5 @@ public class AddProductFragment extends BaseFragment {
 
         Toast.makeText(getContext(),"Product Added",Toast.LENGTH_LONG).show();
     }
-
-
-
-
-   /*     UpdateProductFragment updateProductFragment = new UpdateProductFragment();
-
-        Bundle createBundle = new Bundle();
-        createBundle.putString("Key", myCurrentDateTime);
-        updateProductFragment.setArguments(createBundle);
-
-        if (getActivity() != null)
-            ((HomeActivity) getActivity()).loadFragment(updateProductFragment);*/
-
-
-
-
 
 }

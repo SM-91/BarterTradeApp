@@ -259,13 +259,25 @@
                 android:id="@+id/chatBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:gravity="right"
                 android:background="@drawable/button_shape"
                 android:text="Chat"
                 android:textColor="#ffffff"
                 />
 
+
+
         </RelativeLayout>
+
+        <Button
+            android:id="@+id/btnMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:background="@drawable/button_shape"
+            android:text="Location"
+            android:textColor="#ffffff"
+            />
 
 
 

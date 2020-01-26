@@ -226,7 +226,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mapView = view.findViewById(R.id.nav_maps);
+
         mapView.onCreate(null);
         mapView.onResume();
         mapView.getMapAsync(this);
@@ -365,7 +365,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                             geo= new GeoPoint((float)mLastKnownLocation.getLatitude(),(float)mLastKnownLocation.getLongitude());
                             curr=new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude());
-                            //writeNewUser(geo);
+                            writeNewUser(geo);
                             circle.setCenter(new LatLng(mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude()));
                             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                                 @Override
@@ -650,6 +650,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             getLocationPermission();
         }
     }
+
     /**
      * Displays a form allowing the user to select a place from a list of likely places.
      */
@@ -708,16 +709,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
     private double distanceBetween(LatLng point1, LatLng point2) {
 
-        if (point1 == null || point2 == null) {
-            //return null;
-            return 0;
-        }
         double distance= SphericalUtil.computeDistanceBetween(point1, point2);
         Log.e(TAG, "Distance "+distance);
         return distance;
 
-        //return ;
     }
+
     private void getuser(){
         firebaseDatabase = FirebaseDatabase.getInstance();
         getUserRef = firebaseDatabase.getReference("UserLocation");

@@ -31,7 +31,8 @@ public class DetailedActivity extends BaseActivity {
     String ad_id;
     String food_name;
 
-    Button chatBtn;
+    Button chatBtn ,btn_Map;
+
     ViewPageAdapter adapter = null;
 
     private ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
@@ -44,6 +45,7 @@ public class DetailedActivity extends BaseActivity {
         changeStatusBarColor();
 
         chatBtn = findViewById(R.id.chatBtn);
+        btn_Map = findViewById( R.id.btnMap );
 
         textView_name = findViewById(R.id.textview_ad_name);
         textView_desc = findViewById(R.id.textview_ad_desc);
@@ -108,5 +110,17 @@ public class DetailedActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+        btn_Map.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailedActivity.this, MapsActivity.class);
+                intent.putExtra("ad_id",ad_id);
+                startActivity(intent);
+                finish();
+
+            }
+        } );
+
+
     }
 }
