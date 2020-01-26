@@ -48,9 +48,9 @@ public class DetailedActivity extends BaseActivity {
     private UserModel sender, receiver;
     private boolean accepted;
 
-
-    Button chatBtn, bidBtn;
+    Button chatBtn, bidBtn,btn_Map;
     RelativeLayout relativeLayout;
+
     ViewPageAdapter adapter = null;
 
     FirebaseAuth uploadAuth;
@@ -65,9 +65,12 @@ public class DetailedActivity extends BaseActivity {
         changeStatusBarColor();
 
         chatBtn = findViewById(R.id.chatBtn);
+
         bidBtn = findViewById(R.id.bid);
 
         uploadAuth = FirebaseAuth.getInstance();
+        btn_Map = findViewById( R.id.btnMap );
+
 
         textView_name = findViewById(R.id.textview_ad_name);
         textView_desc = findViewById(R.id.textview_ad_desc);
@@ -226,5 +229,16 @@ public class DetailedActivity extends BaseActivity {
 
             }
         });
+        btn_Map.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailedActivity.this, MapsActivity.class);
+                intent.putExtra("ad_id",ad_id);
+                startActivity(intent);
+                finish();
+
+            }
+        } );
+
     }
 }

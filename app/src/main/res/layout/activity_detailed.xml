@@ -249,17 +249,18 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/chatBtnLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="horizontal"
             android:layout_below="@+id/relative_layout_1">
 
             <Button
                 android:id="@+id/chatBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:layout_weight="1"
                 android:background="@drawable/button_shape"
                 android:text="Chat"
                 android:textColor="#ffffff" />
@@ -268,13 +269,25 @@
                 android:id="@+id/bid"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/chatBtn"
+                android:layout_weight="1"
                 android:background="@drawable/button_shape"
                 android:text="Bid"
                 android:textColor="#fff"
                 android:visibility="visible" />
 
-        </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/button_shape"
+                android:text="Location"
+                android:textColor="#ffffff"
+                />
+
+        </LinearLayout>
+
 
 
     </RelativeLayout>
