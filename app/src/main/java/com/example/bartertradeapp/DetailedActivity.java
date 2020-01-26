@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,10 +52,10 @@ public class DetailedActivity extends BaseActivity {
     private UserModel sender, receiver;
     private boolean accepted;
 
-
     Button chatBtn, bidBtn, btnMap;
     RelativeLayout relativeLayout;
     LinearLayout buttonLayout;
+
     ViewPageAdapter adapter = null;
 
     FirebaseAuth uploadAuth;
@@ -69,8 +70,9 @@ public class DetailedActivity extends BaseActivity {
         changeStatusBarColor();
 
         chatBtn = findViewById(R.id.chatBtn);
+
         bidBtn = findViewById(R.id.bid);
-        btnMap = findViewById(R.id.getLocation);
+        btnMap = findViewById(R.id.btnMap);
 
         uploadAuth = FirebaseAuth.getInstance();
         myId = FirebaseAuth.getInstance().getUid();
@@ -94,8 +96,6 @@ public class DetailedActivity extends BaseActivity {
         viewPager.setAdapter(adapter);
 
 
-
-
         Bundle bundle = getIntent().getExtras();
         ad_id = getIntent().getStringExtra("ad_id");
         product_name = getIntent().getStringExtra("name");
@@ -112,7 +112,8 @@ public class DetailedActivity extends BaseActivity {
         String servicePossibleExchangeWith = getIntent().getStringExtra("servicePossibleExchangeWith");
         String serviceImageUri = getIntent().getStringExtra("serviceImageUri");
         String tag = getIntent().getStringExtra("tag");
-        String myCurrentDataTime = getIntent().getStringExtra("Key");
+        String myCurrentDataTimeString = getIntent().getStringExtra("myCurrentDateTimeString");
+        Date myCurrentDataTime = getIntent().getParcelableExtra("Key");
         String mimage = getIntent().getStringExtra("image");
         receiver = getIntent().getParcelableExtra("user");
         listimages = getIntent().getStringArrayListExtra("imagelist");
@@ -182,8 +183,7 @@ public class DetailedActivity extends BaseActivity {
 
         /*Check the value of accepted*/
         getAccepted();
-        /*Hide Button Layout on user ads*/
-       // hideLayout();
+
 
         chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -217,6 +217,17 @@ public class DetailedActivity extends BaseActivity {
                 Toast.makeText(DetailedActivity.this, "Bid done", Toast.LENGTH_LONG).show();
             }
         });
+
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailedActivity.this, MapsActivity.class);
+                intent.putExtra("ad_id", ad_id);
+                startActivity(intent);
+                finish();
+
+            }
+        });
     }
 
     private void getAccepted() {
@@ -230,8 +241,8 @@ public class DetailedActivity extends BaseActivity {
                     RequestModel requestModel = snapshot.getValue(RequestModel.class);
                     accepted = requestModel.isAccepted();
 
-                    if(accepted = true){
-                        if(myId.equals(requestModel.getSender().getuserId())){
+                    if (accepted = true) {
+                        if (myId.equals(requestModel.getSender().getuserId())) {
                             bidBtn.setVisibility(View.GONE);
                             chatBtn.setVisibility(View.VISIBLE);
                             btnMap.setVisibility(View.VISIBLE);
@@ -247,7 +258,7 @@ public class DetailedActivity extends BaseActivity {
         });
     }
 
-    private void hideLayout(){
+    private void hideLayout() {
 
         DatabaseReference getUserReference;
         getUserReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices")
@@ -260,9 +271,9 @@ public class DetailedActivity extends BaseActivity {
                     buttonLayout.setVisibility(View.GONE);
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
             }
         });
     }

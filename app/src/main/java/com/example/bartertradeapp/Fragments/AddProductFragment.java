@@ -27,6 +27,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
+import com.example.bartertradeapp.HomeActivity;
 import com.example.bartertradeapp.LogInActivity;
 import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.ViewPageAdapter;
@@ -48,6 +49,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import me.abhinay.input.CurrencyEditText;
 
@@ -79,6 +81,7 @@ public class AddProductFragment extends BaseFragment {
 
 
     ProgressDialog progressDialog;
+    private HomeActivity home = new HomeActivity();
 
     private static final int MULTIPLE_IMAGE_REQUEST = 2;
     int uploadCount = 0;
@@ -91,6 +94,7 @@ public class AddProductFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_add_new_product, container, false);
 
         userUploadProductModel = new UserUploadProductModel();
+
 
         uploadAuth = FirebaseAuth.getInstance();
 
@@ -390,15 +394,20 @@ public class AddProductFragment extends BaseFragment {
     /*Sending Data to DB*/
     private void storeLink() {
 
-        final String myCurrentDateTime = DateFormat.getDateTimeInstance()
-                .format(Calendar.getInstance().getTime());
+        String myCurrentDateTimeString = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+
+        Date myCurrentDateTime = Calendar.getInstance().getTime();
         userUploadProductModel.setCurrentDateTime(myCurrentDateTime);
+        userUploadProductModel.setCurrentDateTimeString(myCurrentDateTimeString);
         userUploadProductModel.setProductName(et_name.getText().toString().trim());
         userUploadProductModel.setProductDescription(et_description.getText().toString().trim());
         userUploadProductModel.setProductEstimatedMarketValue(et_estimated_market_value.getText().toString().trim());
         userUploadProductModel.setPossibleExchangeWith(et_possible_exchange_with.getText().toString().trim());
         userUploadProductModel.setPostedBy(currentUserModel);
         userUploadProductModel.setTag("Product");
+
+        userUploadProductModel.setLatitude( home.curr.latitude );
+        userUploadProductModel.setLongitude( home.curr.longitude );
 
         DatabaseReference databaseReference;
         databaseReference = FirebaseDatabase.getInstance().getReference("UserUploads").child(uploadAuth.getCurrentUser().getUid());
@@ -411,21 +420,5 @@ public class AddProductFragment extends BaseFragment {
 
         Toast.makeText(getContext(),"Product Added",Toast.LENGTH_LONG).show();
     }
-
-
-
-
-   /*     UpdateProductFragment updateProductFragment = new UpdateProductFragment();
-
-        Bundle createBundle = new Bundle();
-        createBundle.putString("Key", myCurrentDateTime);
-        updateProductFragment.setArguments(createBundle);
-
-        if (getActivity() != null)
-            ((HomeActivity) getActivity()).loadFragment(updateProductFragment);*/
-
-
-
-
 
 }

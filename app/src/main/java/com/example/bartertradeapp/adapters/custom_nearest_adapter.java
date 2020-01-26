@@ -108,7 +108,7 @@ public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+            if (mClickListener != null) mClickListener.onNearestItemClick(view, getAdapterPosition());
         }
     }
 
@@ -124,6 +124,6 @@ public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onItemClick(View view, int position);
+        void onNearestItemClick(View view, int position);
     }
 }

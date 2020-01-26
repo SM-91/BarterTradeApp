@@ -28,6 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import me.abhinay.input.CurrencyEditText;
 
@@ -123,8 +124,9 @@ public class AddServiceFragment extends BaseFragment {
 
     private void storeLink() {
 
-        String myCurrentDateTime = DateFormat.getDateTimeInstance()
-                .format(Calendar.getInstance().getTime());
+        String myCurrentDateTimeString = DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+
+        Date myCurrentDateTime = Calendar.getInstance().getTime();
 
         userUploadProductModel.setServiceName(et_serviceName.getText().toString().trim());
         userUploadProductModel.setServiceDescription(et_serviceDescription.getText().toString().trim());
@@ -132,6 +134,7 @@ public class AddServiceFragment extends BaseFragment {
         userUploadProductModel.setServiceEstimatedMarketValue(editTextPrice.getText().toString().trim());
         userUploadProductModel.setPostedBy(currentUserModel);
         userUploadProductModel.setCurrentDateTime(myCurrentDateTime);
+        userUploadProductModel.setCurrentDateTimeString(myCurrentDateTimeString);
         String tag = "Service";
         userUploadProductModel.setTag(tag);
 

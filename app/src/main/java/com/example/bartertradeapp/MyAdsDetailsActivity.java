@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MyAdsDetailsActivity extends BaseActivity {
 
@@ -51,6 +53,8 @@ public class MyAdsDetailsActivity extends BaseActivity {
     String ad_id;
     String user_id;
     private UserModel postedBy;
+    String updateCurrentDateTime;
+    Date myCurrentDataTime;
 
     private ArrayList<Uri> mArrayUri = new ArrayList<Uri>();
     private ArrayList<String> listimages = new ArrayList<String>();
@@ -89,7 +93,8 @@ public class MyAdsDetailsActivity extends BaseActivity {
 
         Bundle bundle = getIntent().getExtras();
 
-        String myCurrentDataTime = getIntent().getStringExtra("Key");
+        String myCurrentDataTimeString = getIntent().getStringExtra("myCurrentDateTimeString");
+        myCurrentDataTime = getIntent().getParcelableExtra("Key");
         ad_id = getIntent().getStringExtra("ad_id");
         String name = getIntent().getStringExtra("name");
         String desc = getIntent().getStringExtra("description");
@@ -162,7 +167,7 @@ public class MyAdsDetailsActivity extends BaseActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                         String current_ad_id = dataSnapshot.child("adId").getValue(String.class);
-                        String updateCurrentDateTime = dataSnapshot.child("currentDateTime").getValue(String.class);
+                        String updateCurrentDateTimeString = dataSnapshot.child("currentDateTimeString").getValue(String.class);
                         String pName = dataSnapshot.child("productName").getValue(String.class);
                         String pDescription = dataSnapshot.child("productDescription").getValue(String.class);
                         String pPossibleExchangeWith = dataSnapshot.child("possibleExchangeWith").getValue(String.class);
@@ -192,7 +197,7 @@ public class MyAdsDetailsActivity extends BaseActivity {
                             }
                         }
 
-                        try{
+                        try {
                             if (tag.equals("Product")) {
                                 Bundle updateBundle = new Bundle();
                                 updateBundle.putString("tag", tag);
@@ -245,11 +250,12 @@ public class MyAdsDetailsActivity extends BaseActivity {
                                         .commit();
                             }
 
-                        } catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
-                            Toast.makeText(MyAdsDetailsActivity.this,"DB refreshed",Toast.LENGTH_LONG).show();
+                            Toast.makeText(MyAdsDetailsActivity.this, "DB refreshed", Toast.LENGTH_LONG).show();
                         }
                     }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 

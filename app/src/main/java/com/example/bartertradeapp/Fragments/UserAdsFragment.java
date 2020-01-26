@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -92,7 +93,8 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         intent = new Intent(getContext(), MyAdsDetailsActivity.class);
         userUploadProductModel = adapter.getItem(position);
         ad_id = userUploadProductModel.getAdId();
-        String myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
+        Date myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
+        String myCurrentDateTimeString = userUploadProductModel.getCurrentDateTimeString();
         productName = userUploadProductModel.getProductName();
         productDescription = userUploadProductModel.getProductDescription();
         productPossibleExchangeWith = userUploadProductModel.getPossibleExchangeWith();
@@ -112,7 +114,8 @@ public class UserAdsFragment extends BaseFragment implements custom_list_adapter
         ArrayList<String> productMultipleImages = userUploadProductModel.getmArrList();
 
         intent.putExtra("ad_id", ad_id);
-        intent.putExtra("Key", myCurrentDateTime);
+        //intent.putExtra("Key", myCurrentDateTime);
+        intent.putExtra("myCurrentDateTimeString", myCurrentDateTimeString);
         intent.putExtra("name", productName);
         intent.putExtra("description", productDescription);
         intent.putExtra("possibelExchange", productPossibleExchangeWith);

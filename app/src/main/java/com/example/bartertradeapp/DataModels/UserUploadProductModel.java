@@ -1,6 +1,7 @@
 package com.example.bartertradeapp.DataModels;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class UserUploadProductModel {
@@ -21,7 +22,8 @@ public class UserUploadProductModel {
     private String serviceImageUri;
     private double latitude;
     private double longitude;
-    private String currentDateTime;
+    private String currentDateTimeString;
+    private Date currentDateTime;
     private UserModel postedBy;
     private String tag;
 
@@ -136,11 +138,11 @@ public class UserUploadProductModel {
         this.mArrList = mArrList;
     }
 
-    public String getCurrentDateTime() {
+    public Date getCurrentDateTime() {
         return currentDateTime;
     }
 
-    public void setCurrentDateTime(String currentDateTime) {
+    public void setCurrentDateTime(Date currentDateTime) {
         this.currentDateTime = currentDateTime;
     }
 
@@ -206,5 +208,13 @@ public class UserUploadProductModel {
 
     public void setServiceImageUri(String serviceImageUri) {
         this.serviceImageUri = serviceImageUri;
+    }
+
+    public String getCurrentDateTimeString() {
+        return currentDateTimeString;
+    }
+
+    public void setCurrentDateTimeString(String currentDateTimeString) {
+        this.currentDateTimeString = currentDateTimeString;
     }
 }
