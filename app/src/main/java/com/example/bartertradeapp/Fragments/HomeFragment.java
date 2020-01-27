@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bartertradeapp.DataModels.RatingModel;
 import com.example.bartertradeapp.DataModels.UserHistoryModel;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
@@ -48,6 +49,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
 
     private String ad_id, category;
 
+
     //Location
 
     @Nullable
@@ -82,10 +84,10 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         adapter_latest.setClickListener(this);
 
         adapter_history = new custom_list_adapter(getContext(), history_ads);
-        //adapter_history.setClickListener(this);
+        adapter_history.setClickListener(this);
 
         adapter_nearest = new custom_nearest_adapter(getContext(), nearest_ads);
-        //adapter_nearest.setClickListener(this);
+        adapter_nearest.setClickListener(this);
 
 
         // Setting data by History Data

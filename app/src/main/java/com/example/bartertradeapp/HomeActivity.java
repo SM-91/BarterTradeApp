@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -18,7 +19,9 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.example.bartertradeapp.DataModels.RatingModel;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.Fragments.HomeFragment;
 import com.example.bartertradeapp.Fragments.HomeFragmentExtend;
@@ -55,57 +58,60 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private Location mLastKnownLocation;
     public static LatLng curr;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
-    private static final String TAG = HomeActivity.class.getSimpleName( );
+    private static final String TAG = HomeActivity.class.getSimpleName();
+    public static String avg_rating_string;
+    public static float avg_rating;
 
 
-    String uid = FirebaseAuth.getInstance( ).getCurrentUser( ).getUid( );
+    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance( );
+    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( this );
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_home );
-        changeStatusBarColor( );
-        userModel = new UserModel( );
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        changeStatusBarColor();
+        userModel = new UserModel();
 
-        getLocationPermission( );
-        getDeviceLocation( );
+        getLocationPermission();
+        getDeviceLocation();
 
-        Toolbar toolbar = findViewById( R.id.toolbar );
-        setSupportActionBar( toolbar );
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        mDrawer = findViewById( R.id.drawer_layout );
+        mDrawer = findViewById(R.id.drawer_layout);
 
-        NavigationView navigationView = findViewById( R.id.nav_view );
-        navigationView.setNavigationItemSelectedListener( this );
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         /*Navigation Drawer Header*/
-        View header_view = navigationView.getHeaderView( 0 );
-        nav_header_user_name = header_view.findViewById( R.id.nav_header_userName );
-        nav_header_user_email = header_view.findViewById( R.id.nav_header_userEmail );
-        img1 = header_view.findViewById( R.id.nav_header_userProfilePic );
-        img1.setOnClickListener( new View.OnClickListener( ) {
+        View header_view = navigationView.getHeaderView(0);
+        nav_header_user_name = header_view.findViewById(R.id.nav_header_userName);
+        nav_header_user_email = header_view.findViewById(R.id.nav_header_userEmail);
+        img1 = header_view.findViewById(R.id.nav_header_userProfilePic);
+        img1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadFragment( new Profile_displayFragment( ) );
-                mDrawer.closeDrawer( GravityCompat.START );
+                loadFragment(new Profile_displayFragment());
+                mDrawer.closeDrawer(GravityCompat.START);
             }
-        } );
-        changeStatusBarColor( );
+        });
+        changeStatusBarColor();
+        Average_score();
 
         DatabaseReference reference;
-        reference = FirebaseDatabase.getInstance( ).getReference( "Users" ).child( firebaseAuth.getUid( ) );
-        reference.addValueEventListener( new ValueEventListener( ) {
+        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.getUid());
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserModel userModel = dataSnapshot.getValue( UserModel.class );
-                nav_header_user_name.setText( userModel.getUserName( ) );
-                nav_header_user_email.setText( userModel.getUserEmail( ) );
-                Picasso.get( ).load( userModel.getUserImageUrl( ) )
-                        .fit( )
-                        .into( img1 );
+                UserModel userModel = dataSnapshot.getValue(UserModel.class);
+                nav_header_user_name.setText(userModel.getUserName());
+                nav_header_user_email.setText(userModel.getUserEmail());
+                Picasso.get().load(userModel.getUserImageUrl())
+                        .fit()
+                        .into(img1);
 
             }
 
@@ -113,78 +119,87 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        } );
+        });
 
         /*Bottom Navigation Bar*/
-        BottomNavigationView nav_bar = findViewById( R.id.nav_bar );
-        nav_bar.setOnNavigationItemSelectedListener( new BottomNavigationView.OnNavigationItemSelectedListener( ) {
+        BottomNavigationView nav_bar = findViewById(R.id.nav_bar);
+        nav_bar.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId( )) {
+                switch (menuItem.getItemId()) {
                     case R.id.grid:
-                        loadFragment( new HomeFragment( ) );
+                        loadFragment(new HomeFragment());
                         return true;
 
                     case R.id.list:
-                        loadFragment( new HomeFragmentExtend( ) );
+                        loadFragment(new HomeFragmentExtend());
                         return true;
 
                     case R.id.add:
-                        loadFragment( new UserUploadFragment( ) );
+                        loadFragment(new UserUploadFragment());
                         return true;
 
                     case R.id.profile_edit:
-                        loadFragment( new Profile_displayFragment( ) );
+                        loadFragment(new Profile_displayFragment());
                         return true;
                     // ///// ADD more cases for different navigation bar options////////
                     default:
                         return false;
                 }
             }
-        } );
+        });
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle( this, mDrawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close );
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-        mDrawer.addDrawerListener( toggle );
-        toggle.syncState( );
+        mDrawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         /*Default Fragment*/
         if (savedInstanceState == null) {
-            getSupportFragmentManager( ).beginTransaction( ).replace( R.id.fragment_container, new HomeFragment( ) ).addToBackStack( null ).commit( );
-            navigationView.setCheckedItem( R.id.nav_home );
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
+            navigationView.setCheckedItem(R.id.nav_home);
         }
     }
 
     public void loadFragment(Fragment fragment) {
-        getSupportFragmentManager( ).beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack( null ).commit( );
+        //getSupportFragmentManager( ).beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack( null ).commit( );
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+        //Fragment_My_Clients newFragment = Fragment_My_Clients.newInstance();
+        ft.replace(R.id.fragment_container, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
+
     }
 
     @Override
     public void onBackPressed() {
-        if (mDrawer.isDrawerOpen( GravityCompat.START )) {
-            mDrawer.closeDrawer( GravityCompat.START );
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed( );
+            super.onBackPressed();
         }
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-        switch (menuItem.getItemId( )) {
+        switch (menuItem.getItemId()) {
 
             case R.id.nav_home:
-                loadFragment( new HomeFragment( ) );
+                loadFragment(new HomeFragment());
                 break;
 
             case R.id.nav_profile:
-                loadFragment( new Profile_displayFragment( ) );
+                loadFragment(new Profile_displayFragment());
+
                 break;
 
             case R.id.nav_chat:
-                Intent intent = new Intent( HomeActivity.this, MessageListActivity.class );
-                startActivity( intent );
+                Intent intent = new Intent(HomeActivity.this, MessageListActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.nav_requests:
@@ -193,20 +208,20 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
 
             case R.id.nav_myAds:
-                loadFragment( new UserAdsFragment( ) );
+                loadFragment(new UserAdsFragment());
                 break;
 
             case R.id.nav_signOut:
                 //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserUploadFragment()).addToBackStack(null).commit();
-                firebaseAuth.signOut( );
-                finish( );
-                intent = new Intent( HomeActivity.this, SignUpActivity.class );
-                startActivity( intent );
+                firebaseAuth.signOut();
+                finish();
+                intent = new Intent(HomeActivity.this, SignUpActivity.class);
+                startActivity(intent);
                 break;
 
         }
 
-        mDrawer.closeDrawer( GravityCompat.START );
+        mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -216,16 +231,16 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
          * device. The result of the permission request is handled by a callback,
          * onRequestPermissionsResult.
          */
-        if (ContextCompat.checkSelfPermission( this.getApplicationContext( ),
-                android.Manifest.permission.ACCESS_FINE_LOCATION )
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
 
         } else {
 
-            ActivityCompat.requestPermissions( this,
+            ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION );
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
 
@@ -236,26 +251,55 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
          */
         try {
             if (mLocationPermissionGranted) {
-                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation( );
-                locationResult.addOnCompleteListener( this, new OnCompleteListener<Location>( ) {
+                Task<Location> locationResult = mFusedLocationProviderClient.getLastLocation();
+                locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
-                        if (task.isSuccessful( )) {
+                        if (task.isSuccessful()) {
                             // Set the map's camera position to the current location of the device.
-                            mLastKnownLocation = task.getResult( );
-                            curr = new LatLng( mLastKnownLocation.getLatitude( ), mLastKnownLocation.getLongitude( ) );
-                            Log.e( TAG, "current1" + curr );
+                            mLastKnownLocation = task.getResult();
+                            curr = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+                            Log.e(TAG, "current1" + curr);
 
                         } else {
-                            Log.d( TAG, "Current location is null. Using defaults." );
-                            Log.e( TAG, "Exception: %s", task.getException( ) );
+                            Log.d(TAG, "Current location is null. Using defaults.");
+                            Log.e(TAG, "Exception: %s", task.getException());
                         }
                     }
-                } );
+                });
             }
         } catch (SecurityException e) {
-            Log.e( "Exception: %s", e.getMessage( ) );
+            Log.e("Exception: %s", e.getMessage());
         }
+    }
+
+    public void Average_score(){
+        //  Calculating Avg User Feedback
+
+        String user_id = firebaseAuth.getCurrentUser().getUid();
+        DatabaseReference viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserFeedback").child(user_id);
+        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                int temp_rating=0;
+                int count =0;
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
+                    RatingModel feedback = usersSnapshot.getValue(RatingModel.class);
+                    temp_rating = temp_rating + feedback.getRating();
+                    count ++;
+                }
+                /*Bug fix here*/
+                avg_rating = Float.valueOf(temp_rating)/count;
+                avg_rating_string = String.valueOf(avg_rating);
+                Toast.makeText(HomeActivity.this,"Rate:" + avg_rating_string, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

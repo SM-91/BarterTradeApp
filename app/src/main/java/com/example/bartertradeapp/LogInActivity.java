@@ -3,10 +3,12 @@ package com.example.bartertradeapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -46,33 +48,47 @@ public class LogInActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                String loginEmail = et_login_email.getText().toString().trim();
-                String loginPass = et_login_password.getText().toString().trim();
+                final ProgressDialog progress = ProgressDialog.show(LogInActivity.this, "",
+                        "Authenticating", true);
 
-                if(!TextUtils.isEmpty(loginEmail) && !TextUtils.isEmpty(loginPass)){
-                    //set the visibility on for progressbar
-                    loginProgress.setVisibility(View.VISIBLE);
+                Runnable progressRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        String loginEmail = et_login_email.getText().toString().trim();
+                        String loginPass = et_login_password.getText().toString().trim();
 
-                    mAuth.signInWithEmailAndPassword(loginEmail, loginPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(!TextUtils.isEmpty(loginEmail) && !TextUtils.isEmpty(loginPass)){
+                            //set the visibility on for progressbar
+                            loginProgress.setVisibility(View.VISIBLE);
 
-                            if(task.isSuccessful()){
-                                sendToMain();
-                            } else {
-                                //set the error message
-                                String errorMessage = task.getException().getMessage();
-                                Toast.makeText(LogInActivity.this, "Error : " + errorMessage, Toast.LENGTH_LONG).show();
-                            }
-                            //set the visibility off for progressbar
-                            loginProgress.setVisibility(View.INVISIBLE);
+                            mAuth.signInWithEmailAndPassword(loginEmail, loginPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                    if(task.isSuccessful()){
+                                        sendToMain();
+                                    } else {
+                                        //set the error message
+                                        String errorMessage = task.getException().getMessage();
+                                        Toast.makeText(LogInActivity.this, "Error : " + errorMessage, Toast.LENGTH_LONG).show();
+                                        progress.cancel();
+                                    }
+                                    //set the visibility off for progressbar
+                                    loginProgress.setVisibility(View.INVISIBLE);
+                                }
+                            });
+
                         }
-                    });
+                        else{
+                            Toast.makeText(LogInActivity.this, "Enter Email and Password", Toast.LENGTH_LONG).show();
+                        }
+                    }
 
-                }
-                else{
-                    Toast.makeText(LogInActivity.this, "Enter Email and Password", Toast.LENGTH_LONG).show();
-                }
+                };
+                Handler pdCanceller = new Handler();
+                pdCanceller.postDelayed(progressRunnable, 1000);
+
+
             }
         });
         btn_signUp = findViewById(R.id.login_signUp_btn);
