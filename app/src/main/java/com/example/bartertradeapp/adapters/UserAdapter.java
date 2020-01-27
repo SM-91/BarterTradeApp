@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,8 +12,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import static java.security.AccessController.getContext;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
@@ -37,7 +41,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         UserModel userModel = userModels.get(position);
         holder.username.setText(userModel.getUserName());
-
+        Picasso.get().load(userModel.getUserImageUrl()).into(holder.imageView);
         holder.itemView.setTag(userModel);
         holder.itemView.setOnClickListener(listener);
 
@@ -53,12 +57,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         public TextView username;
         public TextView productName;
+        public ImageView imageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             username = itemView.findViewById(R.id.username);
             productName = itemView.findViewById(R.id.product_title);
+            imageView = itemView.findViewById(R.id.ad_image);
         }
     }
 

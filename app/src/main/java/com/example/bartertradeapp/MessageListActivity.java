@@ -29,6 +29,7 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
 
     private RecyclerView rvMessageList;
     private List<UserModel> otherUserList = new ArrayList<>();
+    //private List<UserModel> otherUserList = new ArrayList<>();
     private Map<String, Boolean> otherUserMap = new HashMap<>();
     private String myId;
     private String ad_id = " ";
