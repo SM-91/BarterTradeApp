@@ -25,6 +25,7 @@ import com.example.bartertradeapp.DataModels.RatingModel;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.Fragments.HomeFragment;
 import com.example.bartertradeapp.Fragments.HomeFragmentExtend;
+import com.example.bartertradeapp.Fragments.MessageFragment;
 import com.example.bartertradeapp.Fragments.MessageListFragment;
 import com.example.bartertradeapp.Fragments.Profile_displayFragment;
 import com.example.bartertradeapp.Fragments.RequestListFragment;
@@ -49,7 +50,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     private DrawerLayout mDrawer;
 
-    UserModel userModel;
+
 
     TextView nav_header_user_name;
     TextView nav_header_user_email;
@@ -65,6 +66,11 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public static String avg_rating_string;
     public static float avg_rating;
 
+    // message ka data
+    MessageFragment messageFragment;
+    public static String msg_id,msg_category,msg_product_name;
+    public static UserModel userModel, msg_temp;
+
 
     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -77,6 +83,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         setContentView(R.layout.activity_home);
         changeStatusBarColor();
         userModel = new UserModel();
+
+        messageFragment = new MessageFragment();
 
         getLocationPermission();
         getDeviceLocation();
@@ -162,6 +170,31 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
             navigationView.setCheckedItem(R.id.nav_home);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent intent = getIntent();
+        if (getIntent().getExtras() != null) {
+            String frag = intent.getExtras().getString("frag");
+            switch (frag) {
+                case "abc":
+                    msg_id = intent.getExtras().getString("ad_id");
+                    msg_product_name = intent.getExtras().getString("product_name");
+                    msg_category = intent.getExtras().getString("category");
+                    msg_temp = intent.getExtras().getParcelable("user");
+
+//                    Bundle message = new Bundle();
+//                    message.putString("ad_id", ad_id);
+//                    message.putString("product_name", product_name);
+//                    message.putString("category", category);
+//                    message.putParcelable("user", temp);
+//                    messageFragment.setArguments(message);
+                    loadFragment(new MessageFragment());
+                    break;
+            }
         }
     }
 

@@ -12,10 +12,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.bartertradeapp.DataModels.RequestModel;
 import com.example.bartertradeapp.DataModels.UserModel;
+import com.example.bartertradeapp.Fragments.MessageFragment;
 import com.example.bartertradeapp.adapters.ViewPageAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class DetailedActivity extends BaseActivity {
 
@@ -68,6 +71,7 @@ public class DetailedActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
         changeStatusBarColor();
+
 
         chatBtn = findViewById(R.id.chatBtn);
 
@@ -188,12 +192,21 @@ public class DetailedActivity extends BaseActivity {
         chatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(DetailedActivity.this, MessageActivity.class);
+                Intent intent = new Intent(DetailedActivity.this, HomeActivity.class);
+                intent.putExtra("frag", "abc");
                 intent.putExtra("ad_id", ad_id);
                 intent.putExtra("product_name", product_name);
                 intent.putExtra("user", receiver);
                 intent.putExtra("category", category);
                 startActivity(intent);
+
+
+//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//                ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_left);
+//                ft.replace(R.id.fragment_container, messageFragment);
+//                ft.addToBackStack(null);
+//                ft.commit();
+
             }
         });
 

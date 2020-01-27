@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +38,9 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
     private String myId;
     private String ad_id = " ";
 
+
+    MessageFragment messageFragment;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,6 +49,8 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
         myId = FirebaseAuth.getInstance().getUid();
         rvMessageList = view.findViewById(R.id.rvMessageList);
         rvMessageList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        messageFragment = new MessageFragment();
 
         DatabaseReference getProductAdIdReference = FirebaseDatabase.getInstance().getReference("Messages");
         //Show Progress Dialog
@@ -113,9 +120,20 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         UserModel clickedUserModel = (UserModel) v.getTag();
-        Intent messageIntent = new Intent(getContext(), MessageActivity.class);
-        messageIntent.putExtra("user", clickedUserModel);
-        messageIntent.putExtra("ad_id", ad_id);
-        startActivity(messageIntent);
+//        Intent messageIntent = new Intent(getContext(), MessageActivity.class);
+//        messageIntent.putExtra("user", clickedUserModel);
+//        messageIntent.putExtra("ad_id", ad_id);
+//        startActivity(messageIntent);
+
+        Bundle message = new Bundle();
+        message.putString("ad_id", ad_id);
+        message.putParcelable("user", clickedUserModel);
+        messageFragment.setArguments(message);
+
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_left);
+        ft.replace(R.id.fragment_container, messageFragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 }
