@@ -25,7 +25,9 @@ import com.example.bartertradeapp.DataModels.RatingModel;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.Fragments.HomeFragment;
 import com.example.bartertradeapp.Fragments.HomeFragmentExtend;
+import com.example.bartertradeapp.Fragments.MessageListFragment;
 import com.example.bartertradeapp.Fragments.Profile_displayFragment;
+import com.example.bartertradeapp.Fragments.RequestListFragment;
 import com.example.bartertradeapp.Fragments.UserAdsFragment;
 import com.example.bartertradeapp.Fragments.UserUploadFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -52,6 +54,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     TextView nav_header_user_name;
     TextView nav_header_user_email;
     ImageView img1;
+    Intent intent;
 
     public static boolean mLocationPermissionGranted;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -198,13 +201,17 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
 
             case R.id.nav_chat:
-                Intent intent = new Intent(HomeActivity.this, MessageListActivity.class);
-                startActivity(intent);
+//                intent = new Intent(HomeActivity.this, MessageListActivity.class);
+//                startActivity(intent);
+
+                loadFragment(new MessageListFragment());
+
                 break;
 
             case R.id.nav_requests:
-                Intent requestIntent = new Intent(HomeActivity.this, RequestListActivity.class);
-                startActivity(requestIntent);
+                loadFragment(new RequestListFragment());
+//                Intent requestIntent = new Intent(HomeActivity.this, RequestListActivity.class);
+//                startActivity(requestIntent);
                 break;
 
             case R.id.nav_myAds:
@@ -273,7 +280,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    public void Average_score(){
+    public void Average_score() {
         //  Calculating Avg User Feedback
 
         String user_id = firebaseAuth.getCurrentUser().getUid();
@@ -282,17 +289,17 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                int temp_rating=0;
-                int count =0;
+                int temp_rating = 0;
+                int count = 0;
                 for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     RatingModel feedback = usersSnapshot.getValue(RatingModel.class);
                     temp_rating = temp_rating + feedback.getRating();
-                    count ++;
+                    count++;
                 }
                 /*Bug fix here*/
-                avg_rating = Float.valueOf(temp_rating)/count;
+                avg_rating = Float.valueOf(temp_rating) / count;
                 avg_rating_string = String.valueOf(avg_rating);
-                Toast.makeText(HomeActivity.this,"Rate:" + avg_rating_string, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "Rate:" + avg_rating_string, Toast.LENGTH_SHORT).show();
             }
 
             @Override

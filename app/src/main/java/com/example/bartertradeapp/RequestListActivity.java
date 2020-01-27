@@ -41,7 +41,7 @@ public class RequestListActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_request_list);
+        setContentView(R.layout.fragment_request_list);
 
         myId = FirebaseAuth.getInstance().getUid();
         rvRequestList = findViewById(R.id.rvRequestList);

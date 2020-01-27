@@ -1,17 +1,18 @@
-package com.example.bartertradeapp;
+package com.example.bartertradeapp.Fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bartertradeapp.DataModels.ChatModel;
+import com.example.bartertradeapp.DataModels.RequestModel;
 import com.example.bartertradeapp.DataModels.UserModel;
+import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.UserAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,33 +26,38 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MessageListActivity extends BaseActivity implements View.OnClickListener {
+public class RequestListFragment extends BaseFragment implements View.OnClickListener {
 
-    private RecyclerView rvMessageList;
+    private RecyclerView rvRequestList;
     private List<UserModel> otherUserList = new ArrayList<>();
     private Map<String, Boolean> otherUserMap = new HashMap<>();
     private String myId;
+    private String requestId;
     private String ad_id = " ";
+    private String name;
+    private boolean accepted;
+    UserModel sender, reciever;
+
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_message_list);
-        changeStatusBarColor();
-        myId = FirebaseAuth.getInstance().getUid();
-        rvMessageList = findViewById(R.id.rvMessageList);
-        rvMessageList.setLayoutManager(new LinearLayoutManager(this));
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_request_list, container, false);
 
-        DatabaseReference getProductAdIdReference = FirebaseDatabase.getInstance().getReference("Messages");
+        myId = FirebaseAuth.getInstance().getUid();
+        rvRequestList = view.findViewById(R.id.rvRequestList);
+        rvRequestList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        DatabaseReference getProductAdIdReference = FirebaseDatabase.getInstance().getReference("Requests");
         //Show Progress Dialog
         getProductAdIdReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //otherUserMap.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String conversationId = snapshot.getKey();
-                    if (!TextUtils.isEmpty(conversationId)) {
-                        ad_id = conversationId;
+                    String productId = snapshot.getKey();
+                    if (!TextUtils.isEmpty(productId)) {
+                        ad_id = productId;
                         getUser();
                     }
                 }
@@ -62,23 +68,31 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
 
             }
         });
+        return view;
     }
 
     private void getUser() {
-        DatabaseReference allChatReference = FirebaseDatabase.getInstance().getReference("Messages").child(ad_id);
+        DatabaseReference allRequestsReference = FirebaseDatabase.getInstance().getReference("Requests").child(ad_id);
         //Show Progress Dialog
-        allChatReference.addValueEventListener(new ValueEventListener() {
+        allRequestsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 //otherUserList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    ChatModel chatModel = snapshot.getValue(ChatModel.class);
+                    RequestModel requestModel = snapshot.getValue(RequestModel.class);
                     UserModel otherUser = null;
 
-                    if (myId.equals(chatModel.getSender().getuserId())) {
-                        otherUser = chatModel.getReciever();
-                    } else if (myId.equals(chatModel.getReciever().getuserId())) {
-                        otherUser = chatModel.getSender();
+                    sender = requestModel.getSender();
+                    reciever = requestModel.getReciever();
+                    accepted = requestModel.isAccepted();
+                    name = requestModel.getName();
+                    requestId = requestModel.getRequestId();
+
+                    /*if (myId.equals(requestModel.getSender().getuserId())) {
+                        otherUser = requestModel.getReciever();
+                    } else*/
+                    if (myId.equals(requestModel.getReciever().getuserId())) {
+                        otherUser = requestModel.getSender();
                     }
 
                     if (otherUser != null) {
@@ -99,19 +113,33 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setRVAdapter() {
-        UserAdapter userAdapter = new UserAdapter(this, otherUserList);
+        UserAdapter userAdapter = new UserAdapter(getContext(), otherUserList);
         userAdapter.setOnClickListener(this);
-        rvMessageList.setAdapter(userAdapter);
+        rvRequestList.setAdapter(userAdapter);
         //userAdapter.notifyDataSetChanged();
-
     }
 
     @Override
     public void onClick(View v) {
-        UserModel clickedUserModel = (UserModel) v.getTag();
+
+        DatabaseReference setAcceptedReference;
+        setAcceptedReference = FirebaseDatabase.getInstance().getReference("Requests")
+                .child(ad_id);
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setAdId(ad_id);
+        requestModel.setAccepted(true);
+        requestModel.setSender(sender);
+        requestModel.setReciever(reciever);
+        requestModel.setName(name);
+        requestModel.setRequestId(requestId);
+        setAcceptedReference.child(requestId).setValue(requestModel);
+
+
+      /*  UserModel clickedUserModel = (UserModel) v.getTag();
         Intent messageIntent = new Intent(MessageListActivity.this, MessageActivity.class);
         messageIntent.putExtra("user", clickedUserModel);
         messageIntent.putExtra("ad_id", ad_id);
-        startActivity(messageIntent);
+        startActivity(messageIntent);*/
     }
 }

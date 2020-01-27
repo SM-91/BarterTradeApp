@@ -1,17 +1,20 @@
-package com.example.bartertradeapp;
+package com.example.bartertradeapp.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bartertradeapp.DataModels.ChatModel;
 import com.example.bartertradeapp.DataModels.UserModel;
+import com.example.bartertradeapp.MessageActivity;
+import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.UserAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MessageListActivity extends BaseActivity implements View.OnClickListener {
+public class MessageListFragment extends BaseFragment implements View.OnClickListener{
 
     private RecyclerView rvMessageList;
     private List<UserModel> otherUserList = new ArrayList<>();
@@ -34,13 +37,13 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
     private String ad_id = " ";
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_message_list);
-        changeStatusBarColor();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_message_list, container, false);
+
         myId = FirebaseAuth.getInstance().getUid();
-        rvMessageList = findViewById(R.id.rvMessageList);
-        rvMessageList.setLayoutManager(new LinearLayoutManager(this));
+        rvMessageList = view.findViewById(R.id.rvMessageList);
+        rvMessageList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DatabaseReference getProductAdIdReference = FirebaseDatabase.getInstance().getReference("Messages");
         //Show Progress Dialog
@@ -62,6 +65,8 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
 
             }
         });
+
+        return view;
     }
 
     private void getUser() {
@@ -99,17 +104,16 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setRVAdapter() {
-        UserAdapter userAdapter = new UserAdapter(this, otherUserList);
+        UserAdapter userAdapter = new UserAdapter(getContext(), otherUserList);
         userAdapter.setOnClickListener(this);
         rvMessageList.setAdapter(userAdapter);
         //userAdapter.notifyDataSetChanged();
 
     }
-
     @Override
     public void onClick(View v) {
         UserModel clickedUserModel = (UserModel) v.getTag();
-        Intent messageIntent = new Intent(MessageListActivity.this, MessageActivity.class);
+        Intent messageIntent = new Intent(getContext(), MessageActivity.class);
         messageIntent.putExtra("user", clickedUserModel);
         messageIntent.putExtra("ad_id", ad_id);
         startActivity(messageIntent);
