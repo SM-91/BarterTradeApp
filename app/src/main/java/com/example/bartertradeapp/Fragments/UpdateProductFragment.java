@@ -27,6 +27,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
+import com.example.bartertradeapp.HomeActivity;
 import com.example.bartertradeapp.LogInActivity;
 import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.ViewPageAdapter;
@@ -102,6 +103,7 @@ public class UpdateProductFragment extends BaseFragment {
         // Required empty public constructor
     }
 
+    private HomeActivity home = new HomeActivity();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -505,6 +507,10 @@ public class UpdateProductFragment extends BaseFragment {
 
         String tag = "Product";
         userUploadProductModel.setTag(tag);
+
+        userUploadProductModel.setLatitude( home.curr.latitude );
+        userUploadProductModel.setLongitude( home.curr.longitude );
+
 
         DatabaseReference updateDatabaseReference;
         updateDatabaseReference = FirebaseDatabase.getInstance().getReference("UserUploads")
