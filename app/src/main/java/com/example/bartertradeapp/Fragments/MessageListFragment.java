@@ -36,6 +36,7 @@ import java.util.Map;
 import static com.example.bartertradeapp.HomeActivity.msg_category;
 import static com.example.bartertradeapp.HomeActivity.msg_id;
 import static com.example.bartertradeapp.HomeActivity.msg_product_name;
+import static com.example.bartertradeapp.HomeActivity.msg_temp;
 
 
 
@@ -186,7 +187,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        UserModel clickedUserModel = (UserModel) v.getTag();
+        //UserModel clickedUserModel = (UserModel) v.getTag();
 //        Intent messageIntent = new Intent(getContext(), MessageActivity.class);
 //        messageIntent.putExtra("user", clickedUserModel);
 //        messageIntent.putExtra("ad_id", ad_id);
@@ -204,7 +205,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
         startActivity(messageIntent);*/
 
         msg_temp = clickedCustomModel.getUserModel();
-        msg_id =ad_id;
+        msg_id = ad_id;
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_left);

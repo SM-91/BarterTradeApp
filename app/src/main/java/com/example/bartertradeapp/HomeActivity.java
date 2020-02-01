@@ -69,8 +69,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     public static float avg_rating;
     public static String ad_id,msg_product_name,msg_category,avg_rating_string,msg_id;
-    UserModel userModel;
-    UserModel reciever;
+    public static UserModel userModel,msg_temp;
     MessageFragment messageFragment;
 
     String uid = FirebaseAuth.getInstance().getUid();
@@ -190,7 +189,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     msg_id = intent.getExtras().getString("ad_id");
                     msg_product_name = intent.getExtras().getString("product_name");
                     msg_category = intent.getExtras().getString("category");
-                    reciever = intent.getExtras().getParcelable("user");
+                    msg_temp = intent.getExtras().getParcelable("user");
 
 //                    Bundle message = new Bundle();
 //                    message.putString("ad_id", ad_id);

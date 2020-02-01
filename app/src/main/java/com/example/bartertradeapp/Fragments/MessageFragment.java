@@ -41,6 +41,7 @@ import static com.example.bartertradeapp.HomeActivity.msg_id;
 import static com.example.bartertradeapp.HomeActivity.msg_product_name;
 import static com.example.bartertradeapp.HomeActivity.msg_temp;
 
+
 public class MessageFragment extends BaseFragment {
 
     FirebaseAuth chatAuth;
