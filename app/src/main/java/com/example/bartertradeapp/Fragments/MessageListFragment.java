@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.bartertradeapp.DataModels.ChatModel;
 import com.example.bartertradeapp.DataModels.UserModel;
+import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.MessageActivity;
 import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.UserAdapter;
@@ -30,6 +31,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.bartertradeapp.HomeActivity.msg_category;
+import static com.example.bartertradeapp.HomeActivity.msg_id;
+import static com.example.bartertradeapp.HomeActivity.msg_product_name;
+import static com.example.bartertradeapp.HomeActivity.msg_temp;
+
+
 public class MessageListFragment extends BaseFragment implements View.OnClickListener{
 
     private RecyclerView rvMessageList;
@@ -37,6 +44,8 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
     private Map<String, Boolean> otherUserMap = new HashMap<>();
     private String myId;
     private String ad_id = " ";
+
+    private String tag;
 
 
     MessageFragment messageFragment;
@@ -52,6 +61,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
 
         messageFragment = new MessageFragment();
 
+
         DatabaseReference getProductAdIdReference = FirebaseDatabase.getInstance().getReference("Messages");
         //Show Progress Dialog
         getProductAdIdReference.addValueEventListener(new ValueEventListener() {
@@ -63,6 +73,8 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
                     if (!TextUtils.isEmpty(conversationId)) {
                         ad_id = conversationId;
                         getUser();
+
+                        getProductDetails();
                     }
                 }
             }
@@ -72,6 +84,7 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
 
             }
         });
+
 
         return view;
     }
@@ -125,15 +138,42 @@ public class MessageListFragment extends BaseFragment implements View.OnClickLis
 //        messageIntent.putExtra("ad_id", ad_id);
 //        startActivity(messageIntent);
 
-        Bundle message = new Bundle();
-        message.putString("ad_id", ad_id);
-        message.putParcelable("user", clickedUserModel);
-        messageFragment.setArguments(message);
+//        Bundle message = new Bundle();
+//        message.putString("ad_id", ad_id);
+//        message.putParcelable("user", clickedUserModel);
+//        messageFragment.setArguments(message);
+        msg_temp=clickedUserModel;
+        msg_id =ad_id;
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_in_left);
         ft.replace(R.id.fragment_container, messageFragment);
         ft.addToBackStack(null);
         ft.commit();
+    }
+    private void getProductDetails(){
+
+        DatabaseReference productDetailsRef;
+        productDetailsRef = FirebaseDatabase.getInstance().getReference("ProductsAndServices")
+                .child(ad_id);
+        productDetailsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserUploadProductModel userUploadProductModel = dataSnapshot.getValue(UserUploadProductModel.class);
+                tag = userUploadProductModel.getTag();
+                if(tag.equals("Product")){
+                    msg_category = userUploadProductModel.getProductCategoryList();
+                    msg_product_name = userUploadProductModel.getProductName();
+                }else {
+                    msg_category = userUploadProductModel.getServiceCategory();
+                    msg_product_name = userUploadProductModel.getServiceName();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }

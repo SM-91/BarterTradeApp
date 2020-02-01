@@ -332,7 +332,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 /*Bug fix here*/
                 avg_rating = Float.valueOf(temp_rating) / count;
                 avg_rating_string = String.valueOf(avg_rating);
-                Toast.makeText(HomeActivity.this, "Rate:" + avg_rating_string, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(HomeActivity.this, "Rate:" + avg_rating_string, Toast.LENGTH_SHORT).show();
             }
 
             @Override

@@ -12,12 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.bartertradeapp.DataModels.RatingModel;
 import com.example.bartertradeapp.DataModels.UserHistoryModel;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.DetailedActivity;
 import com.example.bartertradeapp.R;
+import com.example.bartertradeapp.adapters.custom_latest_adapter;
 import com.example.bartertradeapp.adapters.custom_list_adapter;
 import com.example.bartertradeapp.adapters.custom_nearest_adapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,11 +34,12 @@ import java.util.regex.Pattern;
 
 import static com.example.bartertradeapp.HomeActivity.curr;
 
-public class HomeFragment extends BaseFragment implements custom_list_adapter.ItemClickListener, custom_nearest_adapter.ItemClickListener {
+public class HomeFragment extends BaseFragment implements custom_list_adapter.ItemClickListener, custom_nearest_adapter.ItemClickListener, custom_latest_adapter.ItemClickListener {
 
     private RecyclerView recyclerView_latest, recyclerView_history, recyclerView_nearest;
     private custom_list_adapter adapter_history;
-    private custom_nearest_adapter adapter_nearest, adapter_latest;
+    private custom_nearest_adapter adapter_nearest;
+    private custom_latest_adapter adapter_latest;
     LinearLayoutManager layoutManager_latest, layoutManager_history, layoutManager_nearest;
 
     ArrayList<String> category_list;
@@ -80,7 +81,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         recyclerView_nearest.setLayoutManager(layoutManager_nearest);
 
         // initializing adapter
-        adapter_latest = new custom_nearest_adapter(getContext(), latest_ads);
+        adapter_latest = new custom_latest_adapter(getContext(), latest_ads);
         adapter_latest.setClickListener(this);
 
         adapter_history = new custom_list_adapter(getContext(), history_ads);
@@ -91,7 +92,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
 
 
         // Setting data by History Data
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserHistory");
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserHistory").child(uploadAuth.getUid());
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -99,12 +100,10 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
                 category_list.clear();
                 category_list.add("nothing");
                 for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
-                    for (DataSnapshot ds : usersSnapshot.getChildren()) {
-                        UserHistoryModel history = ds.getValue(UserHistoryModel.class);
+                        UserHistoryModel history = usersSnapshot.getValue(UserHistoryModel.class);
                         //category_list.add(history.getCategory());
                         category = history.getCategory();
                         category_search(category);
-                    }
                 }
 
             }
@@ -134,9 +133,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
     public void onItemClick(View view, int position) {
 
         intent = new Intent(getContext(), DetailedActivity.class);
-        userUploadProductModel = adapter_latest.getItem(position);
-        //userUploadProductModel = adapter_nearest.getItem(position);
-        //userUploadProductModel = adapter_history.getItem(position);
+        userUploadProductModel = adapter_history.getItem(position);
         ad_id = userUploadProductModel.getAdId();
         Date myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
         String myCurrentDateTimeString = userUploadProductModel.getCurrentDateTimeString();
@@ -189,8 +186,59 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
     public void onNearestItemClick(View view, int position) {
 
         intent = new Intent(getContext(), DetailedActivity.class);
-        //userUploadProductModel = adapter_latest.getItem(position);
         userUploadProductModel = adapter_nearest.getItem(position);
+        ad_id = userUploadProductModel.getAdId();
+        Date myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
+        String myCurrentDateTimeString = userUploadProductModel.getCurrentDateTimeString();
+        pname = userUploadProductModel.getProductName();
+        pdesc = userUploadProductModel.getProductDescription();
+        pexch = userUploadProductModel.getPossibleExchangeWith();
+        pest = userUploadProductModel.getProductEstimatedMarketValue();
+        ptype = userUploadProductModel.getProductType();
+        pcategory = userUploadProductModel.getProductCategoryList();
+        pcondition = userUploadProductModel.getProductCondition();
+        String serviceName = userUploadProductModel.getServiceName();
+        String serviceCategory = userUploadProductModel.getServiceCategory();
+        String serviceDescription = userUploadProductModel.getServiceDescription();
+        String serviceEstimatedMarketValue = userUploadProductModel.getServiceEstimatedMarketValue();
+        String servicePossibleExchangeWith = userUploadProductModel.getServicePossibleExchangeWith();
+        String serviceImageUri = userUploadProductModel.getServiceImageUri();
+        String tag = userUploadProductModel.getTag();
+        UserModel postedBy = userUploadProductModel.getPostedBy();
+        ArrayList<String> pimagelist = userUploadProductModel.getmArrList();
+
+
+        pimg = userUploadProductModel.getmImageUri();
+
+        intent.putExtra("name", pname);
+        intent.putExtra("desc", pdesc);
+        intent.putExtra("ad_id", ad_id);
+        intent.putExtra("exchange", pexch);
+        intent.putExtra("est", pest);
+        intent.putExtra("type", ptype);
+        intent.putExtra("category", pcategory);
+        intent.putExtra("condition", pcondition);
+        intent.putExtra("exch", pexch);
+        intent.putExtra("worth", pest);
+        intent.putExtra("Key", myCurrentDateTime);
+        intent.putExtra("myCurrentDateTimeString", myCurrentDateTimeString);
+        intent.putExtra("serviceName", serviceName);
+        intent.putExtra("serviceCategory", serviceCategory);
+        intent.putExtra("serviceDescription", serviceDescription);
+        intent.putExtra("serviceEstimatedMarketValue", serviceEstimatedMarketValue);
+        intent.putExtra("servicePossibleExchangeWith", servicePossibleExchangeWith);
+        intent.putExtra("serviceImageUri", serviceImageUri);
+        intent.putExtra("tag", tag);
+        intent.putExtra("user", postedBy);
+        intent.putExtra("imagelist", pimagelist);
+        intent.putExtra("image", pimg);
+        startActivity(intent);
+    }
+    @Override
+    public void onLatestItemClick(View view, int position) {
+
+        intent = new Intent(getContext(), DetailedActivity.class);
+        userUploadProductModel = adapter_latest.getItem(position);
         ad_id = userUploadProductModel.getAdId();
         Date myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
         String myCurrentDateTimeString = userUploadProductModel.getCurrentDateTimeString();
@@ -255,8 +303,8 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
                     //Toast.makeText(getContext(), ""+datestring, Toast.LENGTH_SHORT).show();
                     Long hour;
                     hour = printDifference(datestring, date);
-                    Toast.makeText(getContext(), "Hour:" + hour, Toast.LENGTH_SHORT).show();
-                    if (hour < 24) {
+                    //Toast.makeText(getContext(), "Hour:" + hour, Toast.LENGTH_SHORT).show();
+                    if (hour < 12) {
                         latest_ads.add(latest_search);
                     }
 
@@ -306,7 +354,7 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
 
                     float distance;
                     distance = calculateDistance(curr.latitude, curr.longitude, nearest.getLatitude(), nearest.getLongitude());
-                    Toast.makeText(getContext(), "distance" + distance, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(), "distance" + distance, Toast.LENGTH_SHORT).show();
                     // distance is in KM
                     if (distance < 3) {
                         nearest_ads.add(nearest);

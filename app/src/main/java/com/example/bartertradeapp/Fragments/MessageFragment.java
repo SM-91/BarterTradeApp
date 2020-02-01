@@ -20,6 +20,7 @@ import com.example.bartertradeapp.DataModels.ChatModel;
 import com.example.bartertradeapp.DataModels.RatingModel;
 import com.example.bartertradeapp.DataModels.UserHistoryModel;
 import com.example.bartertradeapp.DataModels.UserModel;
+import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.FeedbackActivity;
 import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.MessageAdapter;
@@ -50,7 +51,7 @@ public class MessageFragment extends BaseFragment {
     List<ChatModel> chatModels = new ArrayList<>();
     RecyclerView recyclerView;
     private UserModel sender, receiver;
-    private String ad_id, product_name, category;
+    private String ad_id, product_name, category,tag;
     LinearLayout feedback_layout, trade_layout;
     private RadioButton radio_btn_no, radio_btn_yes, trade_yes, trade_no;
     private RadioGroup radioGroup, tradeGroup;
