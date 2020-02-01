@@ -28,7 +28,7 @@ public class BaseFragment extends Fragment {
     Intent intent;
 
     /*Firebase*/
-    DatabaseReference updateDatabaseReference, viewDatabaseReference;
+    DatabaseReference updateDatabaseReference;
     FirebaseDatabase firebaseDatabase;
     FirebaseAuth uploadAuth;
 

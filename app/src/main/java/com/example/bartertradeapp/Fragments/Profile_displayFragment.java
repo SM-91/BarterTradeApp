@@ -18,10 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bartertradeapp.DataModels.RatingModel;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.R;
-import com.example.bartertradeapp.adapters.user_feedback_adapter;
+import com.example.bartertradeapp.adapters.UserFeedbackAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
@@ -29,18 +30,18 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Profile_displayFragment extends BaseFragment implements user_feedback_adapter.ItemClickListener {
+public class Profile_displayFragment extends BaseFragment implements UserFeedbackAdapter.ItemClickListener {
 
     Button update_profile;
     ImageView image_profile;
     TextView username, avg_feedback;
     RecyclerView feedback_recycler;
     LinearLayoutManager layoutManager;
-    private user_feedback_adapter adapter;
+    private UserFeedbackAdapter adapter;
     float avg_rating;
     String avg_rating_string;
     RatingBar avg_rating_bar;
-
+    DatabaseReference viewDatabaseReference;
 
     List<RatingModel> feedback_list;
 
@@ -75,7 +76,7 @@ public class Profile_displayFragment extends BaseFragment implements user_feedba
         // Recycler View Setup
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         feedback_recycler.setLayoutManager(layoutManager);
-        adapter = new user_feedback_adapter(getContext(), feedback_list);
+        adapter = new UserFeedbackAdapter(getContext(), feedback_list);
         adapter.setClickListener(this);
 
         //  Showing User Feedback

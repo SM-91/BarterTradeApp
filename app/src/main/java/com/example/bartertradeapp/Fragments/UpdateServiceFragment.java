@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
+import com.example.bartertradeapp.HomeActivity;
 import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.ViewPageAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,6 +56,7 @@ public class UpdateServiceFragment extends Fragment {
 
     private String[] serviceCategories = {"Tutoring", "Designing", "Electrical work", "Mechanical work", "Wood work", "Cleaning"};
     ArrayAdapter<String> categoriesAdapter;
+    private HomeActivity home = new HomeActivity();
 
     public UpdateServiceFragment() {
         // Required empty public constructor
@@ -192,6 +194,9 @@ public class UpdateServiceFragment extends Fragment {
         userUploadProductModel.setAdId(ad_id);
         String tag = "Service";
         userUploadProductModel.setTag(tag);
+
+        userUploadProductModel.setLatitude( home.curr.latitude );
+        userUploadProductModel.setLongitude( home.curr.longitude );
 
         DatabaseReference uploadServiceReference;
         uploadServiceReference = FirebaseDatabase.getInstance().getReference("UserUploads").child(uploadAuth.getUid())

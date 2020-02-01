@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,32 +19,32 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class user_feedback_adapter extends RecyclerView.Adapter<user_feedback_adapter.ViewHolder>  {
+public class UserFeedbackAdapter extends RecyclerView.Adapter<UserFeedbackAdapter.ViewHolder>  {
     @NonNull
     private List<RatingModel> feedbacklist;
     private LayoutInflater mInflater;
-    private user_feedback_adapter.ItemClickListener mClickListener;
+    private UserFeedbackAdapter.ItemClickListener mClickListener;
 
     private Context context;
 
     private ArrayList<String> imageList = null;
 
     // data is passed into the constructor
-    public user_feedback_adapter(Context context, List<RatingModel> feedbacklist) {
+    public UserFeedbackAdapter(Context context, List<RatingModel> feedbacklist) {
         this.mInflater = LayoutInflater.from(context);
         this.feedbacklist = feedbacklist;
     }
 
     // inflates the itemlist layout from xml when needed
     @Override
-    public user_feedback_adapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public UserFeedbackAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.feedback_list_item, parent, false);
-        return new user_feedback_adapter.ViewHolder(view);
+        return new UserFeedbackAdapter.ViewHolder(view);
     }
 
     // binds the data to the TextView in each row
     @Override
-    public void onBindViewHolder(final user_feedback_adapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final UserFeedbackAdapter.ViewHolder holder, int position) {
         RatingModel list = feedbacklist.get(position);
 
         holder.feedback_bar.setIsIndicator(true);
@@ -122,7 +121,7 @@ public class user_feedback_adapter extends RecyclerView.Adapter<user_feedback_ad
     }
 
     // allows clicks events to be caught
-    public void setClickListener(user_feedback_adapter.ItemClickListener itemClickListener) {
+    public void setClickListener(UserFeedbackAdapter.ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 

@@ -120,7 +120,7 @@ public class DetailedActivity extends BaseActivity {
 
 
         if (bundle != null) {
-            if (tag.equals("Product")) {
+            if ("Product".equals(tag)) {
                 if (mimage != null) {
                     imageView.setVisibility(View.VISIBLE);
                     Picasso.get().load(mimage)
@@ -154,7 +154,7 @@ public class DetailedActivity extends BaseActivity {
                 textView_exch.setText("Exchange with: " + servicePossibleExchangeWith);
                 textView_est.setText("Estimated Price: " + serviceEstimatedMarketValue);
                 textView_category.setText(serviceCategory);
-                relativeLayout.setVisibility(View.GONE);
+                //relativeLayout.setVisibility(View.GONE);
             }
 
         }
@@ -241,8 +241,8 @@ public class DetailedActivity extends BaseActivity {
                     RequestModel requestModel = snapshot.getValue(RequestModel.class);
                     accepted = requestModel.isAccepted();
 
-                    if (accepted = true) {
-                        if (myId.equals(requestModel.getSender().getuserId())) {
+                    if (myId.equals(requestModel.getSender().getuserId())) {
+                        if (requestModel.isAccepted()) {
                             bidBtn.setVisibility(View.GONE);
                             chatBtn.setVisibility(View.VISIBLE);
                             btnMap.setVisibility(View.VISIBLE);

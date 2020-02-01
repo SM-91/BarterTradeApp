@@ -1,5 +1,6 @@
 package com.example.bartertradeapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -18,7 +19,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_adapter.ViewHolder> {
+public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.ViewHolder> {
 
     private List<UserUploadProductModel> userlist;
     private LayoutInflater mInflater;
@@ -29,7 +30,7 @@ public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_
     private ArrayList<String> imageList = null;
 
     // data is passed into the constructor
-    public custom_nearest_adapter(Context context, List<UserUploadProductModel> userlist) {
+    public CustomListAdapter(Context context, List<UserUploadProductModel> userlist) {
         this.mInflater = LayoutInflater.from(context);
         this.userlist = userlist;
     }
@@ -37,43 +38,64 @@ public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_
     // inflates the itemlist layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.nearest_items, parent, false);
+        View view = mInflater.inflate(R.layout.my_list_item, parent, false);
         return new ViewHolder(view);
     }
 
     // binds the data to the TextView in each row
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         UserUploadProductModel list = userlist.get(position);
-        holder.title.setText(list.getProductName());
-        holder.tags.setText(list.getTag());
-        holder.title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "" + holder.title.getText().toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        try {
-            if (list.getmImageUri() != null) {
+        if(list.getTag().equals("Product")){
+            holder.title.setText(list.getProductName());
+            holder.tags.setText(list.getTag());
+            holder.type.setText("Type: " + list.getProductType());
+            holder.estimation.setText("Estimated price: " + list.getProductEstimatedMarketValue());
+            Picasso.get().load(list.getmImageUri())
+                    .fit()
+                    .into(holder.image);
 
-                Picasso.get().load(list.getmImageUri())
-                        .fit()
-                        .into(holder.image);
+            try {
+                if (list.getmImageUri() != null) {
 
-            } else {
-
-                imageList = list.getmArrList();
-                if (imageList != null) {
-                    Uri uri = Uri.parse(imageList.get(0));
-                    Picasso.get().load(uri)
+                    Picasso.get().load(list.getmImageUri())
                             .fit()
                             .into(holder.image);
-                }
-            }
 
-        } catch (Exception e) {
-            System.out.println("Error " + e.getMessage());
-            //Toast.makeText(this.context,"Error in multiple images" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                } else {
+
+                    imageList = list.getmArrList();
+                    if (imageList != null) {
+                        Uri uri = Uri.parse(imageList.get(0));
+                        Picasso.get().load(uri)
+                                .fit()
+                                .centerCrop()
+                                .into(holder.image);
+                    }
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error " + e.getMessage());
+                //Toast.makeText(this.context,"Error in multiple images" + e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            holder.title.setText(list.getServiceName());
+            holder.tags.setText(list.getTag());
+            holder.title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(v.getContext(), "" + holder.title.getText().toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            holder.type.setText("Category: " + list.getServiceCategory());
+            holder.estimation.setText("Estimated price: " + list.getServiceEstimatedMarketValue());
+
+            Picasso.get().load(list.getServiceImageUri())
+                    .fit()
+                    .centerCrop()
+                    .into(holder.image);
         }
 
 
@@ -108,7 +130,7 @@ public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onNearestItemClick(view, getAdapterPosition());
+            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
     }
 
@@ -124,6 +146,6 @@ public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onNearestItemClick(View view, int position);
+        void onItemClick(View view, int position);
     }
 }

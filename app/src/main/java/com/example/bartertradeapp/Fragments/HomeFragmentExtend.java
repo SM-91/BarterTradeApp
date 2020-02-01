@@ -17,10 +17,11 @@ import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.DetailedActivity;
 import com.example.bartertradeapp.R;
-import com.example.bartertradeapp.adapters.custom_list_adapter;
+import com.example.bartertradeapp.adapters.CustomListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -29,10 +30,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class HomeFragmentExtend extends BaseFragment implements custom_list_adapter.ItemClickListener {
+public class HomeFragmentExtend extends BaseFragment implements CustomListAdapter.ItemClickListener {
 
     private RecyclerView recyclerView;
-    private custom_list_adapter adapter;
+    private CustomListAdapter adapter;
     LinearLayoutManager layoutManager;
     SearchView searchbar;
     FirebaseAuth uploadAuth;
@@ -58,7 +59,7 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layoutManager);
         // initializing adapter
-        adapter = new custom_list_adapter(getContext(), userlist);
+        adapter = new CustomListAdapter(getContext(), userlist);
         adapter.setClickListener(this);
 
         text_search.setOnClickListener(new View.OnClickListener() {
@@ -82,6 +83,7 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
             }
         });
 
+        DatabaseReference viewDatabaseReference;
         viewDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -163,9 +165,9 @@ public class HomeFragmentExtend extends BaseFragment implements custom_list_adap
     public void search(final String query) {
         text_search.setVisibility(View.GONE);
         searchbar.setMaxWidth(1000);
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
-
-        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference searchRef;
+        searchRef = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
+        searchRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

@@ -20,13 +20,15 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".RequestListActivity"></activity>
-        <activity android:name=".MapsActivity"></activity>
-        <activity android:name=".MessageActivity" />
-        <activity android:name=".MyAdsDetailsActivity" />
 
+        <activity android:name=".MapsActivity">
+        </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBBokTr-9jkpGL2J-dEjUicYkiHW8wMz5I" />
+
+        <activity android:name=".MessageActivity" />
+        <activity android:name=".MyAdsDetailsActivity" />
 
         <activity
             android:name=".HomeActivity"

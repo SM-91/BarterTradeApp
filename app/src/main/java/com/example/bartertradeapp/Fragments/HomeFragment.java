@@ -17,11 +17,12 @@ import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.DetailedActivity;
 import com.example.bartertradeapp.R;
-import com.example.bartertradeapp.adapters.custom_list_adapter;
-import com.example.bartertradeapp.adapters.custom_nearest_adapter;
+import com.example.bartertradeapp.adapters.CustomListAdapter;
+import com.example.bartertradeapp.adapters.CustomNearestAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -33,11 +34,11 @@ import java.util.regex.Pattern;
 
 import static com.example.bartertradeapp.HomeActivity.curr;
 
-public class HomeFragment extends BaseFragment implements custom_list_adapter.ItemClickListener, custom_nearest_adapter.ItemClickListener {
+public class HomeFragment extends BaseFragment implements CustomListAdapter.ItemClickListener, CustomNearestAdapter.ItemClickListener {
 
     private RecyclerView recyclerView_latest, recyclerView_history, recyclerView_nearest;
-    private custom_list_adapter adapter_history;
-    private custom_nearest_adapter adapter_nearest, adapter_latest;
+    private CustomListAdapter adapter_history;
+    private CustomNearestAdapter adapter_nearest, adapter_latest;
     LinearLayoutManager layoutManager_latest, layoutManager_history, layoutManager_nearest;
 
     ArrayList<String> category_list;
@@ -59,7 +60,6 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         latest_ads = new ArrayList<>();
         history_ads = new ArrayList<>();
         nearest_ads = new ArrayList<>();
-
         category_list = new ArrayList<>();
 
 
@@ -78,49 +78,23 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         recyclerView_nearest.setLayoutManager(layoutManager_nearest);
 
         // initializing adapter
-        adapter_latest = new custom_nearest_adapter(getContext(), latest_ads);
+        adapter_latest = new CustomNearestAdapter(getContext(), latest_ads);
         adapter_latest.setClickListener(this);
 
-        adapter_history = new custom_list_adapter(getContext(), history_ads);
+        adapter_history = new CustomListAdapter(getContext(), history_ads);
         //adapter_history.setClickListener(this);
 
-        adapter_nearest = new custom_nearest_adapter(getContext(), nearest_ads);
+        adapter_nearest = new CustomNearestAdapter(getContext(), nearest_ads);
         //adapter_nearest.setClickListener(this);
 
 
-        // Setting data by History Data
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserHistory");
-        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                category_list.clear();
-                category_list.add("nothing");
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
-                    for (DataSnapshot ds : usersSnapshot.getChildren()) {
-                        UserHistoryModel history = ds.getValue(UserHistoryModel.class);
-                        //category_list.add(history.getCategory());
-                        category = history.getCategory();
-                        category_search(category);
-                    }
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+        getUserHistory();
 
         // taking Latest Ads according to time...
         latest_search();
 
-
         // Setting data by Location
         nearest_search();
-
 
         //Float distance = calculateDistance(49.9342639,11.5832404,49.434669,11.051320);
         //Toast.makeText(getContext(), "distance"+distance, Toast.LENGTH_SHORT).show();
@@ -237,11 +211,40 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
         startActivity(intent);
     }
 
+    public void getUserHistory(){
+        // Setting data by History Data
+        DatabaseReference viewDatabaseReference;
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserHistory");
+        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                category_list.clear();
+                category_list.add("nothing");
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot ds : usersSnapshot.getChildren()) {
+                        UserHistoryModel history = ds.getValue(UserHistoryModel.class);
+                        //category_list.add(history.getCategory());
+                        category = history.getCategory();
+                        category_search(category);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void latest_search() {
         date = Calendar.getInstance().getTime();
         //Date date =DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
-        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference searchref;
+        searchref = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
+        searchref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -271,16 +274,23 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
     }
 
     public void category_search(final String category) {
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
-        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference byCategorySearchRef;
+        byCategorySearchRef = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
+        byCategorySearchRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 history_ads.clear();
                 for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     UserUploadProductModel latest_search = usersSnapshot.getValue(UserUploadProductModel.class);
-                    if (Pattern.compile(Pattern.quote(category), Pattern.CASE_INSENSITIVE).matcher(latest_search.getProductCategoryList()).find()) {
-                        history_ads.add(latest_search);
+                    try{
+                        if (Pattern.compile(Pattern.quote(category), Pattern.CASE_INSENSITIVE).matcher(latest_search.getProductCategoryList()).find()) {
+                            history_ads.add(latest_search);
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
                     }
+
+
                 }
                 recyclerView_history.setAdapter(adapter_history);
             }
@@ -294,21 +304,27 @@ public class HomeFragment extends BaseFragment implements custom_list_adapter.It
     }
 
     public void nearest_search() {
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
-        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
+        DatabaseReference byNearestSearchRef;
+        byNearestSearchRef = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
+        byNearestSearchRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     UserUploadProductModel nearest = usersSnapshot.getValue(UserUploadProductModel.class);
 
-                    float distance;
-                    distance = calculateDistance(curr.latitude, curr.longitude, nearest.getLatitude(), nearest.getLongitude());
-                    Toast.makeText(getContext(), "distance" + distance, Toast.LENGTH_SHORT).show();
-                    // distance is in KM
-                    if (distance < 3) {
-                        nearest_ads.add(nearest);
+                    try{
+                        float distance;
+                        distance = calculateDistance(curr.latitude, curr.longitude, nearest.getLatitude(), nearest.getLongitude());
+                        Toast.makeText(getContext(), "distance" + distance, Toast.LENGTH_SHORT).show();
+                        // distance is in KM
+                        if (distance < 3) {
+                            nearest_ads.add(nearest);
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
                     }
+
                 }
                 recyclerView_nearest.setAdapter(adapter_nearest);
             }

@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.example.bartertradeapp.DataModels.RequestModel;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.Fragments.HomeFragment;
 import com.example.bartertradeapp.Fragments.HomeFragmentExtend;
@@ -56,9 +58,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     public static LatLng curr;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final String TAG = HomeActivity.class.getSimpleName( );
+    private NavigationView navigationView;
 
 
-    String uid = FirebaseAuth.getInstance( ).getCurrentUser( ).getUid( );
+    String uid = FirebaseAuth.getInstance().getUid();
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance( );
 
@@ -78,8 +81,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         mDrawer = findViewById( R.id.drawer_layout );
 
-        NavigationView navigationView = findViewById( R.id.nav_view );
+        navigationView = findViewById( R.id.nav_view );
         navigationView.setNavigationItemSelectedListener( this );
+
+        //checkForNewRequest();
 
         /*Navigation Drawer Header*/
         View header_view = navigationView.getHeaderView( 0 );
@@ -96,7 +101,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         changeStatusBarColor( );
 
         DatabaseReference reference;
-        reference = FirebaseDatabase.getInstance( ).getReference( "Users" ).child( firebaseAuth.getUid( ) );
+        reference = FirebaseDatabase.getInstance( ).getReference( "Users" ).child( uid );
         reference.addValueEventListener( new ValueEventListener( ) {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -154,6 +159,36 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
             getSupportFragmentManager( ).beginTransaction( ).replace( R.id.fragment_container, new HomeFragment( ) ).addToBackStack( null ).commit( );
             navigationView.setCheckedItem( R.id.nav_home );
         }
+
+    }
+
+    private void checkForNewRequest() {
+        DatabaseReference requestReference = FirebaseDatabase.getInstance().getReference("Requests");
+        requestReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                outerLoop:
+                for(DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    for(DataSnapshot childOfChildSnapShot: childSnapshot.getChildren()) {
+                        RequestModel requestModel = childOfChildSnapShot.getValue(RequestModel.class);
+
+                        if(uid.equals(requestModel.getReciever().getuserId())) {
+                            if(!requestModel.isAccepted()) {
+                                Menu menu = navigationView.getMenu();
+                                MenuItem navRequests = menu.findItem(R.id.nav_requests);
+                                navRequests.setIcon(R.drawable.ic_chat_unread);
+                                break outerLoop;
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void loadFragment(Fragment fragment) {

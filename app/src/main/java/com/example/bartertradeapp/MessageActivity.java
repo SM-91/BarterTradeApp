@@ -60,6 +60,7 @@ public class MessageActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         changeStatusBarColor();
+
         if (getIntent().getExtras() != null) {
             Bundle bundle = getIntent().getExtras();
             ad_id = bundle.getString("ad_id");
@@ -133,49 +134,8 @@ public class MessageActivity extends BaseActivity {
             }
         });
 
-        DatabaseReference recieverDatabaseReference;
-        recieverDatabaseReference = FirebaseDatabase.getInstance().getReference("Users");
-        recieverDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    UserModel userModel = snapshot.getValue(UserModel.class);
-
-                    if (userModel.getuserId().equals(chatAuth.getUid())) {
-                        sender = userModel;
-                        readMessage();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-        DatabaseReference feedbackDatabaseReference;
-        feedbackDatabaseReference = FirebaseDatabase.getInstance().getReference("UserFeedback").child(receiver.getuserId());
-        feedbackDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    RatingModel list = snapshot.getValue(RatingModel.class);
-
-                    if (list.getBuyerid().equals(chatAuth.getUid())) {
-                        //Toast.makeText(MessageActivity.this, ""+chatAuth.getUid(), Toast.LENGTH_SHORT).show();
-                        feedback_layout.setVisibility(GONE);
-                        trade_layout.setVisibility(GONE);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+        getSender();
+        getFeedBack();
     }
 
     private void sendMessage(String message) {
@@ -225,6 +185,54 @@ public class MessageActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void getSender(){
+        DatabaseReference recieverDatabaseReference;
+        recieverDatabaseReference = FirebaseDatabase.getInstance().getReference("Users");
+        recieverDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    UserModel userModel = snapshot.getValue(UserModel.class);
+
+                    if (userModel.getuserId().equals(chatAuth.getUid())) {
+                        sender = userModel;
+                        readMessage();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getFeedBack(){
+        DatabaseReference feedbackDatabaseReference;
+        feedbackDatabaseReference = FirebaseDatabase.getInstance().getReference("UserFeedback").child(receiver.getuserId());
+        feedbackDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    RatingModel list = snapshot.getValue(RatingModel.class);
+
+                    if (list.getBuyerid().equals(chatAuth.getUid())) {
+                        //Toast.makeText(MessageActivity.this, ""+chatAuth.getUid(), Toast.LENGTH_SHORT).show();
+                        feedback_layout.setVisibility(GONE);
+                        trade_layout.setVisibility(GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void postUserHistory(){
