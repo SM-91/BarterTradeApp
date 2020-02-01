@@ -49,6 +49,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.productName.setText("Product Title :" + " " + customModel.getUserUploadProductModel().getProductName());
         Picasso.get().load(customModel.getUserModel().getUserImageUrl()).fit().centerCrop().into(holder.imageView);
         holder.itemView.setTag(customModel);
+
         holder.itemView.setOnClickListener(listener);
 
     }

@@ -89,30 +89,43 @@ public class SignUpActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(pass) && !TextUtils.isEmpty(confirm_pass) && !TextUtils.isEmpty(username)) {
                     if (pass.equals(confirm_pass)) {
                         if(uImageUri!=null) {
-                            //reg_progress.setVisibility(View.VISIBLE);
-                            mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+
+                            final ProgressDialog progress = ProgressDialog.show(SignUpActivity.this, "",
+                                    "Authenticating", true);
+
+                            Runnable progressRunnable = new Runnable() {
                                 @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
+                                public void run() {
+                                    //reg_progress.setVisibility(View.VISIBLE);
+                                    mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (task.isSuccessful()) {
 
-                                        //Toast.makeText(SignUpActivity.this, "Account Created.", Toast.LENGTH_LONG).show();
+                                                //Toast.makeText(SignUpActivity.this, "Account Created.", Toast.LENGTH_LONG).show();
 
-                                        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-                                        userid = firebaseUser.getUid();
+                                                FirebaseUser firebaseUser = mAuth.getCurrentUser();
+                                                userid = firebaseUser.getUid();
 
-                                        userCreatedDateTime = DateFormat.getDateTimeInstance()
-                                                .format(Calendar.getInstance().getTime());
-                                        gettingImageUrl();
-                                        progressDialog = ProgressDialog.show(SignUpActivity.this, "Creating Account",
-                                                "Uploading Image", true);
-                                        handler();
-                                    } else {
-                                        String errorMessage = task.getException().getMessage();
-                                        Toast.makeText(SignUpActivity.this, "Error : " + errorMessage, Toast.LENGTH_LONG).show();
-                                    }
-                                    // reg_progress.setVisibility(View.INVISIBLE);
+                                                userCreatedDateTime = DateFormat.getDateTimeInstance()
+                                                        .format(Calendar.getInstance().getTime());
+                                                gettingImageUrl();
+                                                progressDialog = ProgressDialog.show(SignUpActivity.this, "Creating Account",
+                                                        "Uploading Image", true);
+                                                handler();
+                                            } else {
+                                                String errorMessage = task.getException().getMessage();
+                                                Toast.makeText(SignUpActivity.this, "Error : " + errorMessage, Toast.LENGTH_LONG).show();
+                                                progress.cancel();
+                                            }
+                                            // reg_progress.setVisibility(View.INVISIBLE);
+                                        }
+                                    });
                                 }
-                            });
+                            };
+                            Handler pdCanceller = new Handler();
+                            pdCanceller.postDelayed(progressRunnable, 1000);
+
                         }
                         else{
                             Toast.makeText(SignUpActivity.this, "Select Profile Image", Toast.LENGTH_LONG).show();

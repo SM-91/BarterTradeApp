@@ -511,6 +511,10 @@ public class UpdateProductFragment extends BaseFragment {
         String tag = "Product";
         userUploadProductModel.setTag(tag);
 
+        userUploadProductModel.setLatitude( home.curr.latitude );
+        userUploadProductModel.setLongitude( home.curr.longitude );
+
+
         DatabaseReference updateDatabaseReference;
         updateDatabaseReference = FirebaseDatabase.getInstance().getReference("UserUploads")
                 .child(uploadAuth.getCurrentUser().getUid()).child(ad_id);

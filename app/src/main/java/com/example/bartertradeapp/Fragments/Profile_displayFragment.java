@@ -40,6 +40,7 @@ public class Profile_displayFragment extends BaseFragment implements UserFeedbac
     private UserFeedbackAdapter adapter;
     float avg_rating;
     String avg_rating_string;
+
     RatingBar avg_rating_bar;
     DatabaseReference viewDatabaseReference;
 
@@ -65,6 +66,13 @@ public class Profile_displayFragment extends BaseFragment implements UserFeedbac
 
         uploadAuth = FirebaseAuth.getInstance();
 
+        // setting values to avg feedback
+        if (!avg_rating_string.equals("NaN")){
+            avg_feedback.setText("Average Score "+ avg_rating_string);
+            avg_rating_bar.setRating(avg_rating);
+        }
+
+
         update_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,25 +95,12 @@ public class Profile_displayFragment extends BaseFragment implements UserFeedbac
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 feedback_list.clear();
-                int temp_rating=0;
-                int count =0;
                 for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     RatingModel feedback = usersSnapshot.getValue(RatingModel.class);
                     feedback_list.add(feedback);
-                    temp_rating = temp_rating + feedback.getRating();
-                    count ++;
                 }
 
-                /*Bug fix here*/
-                if(avg_rating_string != null){
-
-                    avg_rating = Float.valueOf(temp_rating)/count;
-                    avg_rating_string = String.valueOf(avg_rating);
-                    Toast.makeText(getContext(), "Rate:" + avg_rating_string, Toast.LENGTH_SHORT).show();
-
-                }
                 // setting adapter to recycler View
-                //recyclerView.setAdapter(adapter);
                 feedback_recycler.setAdapter(adapter);
 
             }
@@ -125,8 +120,6 @@ public class Profile_displayFragment extends BaseFragment implements UserFeedbac
 
                 UserModel userModel = dataSnapshot.getValue(UserModel.class);
                 username.setText(userModel.getUserName());
-                avg_feedback.setText("Average Score "+avg_rating_string);
-                avg_rating_bar.setRating(avg_rating);
                 Picasso.get().load(userModel.getUserImageUrl())
                         .fit()
                         .into(image_profile);

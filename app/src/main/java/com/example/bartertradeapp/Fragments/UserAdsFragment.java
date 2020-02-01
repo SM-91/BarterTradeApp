@@ -90,9 +90,14 @@ public class UserAdsFragment extends BaseFragment implements CustomListAdapter.I
         return view;
     }
 
-    @Override
+   /* @Override
     public void onItemClick(View view, int position) {
 
+
+    }*/
+
+    @Override
+    public void onItemClick(View view, int position) {
         intent = new Intent(getContext(), MyAdsDetailsActivity.class);
         userUploadProductModel = adapter.getItem(position);
         ad_id = userUploadProductModel.getAdId();
@@ -137,5 +142,10 @@ public class UserAdsFragment extends BaseFragment implements CustomListAdapter.I
         intent.putExtra("multipleImagesList", productMultipleImages);
         intent.putExtra("singleImage", productSingleImage);
         startActivity(intent);
+    }
+
+    @Override
+    public void onLatestItemClick(View view, int position) {
+
     }
 }

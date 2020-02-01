@@ -162,6 +162,11 @@ public class HomeFragmentExtend extends BaseFragment implements CustomListAdapte
 
     }
 
+    @Override
+    public void onLatestItemClick(View view, int position) {
+
+    }
+
     public void search(final String query) {
         text_search.setVisibility(View.GONE);
         searchbar.setMaxWidth(1000);

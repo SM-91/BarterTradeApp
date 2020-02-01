@@ -53,14 +53,14 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
             holder.type.setText("Type: " + list.getProductType());
             holder.estimation.setText("Estimated price: " + list.getProductEstimatedMarketValue());
             Picasso.get().load(list.getmImageUri())
-                    .fit()
+                    .resize(400,200)
                     .into(holder.image);
 
             try {
                 if (list.getmImageUri() != null) {
 
                     Picasso.get().load(list.getmImageUri())
-                            .fit()
+                            .resize(400,200)
                             .into(holder.image);
 
                 } else {
@@ -69,8 +69,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
                     if (imageList != null) {
                         Uri uri = Uri.parse(imageList.get(0));
                         Picasso.get().load(uri)
-                                .fit()
-                                .centerCrop()
+                                .resize(400,200)
                                 .into(holder.image);
                     }
                 }
@@ -93,8 +92,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
             holder.estimation.setText("Estimated price: " + list.getServiceEstimatedMarketValue());
 
             Picasso.get().load(list.getServiceImageUri())
-                    .fit()
-                    .centerCrop()
+                    .resize(400,200)
                     .into(holder.image);
         }
 
@@ -147,5 +145,7 @@ public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.Vi
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
         void onItemClick(View view, int position);
+
+        void onLatestItemClick(View view, int position);
     }
 }
