@@ -85,7 +85,7 @@ public class AddProductFragment extends BaseFragment {
 
     private static final int MULTIPLE_IMAGE_REQUEST = 2;
     int uploadCount = 0;
-    private String[] categories = {"Clothes", "Shoes", "Household", "Electronics", "Console Games"};
+    private String[] categories = {"Clothes","Electronics","Household","Games", "Shoes"};
 
 
     @Nullable

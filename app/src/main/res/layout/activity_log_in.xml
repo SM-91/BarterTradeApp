@@ -8,68 +8,84 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_marginTop="60dp"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
         android:background="@drawable/splash">
 
     </ImageView>
 
     <TextView
         android:id="@+id/logo_title"
-        android:layout_below="@+id/logo"
-        android:text="Login"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logo"
+        android:layout_centerHorizontal="true"
+        android:text="Login"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:textStyle="bold" />
 
     <RelativeLayout
         android:id="@+id/signUpHolder"
-        android:layout_below="@id/logo_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_centerVertical="true">
+        android:layout_below="@id/logo_title"
+        android:layout_centerVertical="true"
+        android:padding="10dp">
 
-
-
-        <EditText
-            android:id="@+id/reg_email"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_text_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/black"
-            android:ems="10"
-            android:hint="@string/reg_email_text"
-            android:inputType="textEmailAddress"
-            android:textColor="#707070"
-            android:textColorHint="#707070"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints" />
+            android:padding="5dp"
+            tools:ignore="MissingConstraints">
 
-        <EditText
-            android:id="@+id/reg_pass"
-            android:layout_below="@+id/reg_email"
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/reg_email_text"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/grey"
+                android:textSize="18sp">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_text_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/black"
-            android:ems="10"
-            android:hint="@string/reg_pass_text"
-            android:inputType="textPassword"
-            android:textColor="#707070"
-            android:textColorHint="#707070"
-            android:textSize="18sp" />
+            android:layout_below="@+id/edit_text_email"
+            android:padding="5dp"
+            tools:ignore="MissingConstraints">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/reg_pass_text"
+                android:inputType="textPassword"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/grey"
+                android:textSize="18sp">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <LinearLayout
             android:id="@+id/loginButtonLayout"
-            android:layout_below="@+id/reg_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/edit_text_pass"
             android:orientation="vertical">
 
             <Button
@@ -79,51 +95,31 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/button_shape"
-                android:textColor="@color/white"
-                android:padding="15dp"
                 android:layout_marginEnd="8dp"
+                android:background="@drawable/button_shape_two"
+                android:padding="15dp"
                 android:text="@string/login_btn_text"
                 android:textAllCaps="false"
-                android:textSize="18sp"
-                />
+                android:textColor="@color/white"
+                android:textSize="18sp" />
 
             <Button
                 android:id="@+id/login_signUp_btn"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:background="@color/whiteTransparent"
                 android:layout_marginBottom="8dp"
+                android:background="@color/transparent"
                 android:text="@string/login_signup_btn"
-                android:textColor="@color/grey"
                 android:textAllCaps="false"
+                android:textColor="@color/grey"
                 android:textSize="18sp" />
 
 
-
         </LinearLayout>
-
-
-
-
     </RelativeLayout>
-
-    <ProgressBar
-        android:id="@+id/login_progress"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:indeterminate="true"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 </RelativeLayout>

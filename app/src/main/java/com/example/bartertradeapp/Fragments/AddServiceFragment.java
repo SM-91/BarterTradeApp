@@ -42,7 +42,7 @@ public class AddServiceFragment extends BaseFragment {
 
     private UserModel currentUserModel = null;
 
-    private String[] serviceCategories = {"Tutoring", "Designing", "Electrical work", "Mechanical work", "Wood work", "Cleaning"};
+    private String[] serviceCategories = { "Cleaning",  "Designing", "Electrical work", "Mechanical work", "Tutoring","Wood work"};
 
     @Nullable
     @Override

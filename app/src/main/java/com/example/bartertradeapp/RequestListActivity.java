@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,8 +16,13 @@ import com.example.bartertradeapp.DataModels.BidRequestModel;
 import com.example.bartertradeapp.DataModels.RequestModel;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
+import com.example.bartertradeapp.Fragments.HomeFragment;
+import com.example.bartertradeapp.Fragments.HomeFragmentExtend;
+import com.example.bartertradeapp.Fragments.Profile_displayFragment;
+import com.example.bartertradeapp.Fragments.UserUploadFragment;
 import com.example.bartertradeapp.adapters.BidRequestAdapter;
 import com.example.bartertradeapp.adapters.UserAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,7 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RequestListActivity extends AppCompatActivity implements View.OnClickListener{
+public class RequestListActivity extends BaseActivity implements View.OnClickListener{
 
     private RecyclerView rvRequestList;
     private List<UserModel> otherUserList = new ArrayList<>();
@@ -47,7 +53,7 @@ public class RequestListActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_list);
-
+        changeStatusBarColor();
         myId = FirebaseAuth.getInstance().getUid();
         rvRequestList = findViewById(R.id.rvRequestList);
         rvRequestList.setLayoutManager(new LinearLayoutManager(this));

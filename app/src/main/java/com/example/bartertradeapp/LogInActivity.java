@@ -29,8 +29,6 @@ public class LogInActivity extends BaseActivity {
     EditText et_login_email, et_login_password;
     Button btn_login,btn_signUp;
 
-    private ProgressBar loginProgress;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +49,6 @@ public class LogInActivity extends BaseActivity {
 
                 if(!TextUtils.isEmpty(loginEmail) && !TextUtils.isEmpty(loginPass)){
                     //set the visibility on for progressbar
-                    loginProgress.setVisibility(View.VISIBLE);
 
                     mAuth.signInWithEmailAndPassword(loginEmail, loginPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -65,7 +62,6 @@ public class LogInActivity extends BaseActivity {
                                 Toast.makeText(LogInActivity.this, "Error : " + errorMessage, Toast.LENGTH_LONG).show();
                             }
                             //set the visibility off for progressbar
-                            loginProgress.setVisibility(View.INVISIBLE);
                         }
                     });
 
@@ -83,7 +79,6 @@ public class LogInActivity extends BaseActivity {
                 startActivity(regIntent);
             }
         });
-        loginProgress = findViewById(R.id.login_progress);
     }
 
     //to check if user is currently loggeg in

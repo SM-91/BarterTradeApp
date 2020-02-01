@@ -30,16 +30,16 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.bartertradeapp.HomeActivity.avg_rating;
+import static com.example.bartertradeapp.HomeActivity.avg_rating_string;
+
 public class Profile_displayFragment extends BaseFragment implements UserFeedbackAdapter.ItemClickListener {
 
-    Button update_profile;
     ImageView image_profile;
     TextView username, avg_feedback;
     RecyclerView feedback_recycler;
     LinearLayoutManager layoutManager;
     private UserFeedbackAdapter adapter;
-    float avg_rating;
-    String avg_rating_string;
     RatingBar avg_rating_bar;
     DatabaseReference viewDatabaseReference;
 
@@ -51,7 +51,6 @@ public class Profile_displayFragment extends BaseFragment implements UserFeedbac
         View view = inflater.inflate(R.layout.fragment_profile_display, container, false);
 
         feedback_list = new ArrayList<>();
-        update_profile = view.findViewById(R.id.btn_update_profile);
         image_profile = view.findViewById(R.id.profile_image_view);
         username = view.findViewById(R.id.textview_username);
         avg_feedback = view.findViewById(R.id.textview_avg_rating);
@@ -59,19 +58,10 @@ public class Profile_displayFragment extends BaseFragment implements UserFeedbac
         feedback_recycler = view.findViewById(R.id.recyclerView_user_feedbacks);
 
 
-
         avg_rating_bar.setIsIndicator(true);
         avg_rating_bar.setClickable(false);
 
         uploadAuth = FirebaseAuth.getInstance();
-
-        update_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).addToBackStack(null).commit();
-            }
-        });
-
 
         // Recycler View Setup
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -87,21 +77,19 @@ public class Profile_displayFragment extends BaseFragment implements UserFeedbac
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 feedback_list.clear();
-                int temp_rating=0;
-                int count =0;
+//                int temp_rating = 0;
+//                int count = 0;
                 for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     RatingModel feedback = usersSnapshot.getValue(RatingModel.class);
                     feedback_list.add(feedback);
-                    temp_rating = temp_rating + feedback.getRating();
-                    count ++;
+//                    temp_rating = temp_rating + feedback.getRating();
+//                    count++;
                 }
 
                 /*Bug fix here*/
-                if(avg_rating_string != null){
-
-                    avg_rating = Float.valueOf(temp_rating)/count;
-                    avg_rating_string = String.valueOf(avg_rating);
-                    Toast.makeText(getContext(), "Rate:" + avg_rating_string, Toast.LENGTH_SHORT).show();
+                if (!avg_rating_string.equals("NaN")) {
+                    avg_feedback.setText("Average Score" +avg_rating_string);
+                    avg_rating_bar.setRating(avg_rating);
 
                 }
                 // setting adapter to recycler View
@@ -125,8 +113,8 @@ public class Profile_displayFragment extends BaseFragment implements UserFeedbac
 
                 UserModel userModel = dataSnapshot.getValue(UserModel.class);
                 username.setText(userModel.getUserName());
-                avg_feedback.setText("Average Score "+avg_rating_string);
-                avg_rating_bar.setRating(avg_rating);
+//                avg_feedback.setText("Average Score " + avg_rating_string);
+//                avg_rating_bar.setRating(avg_rating);
                 Picasso.get().load(userModel.getUserImageUrl())
                         .fit()
                         .into(image_profile);

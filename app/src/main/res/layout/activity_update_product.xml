@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -47,46 +48,114 @@
             android:textColor="#FFFFFF" />
 
         <LinearLayout
-            android:id="@+id/profile_details"
+        android:id="@+id/profile_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/changeImageBtn"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txt_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/changeImageBtn"
-            android:orientation="vertical"
-            android:padding="10dp">
+            tools:ignore="MissingConstraints">
 
-            <TextView
-                android:id="@+id/txt_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Product Name"
-                android:textSize="15sp" />
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_productName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="please enter product name"
-                android:textSize="15sp" />
+                android:hint="Please enter product name"
+                android:inputType="text"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/grey"
+                android:textSize="15sp">
 
-            <TextView
-                android:id="@+id/txt_productCategory"
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txt_productDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_productDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Product Category"
+                android:hint="Enter product description"
+                android:inputType="text"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/grey"
+                android:textSize="15sp">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txt_productPossibleExchange"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_productPossibleExchange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Preferences for exchange"
+                android:inputType="text"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/grey"
+                android:textSize="15sp">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txt_estimatedMarketValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
+
+            <me.abhinay.input.CurrencyEditText
+                android:id="@+id/et_estimatedMarketValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="enter estimated market value"
+                android:inputType="numberDecimal"
                 android:textSize="15sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txt_productCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
 
             <Spinner
                 android:id="@+id/spinnerProductCategory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/txt_productType"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Product Type"
-                android:textColor="#D8807D7D"
-                android:textSize="15sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            app:helperText="Product Type"
+            android:id="@+id/txt_productType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
 
             <RadioGroup
                 android:id="@+id/radioProductTypeGroup"
@@ -110,29 +179,16 @@
                     android:textColor="#D8807D7D" />
             </RadioGroup>
 
-            <TextView
-                android:id="@+id/txt_productDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Product Description"
-                android:textSize="15sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/et_productDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint=" enter product description"
-                android:inputType="textMultiLine"
-                android:minLines="3"
-                android:scrollbars="vertical"
-                android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/txt_condition"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Product Condition"
-                android:textSize="15sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            app:helperText="Product Condition"
+            android:id="@+id/txt_condition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
 
             <RadioGroup
                 android:id="@+id/radioProductConditionGroup"
@@ -156,44 +212,17 @@
                     android:textColor="#D8807D7D" />
             </RadioGroup>
 
-            <TextView
-                android:id="@+id/txt_productPossibleExchange"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Possible Exchange With"
-                android:textSize="15sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/et_productPossibleExchange"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint=" enter your preferences for exchange"
-                android:inputType="textMultiLine"
-                android:minLines="3"
-                android:scrollbars="vertical"
-                android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/txt_estimatedMarketValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Estimated Market Value"
-                android:textSize="15sp" />
-
-            <me.abhinay.input.CurrencyEditText
-                android:id="@+id/et_estimatedMarketValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="enter estimated market value"
-                android:inputType="numberDecimal"
-                android:textSize="15sp" />
-        </LinearLayout>
+    </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/submitBtnLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profile_details"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="70dp">
 
             <Button

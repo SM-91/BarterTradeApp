@@ -35,70 +35,97 @@
         android:padding="10dp"
         android:layout_centerVertical="true">
 
-
-        <EditText
-            android:id="@+id/reg_userName"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_text_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/black"
-            android:ems="10"
-            android:hint="@string/reg_username_text"
-            android:inputType="text"
-            android:textColor="#707070"
-            android:textColorHint="#707070"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints">
 
-        <EditText
-            android:id="@+id/reg_email"
-            android:layout_below="@+id/reg_userName"
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_userName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/reg_username_text"
+                android:inputType="text"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/grey"
+                android:textSize="18sp">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_text_email"
+            android:layout_below="@id/edit_text_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/black"
-            android:ems="10"
-            android:hint="@string/reg_email_text"
-            android:inputType="textEmailAddress"
-            android:textColor="#707070"
-            android:textColorHint="#707070"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints">
 
-        <EditText
-            android:id="@+id/reg_pass"
-            android:layout_below="@+id/reg_email"
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/reg_email_text"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/grey"
+                android:textSize="18sp">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_text_pass"
+            android:layout_below="@id/edit_text_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/black"
-            android:ems="10"
-            android:hint="@string/reg_pass_text"
-            android:inputType="textPassword"
-            android:textColor="#707070"
-            android:textColorHint="#707070"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/reg_email" />
+            tools:ignore="MissingConstraints">
 
-        <EditText
-            android:id="@+id/reg_confirm_pass"
-            android:layout_below="@+id/reg_pass"
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/reg_pass_text"
+                android:inputType="textPassword"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/grey"
+                android:textSize="18sp">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_text_cpass"
+            android:layout_below="@id/edit_text_pass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/black"
-            android:ems="10"
-            android:hint="@string/reg_confirm_pass_text"
-            android:inputType="textPassword"
-            android:textColor="#707070"
-            android:textColorHint="#707070"
-            android:textSize="18sp"/>
+            tools:ignore="MissingConstraints">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_confirm_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/reg_confirm_pass_text"
+                android:inputType="textPassword"
+                android:textColor="@color/grey"
+                android:textColorHint="@color/grey"
+                android:textSize="18sp">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <LinearLayout
             android:id="@+id/image_upload"
-            android:layout_below="@+id/reg_confirm_pass"
+            android:layout_below="@+id/edit_text_cpass"
             android:layout_width="match_parent"
             android:paddingLeft="5dp"
             android:layout_height="wrap_content"
@@ -109,7 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAlignment="textStart"
-                android:background="@color/whiteTransparent"
+                android:background="@color/transparent"
                 android:layout_weight="8"
                 android:text="Select Profile Picture">
             </Button>
@@ -150,7 +177,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:background="@color/whiteTransparent"
+            android:background="@color/transparent"
             android:layout_centerInParent="true"
             android:textColor="@color/grey"
             android:padding="20dp"
@@ -162,18 +189,4 @@
 
 
     </RelativeLayout>
-
-    <ProgressBar
-        android:id="@+id/reg_progress"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:indeterminate="true"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 </RelativeLayout>

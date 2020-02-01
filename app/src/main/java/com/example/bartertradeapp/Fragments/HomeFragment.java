@@ -19,6 +19,7 @@ import com.example.bartertradeapp.DetailedActivity;
 import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.CustomListAdapter;
 import com.example.bartertradeapp.adapters.CustomNearestAdapter;
+import com.example.bartertradeapp.adapters.CustomRecommendedAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,7 +35,7 @@ import java.util.regex.Pattern;
 
 import static com.example.bartertradeapp.HomeActivity.curr;
 
-public class HomeFragment extends BaseFragment implements CustomListAdapter.ItemClickListener, CustomNearestAdapter.ItemClickListener {
+public class HomeFragment extends BaseFragment implements CustomListAdapter.ItemClickListener, CustomNearestAdapter.ItemClickListener, CustomRecommendedAdapter.ItemClickListener {
 
     private RecyclerView recyclerView_latest, recyclerView_history, recyclerView_nearest;
     private CustomListAdapter adapter_history;
@@ -82,10 +83,10 @@ public class HomeFragment extends BaseFragment implements CustomListAdapter.Item
         adapter_latest.setClickListener(this);
 
         adapter_history = new CustomListAdapter(getContext(), history_ads);
-        //adapter_history.setClickListener(this);
+        adapter_history.setClickListener(this);
 
         adapter_nearest = new CustomNearestAdapter(getContext(), nearest_ads);
-        //adapter_nearest.setClickListener(this);
+        adapter_nearest.setClickListener(this);
 
 
         getUserHistory();
@@ -100,6 +101,177 @@ public class HomeFragment extends BaseFragment implements CustomListAdapter.Item
         //Toast.makeText(getContext(), "distance"+distance, Toast.LENGTH_SHORT).show();
 
         return view;
+    }
+
+
+    public void getUserHistory(){
+        // Setting data by History Data
+        DatabaseReference viewDatabaseReference;
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserHistory");
+        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                category_list.clear();
+                category_list.add("nothing");
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot ds : usersSnapshot.getChildren()) {
+                        UserHistoryModel history = ds.getValue(UserHistoryModel.class);
+                        //category_list.add(history.getCategory());
+                        category = history.getCategory();
+                        category_search(category);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void latest_search() {
+        date = Calendar.getInstance().getTime();
+        //Date date =DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+        DatabaseReference searchref;
+        searchref = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
+        searchref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                latest_ads.clear();
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
+                    UserUploadProductModel latest_search = usersSnapshot.getValue(UserUploadProductModel.class);
+
+                    Date datestring = latest_search.getCurrentDateTime();
+                    //Toast.makeText(getContext(), ""+datestring, Toast.LENGTH_SHORT).show();
+                    Long hour;
+                    hour = printDifference(datestring, date);
+                    //Toast.makeText(getContext(), "Hour:" + hour, Toast.LENGTH_SHORT).show();
+                    if (hour < 24) {
+                        latest_ads.add(latest_search);
+                    }
+
+                }
+                recyclerView_latest.setAdapter(adapter_latest);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void category_search(final String category) {
+        DatabaseReference byCategorySearchRef;
+        byCategorySearchRef = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
+        byCategorySearchRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                history_ads.clear();
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
+                    UserUploadProductModel latest_search = usersSnapshot.getValue(UserUploadProductModel.class);
+                    try{
+                        if (Pattern.compile(Pattern.quote(category), Pattern.CASE_INSENSITIVE).matcher(latest_search.getProductCategoryList()).find()) {
+                            history_ads.add(latest_search);
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+
+                }
+                recyclerView_history.setAdapter(adapter_history);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void nearest_search() {
+        DatabaseReference byNearestSearchRef;
+        byNearestSearchRef = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
+        byNearestSearchRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
+                    UserUploadProductModel nearest = usersSnapshot.getValue(UserUploadProductModel.class);
+
+                    try{
+                        float distance;
+                        distance = calculateDistance(curr.latitude, curr.longitude, nearest.getLatitude(), nearest.getLongitude());
+                        //Toast.makeText(getContext(), "distance" + distance, Toast.LENGTH_SHORT).show();
+                        // distance is in KM
+                        if (distance < 3) {
+                            nearest_ads.add(nearest);
+                        }
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+                recyclerView_nearest.setAdapter(adapter_nearest);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public static float calculateDistance(double lat1, double lng1, double lat2, double lng2) {
+        double earthRadius = 3958.75;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lng2 - lng1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double dist = earthRadius * c;
+
+        double meterConversion = 1.609;
+
+        return new Float(dist * meterConversion).floatValue();
+    }
+
+    public long printDifference(Date startDate, Date endDate) {
+        //milliseconds
+        long different = endDate.getTime() - startDate.getTime();
+
+        System.out.println("startDate : " + startDate);
+        System.out.println("endDate : " + endDate);
+        System.out.println("different : " + different);
+
+        long secondsInMilli = 1000;
+        long minutesInMilli = secondsInMilli * 60;
+        long hoursInMilli = minutesInMilli * 60;
+        long daysInMilli = hoursInMilli * 24;
+
+        long elapsedDays = different / daysInMilli;
+        different = different % daysInMilli;
+
+        long elapsedHours = different / hoursInMilli;
+        different = different % hoursInMilli;
+
+        long elapsedMinutes = different / minutesInMilli;
+        different = different % minutesInMilli;
+
+        long elapsedSeconds = different / secondsInMilli;
+
+        System.out.printf(
+                "%d days, %d hours, %d minutes, %d seconds%n",
+                elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds);
+        return elapsedHours;
     }
 
     @Override
@@ -211,174 +383,59 @@ public class HomeFragment extends BaseFragment implements CustomListAdapter.Item
         startActivity(intent);
     }
 
-    public void getUserHistory(){
-        // Setting data by History Data
-        DatabaseReference viewDatabaseReference;
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserHistory");
-        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+    @Override
+    public void onRecommendedItemClick(View view, int position) {
 
-                category_list.clear();
-                category_list.add("nothing");
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
-                    for (DataSnapshot ds : usersSnapshot.getChildren()) {
-                        UserHistoryModel history = ds.getValue(UserHistoryModel.class);
-                        //category_list.add(history.getCategory());
-                        category = history.getCategory();
-                        category_search(category);
-                    }
-                }
+        intent = new Intent(getContext(), DetailedActivity.class);
+        //userUploadProductModel = adapter_latest.getItem(position);
+        userUploadProductModel = adapter_nearest.getItem(position);
+        ad_id = userUploadProductModel.getAdId();
+        Date myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
+        String myCurrentDateTimeString = userUploadProductModel.getCurrentDateTimeString();
+        pname = userUploadProductModel.getProductName();
+        pdesc = userUploadProductModel.getProductDescription();
+        pexch = userUploadProductModel.getPossibleExchangeWith();
+        pest = userUploadProductModel.getProductEstimatedMarketValue();
+        ptype = userUploadProductModel.getProductType();
+        pcategory = userUploadProductModel.getProductCategoryList();
+        pcondition = userUploadProductModel.getProductCondition();
+        String serviceName = userUploadProductModel.getServiceName();
+        String serviceCategory = userUploadProductModel.getServiceCategory();
+        String serviceDescription = userUploadProductModel.getServiceDescription();
+        String serviceEstimatedMarketValue = userUploadProductModel.getServiceEstimatedMarketValue();
+        String servicePossibleExchangeWith = userUploadProductModel.getServicePossibleExchangeWith();
+        String serviceImageUri = userUploadProductModel.getServiceImageUri();
+        String tag = userUploadProductModel.getTag();
+        UserModel postedBy = userUploadProductModel.getPostedBy();
+        ArrayList<String> pimagelist = userUploadProductModel.getmArrList();
 
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+        pimg = userUploadProductModel.getmImageUri();
 
-            }
-        });
+        intent.putExtra("name", pname);
+        intent.putExtra("desc", pdesc);
+        intent.putExtra("ad_id", ad_id);
+        intent.putExtra("exchange", pexch);
+        intent.putExtra("est", pest);
+        intent.putExtra("type", ptype);
+        intent.putExtra("category", pcategory);
+        intent.putExtra("condition", pcondition);
+        intent.putExtra("exch", pexch);
+        intent.putExtra("worth", pest);
+        intent.putExtra("Key", myCurrentDateTime);
+        intent.putExtra("myCurrentDateTimeString", myCurrentDateTimeString);
+        intent.putExtra("serviceName", serviceName);
+        intent.putExtra("serviceCategory", serviceCategory);
+        intent.putExtra("serviceDescription", serviceDescription);
+        intent.putExtra("serviceEstimatedMarketValue", serviceEstimatedMarketValue);
+        intent.putExtra("servicePossibleExchangeWith", servicePossibleExchangeWith);
+        intent.putExtra("serviceImageUri", serviceImageUri);
+        intent.putExtra("tag", tag);
+        intent.putExtra("user", postedBy);
+        intent.putExtra("imagelist", pimagelist);
+        intent.putExtra("image", pimg);
+        startActivity(intent);
     }
 
-    public void latest_search() {
-        date = Calendar.getInstance().getTime();
-        //Date date =DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-        DatabaseReference searchref;
-        searchref = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
-        searchref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                latest_ads.clear();
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
-                    UserUploadProductModel latest_search = usersSnapshot.getValue(UserUploadProductModel.class);
-
-                    Date datestring = latest_search.getCurrentDateTime();
-                    //Toast.makeText(getContext(), ""+datestring, Toast.LENGTH_SHORT).show();
-                    Long hour;
-                    hour = printDifference(datestring, date);
-                    Toast.makeText(getContext(), "Hour:" + hour, Toast.LENGTH_SHORT).show();
-                    if (hour < 24) {
-                        latest_ads.add(latest_search);
-                    }
-
-                }
-                recyclerView_latest.setAdapter(adapter_latest);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    public void category_search(final String category) {
-        DatabaseReference byCategorySearchRef;
-        byCategorySearchRef = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
-        byCategorySearchRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                history_ads.clear();
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
-                    UserUploadProductModel latest_search = usersSnapshot.getValue(UserUploadProductModel.class);
-                    try{
-                        if (Pattern.compile(Pattern.quote(category), Pattern.CASE_INSENSITIVE).matcher(latest_search.getProductCategoryList()).find()) {
-                            history_ads.add(latest_search);
-                        }
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-
-
-                }
-                recyclerView_history.setAdapter(adapter_history);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    public void nearest_search() {
-        DatabaseReference byNearestSearchRef;
-        byNearestSearchRef = FirebaseDatabase.getInstance().getReference("ProductsAndServices");
-        byNearestSearchRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
-                    UserUploadProductModel nearest = usersSnapshot.getValue(UserUploadProductModel.class);
-
-                    try{
-                        float distance;
-                        distance = calculateDistance(curr.latitude, curr.longitude, nearest.getLatitude(), nearest.getLongitude());
-                        Toast.makeText(getContext(), "distance" + distance, Toast.LENGTH_SHORT).show();
-                        // distance is in KM
-                        if (distance < 3) {
-                            nearest_ads.add(nearest);
-                        }
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-
-                }
-                recyclerView_nearest.setAdapter(adapter_nearest);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    public static float calculateDistance(double lat1, double lng1, double lat2, double lng2) {
-        double earthRadius = 3958.75;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLng = Math.toRadians(lng2 - lng1);
-        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double dist = earthRadius * c;
-
-        double meterConversion = 1.609;
-
-        return new Float(dist * meterConversion).floatValue();
-    }
-
-    public long printDifference(Date startDate, Date endDate) {
-        //milliseconds
-        long different = endDate.getTime() - startDate.getTime();
-
-        System.out.println("startDate : " + startDate);
-        System.out.println("endDate : " + endDate);
-        System.out.println("different : " + different);
-
-        long secondsInMilli = 1000;
-        long minutesInMilli = secondsInMilli * 60;
-        long hoursInMilli = minutesInMilli * 60;
-        long daysInMilli = hoursInMilli * 24;
-
-        long elapsedDays = different / daysInMilli;
-        different = different % daysInMilli;
-
-        long elapsedHours = different / hoursInMilli;
-        different = different % hoursInMilli;
-
-        long elapsedMinutes = different / minutesInMilli;
-        different = different % minutesInMilli;
-
-        long elapsedSeconds = different / secondsInMilli;
-
-        System.out.printf(
-                "%d days, %d hours, %d minutes, %d seconds%n",
-                elapsedDays, elapsedHours, elapsedMinutes, elapsedSeconds);
-        return elapsedHours;
-    }
 
 }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/linear_layout"
@@ -44,21 +45,35 @@
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/edittext_feedback"
-        android:layout_below="@+id/linear_layout"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:hint="Write your feedback">
+        android:padding="5dp"
+        android:layout_below="@+id/linear_layout"
+        android:backgroundTint="@color/black"
+        tools:ignore="MissingConstraints">
 
-    </EditText>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edittext_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Write your feedback"
+            android:inputType="text"
+            android:textColor="#707070"
+            android:textColorHint="#707070"
+            android:textSize="18sp">
+        </com.google.android.material.textfield.TextInputEditText>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <Button
         android:id="@+id/submit_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/edittext_feedback"
+        android:layout_below="@+id/edit_text"
         android:text="Submit"
         android:textColor="@color/white"
         android:background="@color/colorPrimary">

@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -20,6 +21,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import com.example.bartertradeapp.DataModels.RatingModel;
 import com.example.bartertradeapp.DataModels.RequestModel;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.Fragments.HomeFragment;
@@ -60,6 +62,9 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     private static final String TAG = HomeActivity.class.getSimpleName( );
     private NavigationView navigationView;
 
+    public static float avg_rating;
+    public static String avg_rating_string;
+
 
     String uid = FirebaseAuth.getInstance().getUid();
 
@@ -71,6 +76,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_home );
         changeStatusBarColor( );
+        Average_score();
         userModel = new UserModel( );
 
         getLocationPermission( );
@@ -156,7 +162,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         /*Default Fragment*/
         if (savedInstanceState == null) {
-            getSupportFragmentManager( ).beginTransaction( ).replace( R.id.fragment_container, new HomeFragment( ) ).addToBackStack( null ).commit( );
+            getSupportFragmentManager( ).beginTransaction( ).replace( R.id.fragment_container, new HomeFragment( ) ).commit( );
             navigationView.setCheckedItem( R.id.nav_home );
         }
 
@@ -192,15 +198,15 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     public void loadFragment(Fragment fragment) {
-        getSupportFragmentManager( ).beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack( null ).commit( );
+        getSupportFragmentManager( ).beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack(null).commit( );
     }
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         if (mDrawer.isDrawerOpen( GravityCompat.START )) {
             mDrawer.closeDrawer( GravityCompat.START );
         } else {
-            super.onBackPressed( );
         }
     }
 
@@ -291,6 +297,35 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         } catch (SecurityException e) {
             Log.e( "Exception: %s", e.getMessage( ) );
         }
+    }
+
+    public void Average_score() {
+        //  Calculating Avg User Feedback
+
+        String user_id = firebaseAuth.getCurrentUser().getUid();
+        DatabaseReference viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserFeedback").child(user_id);
+        viewDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                int temp_rating = 0;
+                int count = 0;
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
+                    RatingModel feedback = usersSnapshot.getValue(RatingModel.class);
+                    temp_rating = temp_rating + feedback.getRating();
+                    count++;
+                }
+                //Bug fix here//
+                        avg_rating = Float.valueOf(temp_rating) / count;
+                avg_rating_string = String.valueOf(avg_rating);
+                //Toast.makeText(HomeActivity.this, "Rate:" + avg_rating_string, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

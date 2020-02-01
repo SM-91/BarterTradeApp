@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomNearestAdapter extends RecyclerView.Adapter<CustomNearestAdapter.ViewHolder> {
+public class CustomRecommendedAdapter extends RecyclerView.Adapter<CustomRecommendedAdapter.ViewHolder> {
 
     private List<UserUploadProductModel> userlist;
     private LayoutInflater mInflater;
@@ -29,7 +29,7 @@ public class CustomNearestAdapter extends RecyclerView.Adapter<CustomNearestAdap
     private ArrayList<String> imageList = null;
 
     // data is passed into the constructor
-    public CustomNearestAdapter(Context context, List<UserUploadProductModel> userlist) {
+    public CustomRecommendedAdapter(Context context, List<UserUploadProductModel> userlist) {
         this.mInflater = LayoutInflater.from(context);
         this.userlist = userlist;
     }
@@ -93,7 +93,7 @@ public class CustomNearestAdapter extends RecyclerView.Adapter<CustomNearestAdap
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onNearestItemClick(view, getAdapterPosition());
+            if (mClickListener != null) mClickListener.onRecommendedItemClick(view, getAdapterPosition());
         }
     }
 
@@ -109,6 +109,6 @@ public class CustomNearestAdapter extends RecyclerView.Adapter<CustomNearestAdap
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onNearestItemClick(View view, int position);
+        void onRecommendedItemClick(View view, int position);
     }
 }

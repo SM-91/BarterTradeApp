@@ -54,7 +54,7 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
-                android:text="Avergae Score 4.5">
+                android:text="Avergae Score">
 
             </TextView>
 
@@ -69,21 +69,6 @@
 
             </RatingBar>
 
-
-
-
-            <Button
-                android:id="@+id/btn_update_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Update Profile"
-                android:backgroundTint="@color/whiteTransparent"
-                android:clickable="true"
-                android:focusable="true"
-                >
-
-            </Button>
 
         </LinearLayout>
 
