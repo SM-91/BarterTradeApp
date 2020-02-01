@@ -1,13 +1,19 @@
 package com.example.bartertradeapp;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +60,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     TextView nav_header_user_email;
     ImageView img1;
 
+    ProgressDialog progress;
+
     public static boolean mLocationPermissionGranted;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLastKnownLocation;
@@ -75,7 +83,8 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( this );
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_home );
-        changeStatusBarColor( );
+        changeStatusBarColor();
+        hideKeyboard(this);
         Average_score();
         userModel = new UserModel( );
 
@@ -326,6 +335,17 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
             }
         });
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 

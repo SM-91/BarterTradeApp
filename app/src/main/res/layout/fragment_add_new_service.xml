@@ -133,7 +133,7 @@
                     android:id="@+id/et_serviceEstimatedMarketValue"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter estimated market price"
+                    android:hint="Enter service cost"
                     android:inputType="number"
                     android:textSize="15sp" />
 
@@ -150,10 +150,10 @@
             android:layout_width="match_parent">
 
             <Button
-                android:background="@drawable/button_shape"
+                android:background="@drawable/button_shape_two"
                 android:id="@+id/submitServiceData"
                 android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_centerInParent="true"
                 android:text="Submit"
                 android:textColor="#FFFFFF"

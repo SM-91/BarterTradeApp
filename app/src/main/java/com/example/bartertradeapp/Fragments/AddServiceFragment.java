@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.DataModels.UserUploadProductModel;
@@ -149,5 +150,7 @@ public class AddServiceFragment extends BaseFragment {
         uploadAllServices.setValue(userUploadProductModel);
 
         Toast.makeText(getContext(), "Uploaded", Toast.LENGTH_SHORT).show();
+        Fragment fragment = new HomeFragment();
+        getActivity().getSupportFragmentManager().beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack(null).commit( );
     }
 }

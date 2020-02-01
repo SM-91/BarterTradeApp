@@ -1,19 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <stroke
-        android:width="0.5dp"
-        android:color="@color/black"/>
-
-    <corners
-        android:radius="10dp" />
-
-    <padding
-        android:left="10dp"
-        android:right="10dp"
-        android:top="10dp"
-        android:bottom="10dp"/>
-
-    <solid android:color="@color/button"/>
-
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="false">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="@color/button"
+                android:endColor="@color/button"
+                android:centerColor="@color/button"
+                android:angle="45"/>
+            <padding android:left="6dp"
+                android:top="6dp"
+                android:right="6dp"
+                android:bottom="6dp" />
+            <corners android:radius="30dp" />
+            <stroke
+                android:width="3dp"
+                android:color="@color/black"
+                />
+        </shape>
+    </item>
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="@color/black"
+                android:endColor="@color/black"
+                android:centerColor="@color/blue"
+                android:angle="45" />
+            <padding android:left="6dp"
+                android:top="6dp"
+                android:right="6dp"
+                android:bottom="6dp" />
+            <corners android:radius="30dp" />
+            <stroke
+                android:width="3dp"
+                android:color="@color/black"
+                />
+        </shape>
+    </item>
+</selector>

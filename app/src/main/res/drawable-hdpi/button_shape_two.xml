@@ -21,9 +21,9 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <gradient
-                android:startColor="@color/light_blue"
-                android:endColor="@color/light_blue"
-                android:centerColor="@color/light_blue"
+                android:startColor="@color/black"
+                android:endColor="@color/black"
+                android:centerColor="@color/blue"
                 android:angle="45" />
             <padding android:left="6dp"
                 android:top="6dp"
