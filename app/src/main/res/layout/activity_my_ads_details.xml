@@ -431,9 +431,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:background="@drawable/button_shape"
+                android:background="@drawable/button_shape_two"
                 android:layout_below="@+id/relative_layout_1"
-                android:layout_margin="10dp">
+                >
 
                 <Button
                     android:id="@+id/btnUpdate"

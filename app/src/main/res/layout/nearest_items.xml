@@ -4,7 +4,6 @@
     android:layout_width="wrap_content"
     android:layout_height="180dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardBackgroundColor="@color/whiteTransparent"
     app:cardCornerRadius="10dp"
     app:cardElevation="4dp"
     app:cardUseCompatPadding="true">
@@ -18,7 +17,7 @@
 
     <ImageView
         android:id="@+id/ad_image"
-        android:layout_width="100dp"
+        android:layout_width="120dp"
         android:layout_height="100dp"
         android:background="@drawable/default_image"/>
 

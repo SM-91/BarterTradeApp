@@ -38,12 +38,12 @@
 
         <Button
             android:id="@+id/changeImageBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_below="@id/viewPagerLayout"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
-            android:background="@drawable/button_shape"
+            android:background="@drawable/button_shape_two"
             android:text="Update Image"
             android:textColor="#FFFFFF" />
 
@@ -194,14 +194,15 @@
             android:id="@+id/submitBtnLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:layout_below="@+id/profile_details">
 
             <Button
                 android:id="@+id/submitProductData"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/button_shape"
+                android:background="@drawable/button_shape_two"
                 android:text="Update"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp" />

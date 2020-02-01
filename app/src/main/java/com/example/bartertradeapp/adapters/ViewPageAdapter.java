@@ -43,7 +43,8 @@ public class ViewPageAdapter extends PagerAdapter {
         ImageView imageView = new ImageView(context);
         Picasso.get()
                 .load(uri)
-                .resize(400,200)
+                .fit()
+                .centerCrop()
                 .into(imageView);
 
         container.addView(imageView);

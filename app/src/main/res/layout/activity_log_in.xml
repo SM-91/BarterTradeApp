@@ -74,7 +74,7 @@
 
             <Button
                 android:id="@+id/login_btn"
-                android:layout_width="130dp"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
@@ -97,7 +97,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:background="@color/whiteTransparent"
+                android:background="@color/transparent"
                 android:layout_marginBottom="8dp"
                 android:text="@string/login_signup_btn"
                 android:textColor="@color/grey"
