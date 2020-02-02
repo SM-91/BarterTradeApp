@@ -18,10 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.bartertradeapp.DataModels.RatingModel;
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.R;
-import com.example.bartertradeapp.adapters.user_feedback_adapter;
+import com.example.bartertradeapp.adapters.UserFeedbackAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
@@ -29,18 +30,28 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+<<<<<<< HEAD
 import static com.example.bartertradeapp.HomeActivity.avg_rating_string;
 import static com.example.bartertradeapp.HomeActivity.avg_rating;
 public class Profile_displayFragment extends BaseFragment implements user_feedback_adapter.ItemClickListener {
+=======
+import static com.example.bartertradeapp.HomeActivity.avg_rating;
+import static com.example.bartertradeapp.HomeActivity.avg_rating_string;
 
-    Button update_profile;
+public class Profile_displayFragment extends BaseFragment implements UserFeedbackAdapter.ItemClickListener {
+>>>>>>> master
+
     ImageView image_profile;
     TextView username, avg_feedback;
     RecyclerView feedback_recycler;
     LinearLayoutManager layoutManager;
+<<<<<<< HEAD
     private user_feedback_adapter adapter;
+=======
+    private UserFeedbackAdapter adapter;
+>>>>>>> master
     RatingBar avg_rating_bar;
-
+    DatabaseReference viewDatabaseReference;
 
     List<RatingModel> feedback_list;
 
@@ -50,7 +61,6 @@ public class Profile_displayFragment extends BaseFragment implements user_feedba
         View view = inflater.inflate(R.layout.fragment_profile_display, container, false);
 
         feedback_list = new ArrayList<>();
-        update_profile = view.findViewById(R.id.btn_update_profile);
         image_profile = view.findViewById(R.id.profile_image_view);
         username = view.findViewById(R.id.textview_username);
         avg_feedback = view.findViewById(R.id.textview_avg_rating);
@@ -58,12 +68,12 @@ public class Profile_displayFragment extends BaseFragment implements user_feedba
         feedback_recycler = view.findViewById(R.id.recyclerView_user_feedbacks);
 
 
-
         avg_rating_bar.setIsIndicator(true);
         avg_rating_bar.setClickable(false);
 
         uploadAuth = FirebaseAuth.getInstance();
 
+<<<<<<< HEAD
         // setting values to avg feedback
         if (!avg_rating_string.equals("NaN")){
             avg_feedback.setText("Average Score "+ avg_rating_string);
@@ -79,10 +89,12 @@ public class Profile_displayFragment extends BaseFragment implements user_feedba
         });
 
 
+=======
+>>>>>>> master
         // Recycler View Setup
         layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         feedback_recycler.setLayoutManager(layoutManager);
-        adapter = new user_feedback_adapter(getContext(), feedback_list);
+        adapter = new UserFeedbackAdapter(getContext(), feedback_list);
         adapter.setClickListener(this);
 
         //  Showing User Feedback
@@ -93,11 +105,29 @@ public class Profile_displayFragment extends BaseFragment implements user_feedba
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 feedback_list.clear();
+<<<<<<< HEAD
                 for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     RatingModel feedback = usersSnapshot.getValue(RatingModel.class);
                     feedback_list.add(feedback);
                 }
 
+=======
+//                int temp_rating = 0;
+//                int count = 0;
+                for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
+                    RatingModel feedback = usersSnapshot.getValue(RatingModel.class);
+                    feedback_list.add(feedback);
+//                    temp_rating = temp_rating + feedback.getRating();
+//                    count++;
+                }
+
+                /*Bug fix here*/
+                if (!avg_rating_string.equals("NaN")) {
+                    avg_feedback.setText("Average Score" +avg_rating_string);
+                    avg_rating_bar.setRating(avg_rating);
+
+                }
+>>>>>>> master
                 // setting adapter to recycler View
                 feedback_recycler.setAdapter(adapter);
 
@@ -118,6 +148,11 @@ public class Profile_displayFragment extends BaseFragment implements user_feedba
 
                 UserModel userModel = dataSnapshot.getValue(UserModel.class);
                 username.setText(userModel.getUserName());
+<<<<<<< HEAD
+=======
+//                avg_feedback.setText("Average Score " + avg_rating_string);
+//                avg_rating_bar.setRating(avg_rating);
+>>>>>>> master
                 Picasso.get().load(userModel.getUserImageUrl())
                         .fit()
                         .into(image_profile);

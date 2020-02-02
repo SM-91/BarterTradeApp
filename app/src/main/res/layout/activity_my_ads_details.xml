@@ -431,7 +431,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:background="@drawable/button_shape"
                 android:layout_below="@+id/relative_layout_1"
                 android:layout_margin="10dp">
 
@@ -442,6 +441,7 @@
                     android:layout_height="wrap_content"
                     style="?android:attr/borderlessButtonStyle"
                     android:text="Update"
+                    android:background="@drawable/button_shape_two"
                     android:textColor="#ffffff" />
 
                 <Button
@@ -449,6 +449,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/button_shape_two"
                     style="?android:attr/borderlessButtonStyle"
                     android:text="Delete"
                     android:textColor="#ffffff" />

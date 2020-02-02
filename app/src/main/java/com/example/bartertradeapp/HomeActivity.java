@@ -1,12 +1,19 @@
 package com.example.bartertradeapp;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +29,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.bartertradeapp.DataModels.RatingModel;
+<<<<<<< HEAD
+=======
+import com.example.bartertradeapp.DataModels.RequestModel;
+>>>>>>> master
 import com.example.bartertradeapp.DataModels.UserModel;
 import com.example.bartertradeapp.Fragments.HomeFragment;
 import com.example.bartertradeapp.Fragments.HomeFragmentExtend;
@@ -57,11 +68,14 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
     ImageView img1;
     Intent intent;
 
+    ProgressDialog progress;
+
     public static boolean mLocationPermissionGranted;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLastKnownLocation;
     public static LatLng curr;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+<<<<<<< HEAD
     private static final String TAG = HomeActivity.class.getSimpleName();
     public static String avg_rating_string;
     public static float avg_rating;
@@ -73,16 +87,36 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+=======
+    private static final String TAG = HomeActivity.class.getSimpleName( );
+    private NavigationView navigationView;
+
+    public static float avg_rating;
+    public static String avg_rating_string;
+
+
+    String uid = FirebaseAuth.getInstance().getUid();
+>>>>>>> master
 
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+<<<<<<< HEAD
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         changeStatusBarColor();
         userModel = new UserModel();
+=======
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient( this );
+        super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_home );
+        changeStatusBarColor();
+        hideKeyboard(this);
+        Average_score();
+        userModel = new UserModel( );
+>>>>>>> master
 
         messageFragment = new MessageFragment();
 
@@ -92,10 +126,17 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+<<<<<<< HEAD
         mDrawer = findViewById(R.id.drawer_layout);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+=======
+        navigationView = findViewById( R.id.nav_view );
+        navigationView.setNavigationItemSelectedListener( this );
+>>>>>>> master
+
+        //checkForNewRequest();
 
         /*Navigation Drawer Header*/
         View header_view = navigationView.getHeaderView(0);
@@ -113,8 +154,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         Average_score();
 
         DatabaseReference reference;
+<<<<<<< HEAD
         reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseAuth.getUid());
         reference.addValueEventListener(new ValueEventListener() {
+=======
+        reference = FirebaseDatabase.getInstance( ).getReference( "Users" ).child( uid );
+        reference.addValueEventListener( new ValueEventListener( ) {
+>>>>>>> master
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserModel userModel = dataSnapshot.getValue(UserModel.class);
@@ -168,6 +214,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
         /*Default Fragment*/
         if (savedInstanceState == null) {
+<<<<<<< HEAD
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).addToBackStack(null).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
@@ -195,10 +242,45 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     loadFragment(new MessageFragment());
                     break;
             }
+=======
+            getSupportFragmentManager( ).beginTransaction( ).replace( R.id.fragment_container, new HomeFragment( ) ).commit( );
+            navigationView.setCheckedItem( R.id.nav_home );
+>>>>>>> master
         }
+
+    }
+
+    private void checkForNewRequest() {
+        DatabaseReference requestReference = FirebaseDatabase.getInstance().getReference("Requests");
+        requestReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                outerLoop:
+                for(DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    for(DataSnapshot childOfChildSnapShot: childSnapshot.getChildren()) {
+                        RequestModel requestModel = childOfChildSnapShot.getValue(RequestModel.class);
+
+                        if(uid.equals(requestModel.getReciever().getuserId())) {
+                            if(!requestModel.isAccepted()) {
+                                Menu menu = navigationView.getMenu();
+                                MenuItem navRequests = menu.findItem(R.id.nav_requests);
+                                navRequests.setIcon(R.drawable.ic_chat_unread);
+                                break outerLoop;
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void loadFragment(Fragment fragment) {
+<<<<<<< HEAD
         //getSupportFragmentManager( ).beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack( null ).commit( );
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -208,14 +290,24 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         ft.addToBackStack(null);
         ft.commit();
 
+=======
+        getSupportFragmentManager( ).beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack(null).commit( );
+>>>>>>> master
     }
 
     @Override
     public void onBackPressed() {
+<<<<<<< HEAD
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+=======
+        super.onBackPressed();
+        if (mDrawer.isDrawerOpen( GravityCompat.START )) {
+            mDrawer.closeDrawer( GravityCompat.START );
+        } else {
+>>>>>>> master
         }
     }
 
@@ -329,8 +421,13 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                     temp_rating = temp_rating + feedback.getRating();
                     count++;
                 }
+<<<<<<< HEAD
                 /*Bug fix here*/
                 avg_rating = Float.valueOf(temp_rating) / count;
+=======
+                //Bug fix here//
+                        avg_rating = Float.valueOf(temp_rating) / count;
+>>>>>>> master
                 avg_rating_string = String.valueOf(avg_rating);
                 //Toast.makeText(HomeActivity.this, "Rate:" + avg_rating_string, Toast.LENGTH_SHORT).show();
             }
@@ -342,5 +439,19 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         });
     }
 
+<<<<<<< HEAD
+=======
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+>>>>>>> master
 
 }

@@ -8,11 +8,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.example.bartertradeapp.DataModels.BidRequestModel;
 import com.example.bartertradeapp.DataModels.RequestModel;
 import com.example.bartertradeapp.DataModels.UserModel;
+import com.example.bartertradeapp.DataModels.UserUploadProductModel;
+import com.example.bartertradeapp.Fragments.HomeFragment;
+import com.example.bartertradeapp.Fragments.HomeFragmentExtend;
+import com.example.bartertradeapp.Fragments.Profile_displayFragment;
+import com.example.bartertradeapp.Fragments.UserUploadFragment;
+import com.example.bartertradeapp.adapters.BidRequestAdapter;
 import com.example.bartertradeapp.adapters.UserAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,10 +35,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RequestListActivity extends AppCompatActivity implements View.OnClickListener{
+public class RequestListActivity extends BaseActivity implements View.OnClickListener{
 
     private RecyclerView rvRequestList;
     private List<UserModel> otherUserList = new ArrayList<>();
+    private ArrayList<BidRequestModel> requestAdapterModelList = new ArrayList<>();
     private Map<String, Boolean> otherUserMap = new HashMap<>();
     private String myId;
     private String requestId;
@@ -41,8 +52,13 @@ public class RequestListActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+<<<<<<< HEAD
         setContentView(R.layout.fragment_request_list);
 
+=======
+        setContentView(R.layout.activity_request_list);
+        changeStatusBarColor();
+>>>>>>> master
         myId = FirebaseAuth.getInstance().getUid();
         rvRequestList = findViewById(R.id.rvRequestList);
         rvRequestList.setLayoutManager(new LinearLayoutManager(this));
@@ -57,7 +73,7 @@ public class RequestListActivity extends AppCompatActivity implements View.OnCli
                     String productId = snapshot.getKey();
                     if (!TextUtils.isEmpty(productId)) {
                         ad_id = productId;
-                        getUser();
+                        getProduct();
                     }
                 }
             }
@@ -69,7 +85,25 @@ public class RequestListActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
-    private void getUser() {
+    private void getProduct() {
+        DatabaseReference productReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child(ad_id);
+        productReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserUploadProductModel productModel = dataSnapshot.getValue(UserUploadProductModel.class);
+                if(productModel != null) {
+                    getUser(productModel);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getUser(final UserUploadProductModel productModel) {
         DatabaseReference allRequestsReference = FirebaseDatabase.getInstance().getReference("Requests").child(ad_id);
         //Show Progress Dialog
         allRequestsReference.addValueEventListener(new ValueEventListener() {
@@ -97,6 +131,12 @@ public class RequestListActivity extends AppCompatActivity implements View.OnCli
                         if (!otherUserMap.containsKey(otherUser.getuserId())) {
                             otherUserMap.put(otherUser.getuserId(), true);
                             otherUserList.add(otherUser);
+
+                            BidRequestModel requestAdapterModel = new BidRequestModel();
+                            requestAdapterModel.setUserModel(otherUser);
+                            requestAdapterModel.setRequestModel(requestModel);
+                            requestAdapterModel.setProductModel(productModel);
+                            requestAdapterModelList.add(requestAdapterModel);
                         }
                     }
                 }
@@ -111,9 +151,9 @@ public class RequestListActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void setRVAdapter() {
-        UserAdapter userAdapter = new UserAdapter(this, otherUserList);
-        userAdapter.setOnClickListener(this);
-        rvRequestList.setAdapter(userAdapter);
+        BidRequestAdapter bidRequestAdapter = new BidRequestAdapter(requestAdapterModelList);
+        bidRequestAdapter.setOnClickListener(this);
+        rvRequestList.setAdapter(bidRequestAdapter);
         //userAdapter.notifyDataSetChanged();
     }
 
@@ -132,6 +172,8 @@ public class RequestListActivity extends AppCompatActivity implements View.OnCli
         requestModel.setName(name);
         requestModel.setRequestId(requestId);
         setAcceptedReference.child(requestId).setValue(requestModel);
+
+        Toast.makeText(this,"Bid Accepted",Toast.LENGTH_LONG).show();
 
 
       /*  UserModel clickedUserModel = (UserModel) v.getTag();

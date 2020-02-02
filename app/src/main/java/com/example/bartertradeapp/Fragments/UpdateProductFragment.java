@@ -89,6 +89,7 @@ public class UpdateProductFragment extends BaseFragment {
 
     ArrayAdapter<String> categoriesAdapter;
     private String[] categories = {"Clothes", "Shoes", "Household", "Electronics", "Console Games"};
+    private HomeActivity home = new HomeActivity();
 
 
     private String singleImageUrl;
@@ -504,6 +505,9 @@ public class UpdateProductFragment extends BaseFragment {
         userUploadProductModel.setCurrentDateTimeString(myCurrentDateTimeString);
         userUploadProductModel.setCurrentDateTime(currentdate);
         userUploadProductModel.setAdId(ad_id);
+
+        userUploadProductModel.setLatitude( home.curr.latitude );
+        userUploadProductModel.setLongitude( home.curr.longitude );
 
         String tag = "Product";
         userUploadProductModel.setTag(tag);

@@ -19,7 +19,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapter.ViewHolder> {
+public class CustomListAdapter extends RecyclerView.Adapter<CustomListAdapter.ViewHolder> {
 
     private List<UserUploadProductModel> userlist;
     private LayoutInflater mInflater;
@@ -30,7 +30,7 @@ public class custom_list_adapter extends RecyclerView.Adapter<custom_list_adapte
     private ArrayList<String> imageList = null;
 
     // data is passed into the constructor
-    public custom_list_adapter(Context context, List<UserUploadProductModel> userlist) {
+    public CustomListAdapter(Context context, List<UserUploadProductModel> userlist) {
         this.mInflater = LayoutInflater.from(context);
         this.userlist = userlist;
     }

@@ -10,8 +10,11 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.bartertradeapp.DataModels.BidRequestModel;
 import com.example.bartertradeapp.DataModels.ChatModel;
+import com.example.bartertradeapp.DataModels.CustomModel;
 import com.example.bartertradeapp.DataModels.UserModel;
+import com.example.bartertradeapp.DataModels.UserUploadProductModel;
 import com.example.bartertradeapp.adapters.UserAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +32,8 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
 
     private RecyclerView rvMessageList;
     private List<UserModel> otherUserList = new ArrayList<>();
+    //private List<UserModel> otherUserList = new ArrayList<>();
+    private ArrayList<CustomModel> customModelArrayList = new ArrayList<>();
     private Map<String, Boolean> otherUserMap = new HashMap<>();
     private String myId;
     private String ad_id = " ";
@@ -47,12 +52,12 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
         getProductAdIdReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //otherUserMap.clear();
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     String conversationId = snapshot.getKey();
                     if (!TextUtils.isEmpty(conversationId)) {
                         ad_id = conversationId;
-                        getUser();
+                        getProduct();
                     }
                 }
             }
@@ -64,7 +69,25 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
-    private void getUser() {
+    private void getProduct() {
+        DatabaseReference productReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child(ad_id);
+        productReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserUploadProductModel productModel = dataSnapshot.getValue(UserUploadProductModel.class);
+                if (productModel != null) {
+                    getUser(productModel);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getUser(final UserUploadProductModel productModel) {
         DatabaseReference allChatReference = FirebaseDatabase.getInstance().getReference("Messages").child(ad_id);
         //Show Progress Dialog
         allChatReference.addValueEventListener(new ValueEventListener() {
@@ -85,6 +108,12 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
                         if (!otherUserMap.containsKey(otherUser.getuserId())) {
                             otherUserMap.put(otherUser.getuserId(), true);
                             otherUserList.add(otherUser);
+
+                            CustomModel requestAdapterModel = new CustomModel();
+                            requestAdapterModel.setUserModel(otherUser);
+                            requestAdapterModel.setChatModel(chatModel);
+                            requestAdapterModel.setUserUploadProductModel(productModel);
+                            customModelArrayList.add(requestAdapterModel);
                         }
                     }
                 }
@@ -99,7 +128,7 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setRVAdapter() {
-        UserAdapter userAdapter = new UserAdapter(this, otherUserList);
+        UserAdapter userAdapter = new UserAdapter(this, customModelArrayList);
         userAdapter.setOnClickListener(this);
         rvMessageList.setAdapter(userAdapter);
         //userAdapter.notifyDataSetChanged();
@@ -108,9 +137,10 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        UserModel clickedUserModel = (UserModel) v.getTag();
+        //UserModel clickedUserModel = (UserModel) v.getTag();
+        CustomModel clickedCustomModel = (CustomModel) v.getTag();
         Intent messageIntent = new Intent(MessageListActivity.this, MessageActivity.class);
-        messageIntent.putExtra("user", clickedUserModel);
+        messageIntent.putExtra("user", clickedCustomModel.getUserModel());
         messageIntent.putExtra("ad_id", ad_id);
         startActivity(messageIntent);
     }

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<< HEAD
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:nestedScrollingEnabled="true"
+=======
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+>>>>>>> master
     android:layout_marginBottom="60dp">
 
     <RelativeLayout
@@ -15,7 +20,10 @@
         android:layout_height="wrap_content"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
+<<<<<<< HEAD
         android:textAlignment="center"
+=======
+>>>>>>> master
         android:text="Latest"
         android:textColor="@color/black"
         android:textSize="20sp">
@@ -36,8 +44,12 @@
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
+<<<<<<< HEAD
             android:textAlignment="center"
             android:text="Location ads"
+=======
+            android:text="Nearest"
+>>>>>>> master
             android:textColor="@color/black"
             android:textSize="20sp">
 
@@ -56,7 +68,10 @@
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
+<<<<<<< HEAD
             android:textAlignment="center"
+=======
+>>>>>>> master
             android:text="Recommended"
             android:textColor="@color/black"
             android:textSize="20sp">

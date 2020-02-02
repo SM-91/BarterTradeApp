@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.bartertradeapp.DataModels.UserModel;
@@ -85,7 +86,7 @@ public class AddProductFragment extends BaseFragment {
 
     private static final int MULTIPLE_IMAGE_REQUEST = 2;
     int uploadCount = 0;
-    private String[] categories = {"Clothes", "Shoes", "Household", "Electronics", "Console Games"};
+    private String[] categories = {"Clothes","Electronics","Household","Games", "Shoes"};
 
 
     @Nullable
@@ -405,20 +406,18 @@ public class AddProductFragment extends BaseFragment {
         userUploadProductModel.setPossibleExchangeWith(et_possible_exchange_with.getText().toString().trim());
         userUploadProductModel.setPostedBy(currentUserModel);
         userUploadProductModel.setTag("Product");
-
         userUploadProductModel.setLatitude( home.curr.latitude );
         userUploadProductModel.setLongitude( home.curr.longitude );
-
         DatabaseReference databaseReference;
         databaseReference = FirebaseDatabase.getInstance().getReference("UserUploads").child(uploadAuth.getCurrentUser().getUid());
         String pushkey = databaseReference.push().getKey();
         userUploadProductModel.setAdId(pushkey);
         databaseReference.child(pushkey).setValue(userUploadProductModel);
-
         DatabaseReference allProductRef = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child(pushkey);
         allProductRef.setValue(userUploadProductModel);
-
         Toast.makeText(getContext(),"Product Added",Toast.LENGTH_LONG).show();
+        Fragment fragment = new HomeFragment();
+        getActivity().getSupportFragmentManager().beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack(null).commit( );
     }
 
 }

@@ -31,8 +31,6 @@ public class LogInActivity extends BaseActivity {
     EditText et_login_email, et_login_password;
     Button btn_login,btn_signUp;
 
-    private ProgressBar loginProgress;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +46,7 @@ public class LogInActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
+<<<<<<< HEAD
                 final ProgressDialog progress = ProgressDialog.show(LogInActivity.this, "",
                         "Authenticating", true);
 
@@ -81,6 +80,26 @@ public class LogInActivity extends BaseActivity {
                         }
                         else{
                             Toast.makeText(LogInActivity.this, "Enter Email and Password", Toast.LENGTH_LONG).show();
+=======
+                String loginEmail = et_login_email.getText().toString().trim();
+                String loginPass = et_login_password.getText().toString().trim();
+
+                if(!TextUtils.isEmpty(loginEmail) && !TextUtils.isEmpty(loginPass)){
+                    //set the visibility on for progressbar
+
+                    mAuth.signInWithEmailAndPassword(loginEmail, loginPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+
+                            if(task.isSuccessful()){
+                                sendToMain();
+                            } else {
+                                //set the error message
+                                String errorMessage = task.getException().getMessage();
+                                Toast.makeText(LogInActivity.this, "Error : " + errorMessage, Toast.LENGTH_LONG).show();
+                            }
+                            //set the visibility off for progressbar
+>>>>>>> master
                         }
                     }
 
@@ -99,7 +118,6 @@ public class LogInActivity extends BaseActivity {
                 startActivity(regIntent);
             }
         });
-        loginProgress = findViewById(R.id.login_progress);
     }
 
     //to check if user is currently loggeg in

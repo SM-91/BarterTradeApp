@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_adapter.ViewHolder> {
+public class CustomNearestAdapter extends RecyclerView.Adapter<CustomNearestAdapter.ViewHolder> {
 
     private List<UserUploadProductModel> userlist;
     private LayoutInflater mInflater;
@@ -29,7 +29,7 @@ public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_
     private ArrayList<String> imageList = null;
 
     // data is passed into the constructor
-    public custom_nearest_adapter(Context context, List<UserUploadProductModel> userlist) {
+    public CustomNearestAdapter(Context context, List<UserUploadProductModel> userlist) {
         this.mInflater = LayoutInflater.from(context);
         this.userlist = userlist;
     }
@@ -46,13 +46,6 @@ public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_
     public void onBindViewHolder(final ViewHolder holder, int position) {
         UserUploadProductModel list = userlist.get(position);
         holder.title.setText(list.getProductName());
-        holder.tags.setText(list.getTag());
-        holder.title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), "" + holder.title.getText().toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
         try {
             if (list.getmImageUri() != null) {
 
@@ -89,19 +82,11 @@ public class custom_nearest_adapter extends RecyclerView.Adapter<custom_nearest_
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title;
-        TextView type;
-        TextView estimation;
-        TextView tags;
         ImageView image;
-        ArrayList<String> imagelist;
-        Uri uri;
 
         ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.ad_title);
-            type = itemView.findViewById(R.id.ad_type);
-            estimation = itemView.findViewById(R.id.ad_estimation);
-            tags = itemView.findViewById(R.id.tags);
             image = itemView.findViewById(R.id.ad_image);
             itemView.setOnClickListener(this);
         }

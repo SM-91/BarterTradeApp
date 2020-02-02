@@ -2,18 +2,32 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
+<<<<<<< HEAD
     android:layout_height="100dp"
     app:cardBackgroundColor="@color/whiteTransparent"
+=======
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/transparent"
+>>>>>>> master
     app:cardCornerRadius="5dp"
     app:cardElevation="1dp"
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
         android:layout_width="wrap_content"
+<<<<<<< HEAD
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/ad_image"
+=======
+        android:layout_height="wrap_content"
+        android:background="#e6e6e6">
+
+        <ImageView
+            android:id="@+id/ad_image"
+            android:layout_marginTop="10dp"
+>>>>>>> master
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/default_image" />
@@ -33,7 +47,11 @@
                 android:textColor="@color/black"
                 android:padding="10dp"
                 android:textSize="18sp"
+<<<<<<< HEAD
                 android:textStyle="normal" />
+=======
+                android:textStyle="bold" />
+>>>>>>> master
 
             <View
                 android:id="@+id/line"
@@ -54,6 +72,7 @@
                 android:text="Product Name"
                 android:textColor="@color/black"
                 android:textSize="18sp"
+<<<<<<< HEAD
                 android:textStyle="normal" />
 
 
@@ -66,6 +85,32 @@
             android:background="@color/light_grey">
 
         </View>
+=======
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/line1"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_below="@+id/product_title"
+                android:background="@color/light_grey"/>
+
+            <TextView
+                android:id="@+id/isAccepted"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line1"
+                android:layout_marginStart="10dp"
+                android:padding="10dp"
+                android:text="Request Status"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+>>>>>>> master
 
 
     </RelativeLayout>
