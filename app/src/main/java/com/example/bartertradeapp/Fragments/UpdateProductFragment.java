@@ -525,8 +525,11 @@ public class UpdateProductFragment extends BaseFragment {
         newUpdateReference = FirebaseDatabase.getInstance().getReference("ProductsAndServices")
                 .child(ad_id);
         newUpdateReference.setValue(userUploadProductModel);
+
         Toast.makeText(getContext(), "Updated", Toast.LENGTH_SHORT)
                 .show();
 
+        Fragment fragment = new HomeFragment();
+        getActivity().getSupportFragmentManager().beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack(null).commit( );
     }
 }

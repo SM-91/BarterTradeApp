@@ -37,6 +37,7 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
     private Map<String, Boolean> otherUserMap = new HashMap<>();
     private String myId;
     private String ad_id = " ";
+    private String category;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserUploadProductModel productModel = dataSnapshot.getValue(UserUploadProductModel.class);
                 if (productModel != null) {
+                    category = productModel.getProductCategoryList();
                     getUser(productModel);
                 }
             }
@@ -142,6 +144,7 @@ public class MessageListActivity extends BaseActivity implements View.OnClickLis
         Intent messageIntent = new Intent(MessageListActivity.this, MessageActivity.class);
         messageIntent.putExtra("user", clickedCustomModel.getUserModel());
         messageIntent.putExtra("ad_id", ad_id);
+        messageIntent.putExtra("category", category);
         startActivity(messageIntent);
     }
 }

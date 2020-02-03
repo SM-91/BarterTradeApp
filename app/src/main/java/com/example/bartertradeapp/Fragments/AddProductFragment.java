@@ -416,6 +416,7 @@ public class AddProductFragment extends BaseFragment {
         DatabaseReference allProductRef = FirebaseDatabase.getInstance().getReference("ProductsAndServices").child(pushkey);
         allProductRef.setValue(userUploadProductModel);
         Toast.makeText(getContext(),"Product Added",Toast.LENGTH_LONG).show();
+
         Fragment fragment = new HomeFragment();
         getActivity().getSupportFragmentManager().beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack(null).commit( );
     }
