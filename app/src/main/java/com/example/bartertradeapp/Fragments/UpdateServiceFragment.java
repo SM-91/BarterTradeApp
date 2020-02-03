@@ -209,6 +209,9 @@ public class UpdateServiceFragment extends Fragment {
 
         Toast.makeText(getContext(), "Service Updated", Toast.LENGTH_SHORT)
                 .show();
+
+        Fragment fragment = new HomeFragment();
+        getActivity().getSupportFragmentManager().beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack(null).commit( );
     }
 
 }

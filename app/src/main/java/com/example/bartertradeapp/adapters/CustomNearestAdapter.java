@@ -45,28 +45,37 @@ public class CustomNearestAdapter extends RecyclerView.Adapter<CustomNearestAdap
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         UserUploadProductModel list = userlist.get(position);
-        holder.title.setText(list.getProductName());
-        try {
-            if (list.getmImageUri() != null) {
+        if (list.getTag().equals("Product")) {
+            holder.title.setText(list.getProductName());
+            try {
+                if (list.getmImageUri() != null) {
 
-                Picasso.get().load(list.getmImageUri())
-                        .fit()
-                        .into(holder.image);
-
-            } else {
-
-                imageList = list.getmArrList();
-                if (imageList != null) {
-                    Uri uri = Uri.parse(imageList.get(0));
-                    Picasso.get().load(uri)
+                    Picasso.get().load(list.getmImageUri())
                             .fit()
                             .into(holder.image);
-                }
-            }
 
-        } catch (Exception e) {
-            System.out.println("Error " + e.getMessage());
-            //Toast.makeText(this.context,"Error in multiple images" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                } else {
+
+                    imageList = list.getmArrList();
+                    if (imageList != null) {
+                        Uri uri = Uri.parse(imageList.get(0));
+                        Picasso.get().load(uri)
+                                .fit()
+                                .into(holder.image);
+                    }
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error " + e.getMessage());
+                //Toast.makeText(this.context,"Error in multiple images" + e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        } else {
+
+            holder.title.setText(list.getServiceName());
+            Picasso.get().load(list.getServiceImageUri())
+                    .fit()
+                    .centerCrop()
+                    .into(holder.image);
         }
 
 
@@ -93,7 +102,8 @@ public class CustomNearestAdapter extends RecyclerView.Adapter<CustomNearestAdap
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onNearestItemClick(view, getAdapterPosition());
+            if (mClickListener != null)
+                mClickListener.onNearestItemClick(view, getAdapterPosition());
         }
     }
 

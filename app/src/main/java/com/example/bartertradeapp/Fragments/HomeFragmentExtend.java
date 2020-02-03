@@ -174,9 +174,14 @@ public class HomeFragmentExtend extends BaseFragment implements CustomListAdapte
                 userlist.clear();
                 for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
                     UserUploadProductModel searchedusers = usersSnapshot.getValue(UserUploadProductModel.class);
-                    if (Pattern.compile(Pattern.quote(query), Pattern.CASE_INSENSITIVE).matcher(searchedusers.getProductName()).find()) {
-                        userlist.add(searchedusers);
+                    try {
+                        if (Pattern.compile(Pattern.quote(query), Pattern.CASE_INSENSITIVE).matcher(searchedusers.getProductName()).find()) {
+                            userlist.add(searchedusers);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+
                 }
                 recyclerView.setAdapter(adapter);
             }

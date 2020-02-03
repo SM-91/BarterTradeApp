@@ -3,6 +3,7 @@ package com.example.bartertradeapp;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -168,7 +169,10 @@ public class RequestListActivity extends BaseActivity implements View.OnClickLis
         requestModel.setRequestId(requestId);
         setAcceptedReference.child(requestId).setValue(requestModel);
 
-        Toast.makeText(this,"Bid Accepted",Toast.LENGTH_LONG).show();
+        Toast.makeText(this,"Wait For User to accept your request",Toast.LENGTH_LONG).show();
+
+        Fragment fragment = new HomeFragment();
+        this.getSupportFragmentManager().beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack(null).commit( );
 
 
       /*  UserModel clickedUserModel = (UserModel) v.getTag();
