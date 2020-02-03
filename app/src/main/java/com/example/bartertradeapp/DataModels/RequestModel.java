@@ -7,6 +7,7 @@ public class RequestModel {
     private UserModel sender;
     private UserModel reciever;
     private String name;
+    private String tag;
     private boolean accepted;
 
     public RequestModel() {
@@ -66,5 +67,13 @@ public class RequestModel {
 
     public void setAccepted(boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

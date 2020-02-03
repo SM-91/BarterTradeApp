@@ -86,7 +86,7 @@ public class FeedbackActivity extends BaseActivity {
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(FeedbackActivity.this, "need to post data from here to DB", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FeedbackActivity.this, "FeedBack Posted", Toast.LENGTH_SHORT).show();
                 posting_data();
                 passing_data();
             }

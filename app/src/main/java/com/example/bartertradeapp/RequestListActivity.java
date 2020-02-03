@@ -36,7 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RequestListActivity extends BaseActivity implements View.OnClickListener{
+public class RequestListActivity extends BaseActivity implements View.OnClickListener {
 
     private RecyclerView rvRequestList;
     private List<UserModel> otherUserList = new ArrayList<>();
@@ -46,8 +46,11 @@ public class RequestListActivity extends BaseActivity implements View.OnClickLis
     private String requestId;
     private String ad_id = " ";
     private String name;
+    private String product_name;
+    private String service_name;
+    private String tag;
     private boolean accepted;
-    UserModel sender,reciever;
+    UserModel sender, reciever;
 
 
     @Override
@@ -87,7 +90,8 @@ public class RequestListActivity extends BaseActivity implements View.OnClickLis
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserUploadProductModel productModel = dataSnapshot.getValue(UserUploadProductModel.class);
-                if(productModel != null) {
+                if (productModel != null) {
+                    tag = productModel.getTag();
                     getUser(productModel);
                 }
             }
@@ -113,12 +117,15 @@ public class RequestListActivity extends BaseActivity implements View.OnClickLis
                     sender = requestModel.getSender();
                     reciever = requestModel.getReciever();
                     accepted = requestModel.isAccepted();
-                    name = requestModel.getName();
+
+                    if(tag.equals("Product")){
+                        product_name = requestModel.getName();
+                    } else {
+                        service_name = requestModel.getName();
+                    }
+                    //name = requestModel.getName();
                     requestId = requestModel.getRequestId();
 
-                    /*if (myId.equals(requestModel.getSender().getuserId())) {
-                        otherUser = requestModel.getReciever();
-                    } else*/
                     if (myId.equals(requestModel.getReciever().getuserId())) {
                         otherUser = requestModel.getSender();
                     }
@@ -165,15 +172,23 @@ public class RequestListActivity extends BaseActivity implements View.OnClickLis
         requestModel.setAccepted(true);
         requestModel.setSender(sender);
         requestModel.setReciever(reciever);
-        requestModel.setName(name);
+
+        if(tag.equals("Product")){
+            requestModel.setName(product_name);
+        }else {
+            requestModel.setName(service_name);
+        }
+
+        requestModel.setTag(tag);
         requestModel.setRequestId(requestId);
         setAcceptedReference.child(requestId).setValue(requestModel);
 
-        Toast.makeText(this,"Wait For User to accept your request",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Request Accepted", Toast.LENGTH_LONG).show();
+        finish();
 
-        Fragment fragment = new HomeFragment();
+        /*Fragment fragment = new HomeFragment();
         this.getSupportFragmentManager().beginTransaction( ).replace( R.id.fragment_container, fragment ).addToBackStack(null).commit( );
-
+*/
 
       /*  UserModel clickedUserModel = (UserModel) v.getTag();
         Intent messageIntent = new Intent(MessageListActivity.this, MessageActivity.class);

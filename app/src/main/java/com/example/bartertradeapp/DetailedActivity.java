@@ -49,6 +49,7 @@ public class DetailedActivity extends BaseActivity {
     private String myId;
     private String user_id;
     private String product_name;
+    private String tag;
     private UserModel sender, receiver;
     private boolean accepted;
 
@@ -111,7 +112,7 @@ public class DetailedActivity extends BaseActivity {
         String serviceEstimatedMarketValue = getIntent().getStringExtra("serviceEstimatedMarketValue");
         String servicePossibleExchangeWith = getIntent().getStringExtra("servicePossibleExchangeWith");
         String serviceImageUri = getIntent().getStringExtra("serviceImageUri");
-        String tag = getIntent().getStringExtra("tag");
+        tag = getIntent().getStringExtra("tag");
         String myCurrentDataTimeString = getIntent().getStringExtra("myCurrentDateTimeString");
         Date myCurrentDataTime = getIntent().getParcelableExtra("Key");
         String mimage = getIntent().getStringExtra("image");
@@ -206,15 +207,21 @@ public class DetailedActivity extends BaseActivity {
                 requestModel.setReciever(receiver);
                 requestModel.setSender(sender);
                 requestModel.setName(product_name);
+                requestModel.setTag(tag);
                 requestModel.setAccepted(false);
+
+                if(tag.equals("Product")){
+                    requestModel.setTag("Product");
+                } else {
+                    requestModel.setTag("Service");
+                }
 
                 requestReference = FirebaseDatabase.getInstance().getReference("Requests").child(ad_id);
                 String requestId = requestReference.push().getKey();
                 requestModel.setRequestId(requestId);
-
                 requestReference.child(requestId).setValue(requestModel);
 
-                Toast.makeText(DetailedActivity.this, "Bid done", Toast.LENGTH_LONG).show();
+                Toast.makeText(DetailedActivity.this, "Wait For User to accept your request", Toast.LENGTH_LONG).show();
             }
         });
 

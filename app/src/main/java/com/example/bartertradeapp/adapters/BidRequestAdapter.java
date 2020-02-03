@@ -34,20 +34,38 @@ public class BidRequestAdapter extends RecyclerView.Adapter<BidRequestAdapter.Vi
     public void onBindViewHolder(@NonNull BidRequestAdapter.ViewHolder holder, int position) {
         BidRequestModel requestModel = bidRequestList.get(holder.getAdapterPosition());
 
-        holder.username.setText("Sender Name :" + " " + requestModel.getUserModel().getUserName());
-        holder.productName.setText("Product Name :" + " " + requestModel.getProductModel().getProductName());
+        if(requestModel.getProductModel().getTag().equals("Product")){
+            holder.username.setText("Sender Name :" + " " + requestModel.getUserModel().getUserName());
+            holder.productName.setText("Product Name :" + " " + requestModel.getProductModel().getProductName());
 
-        if(requestModel.getRequestModel().isAccepted() == true){
-            holder.isAccepted.setText("Request Status :" + " " + "Bid Accepted");
-            holder.isAccepted.setVisibility(View.VISIBLE);
-        } else {
-            holder.isAccepted.setText("Request Status :" + " " + "Bid Not Accepted");
-            holder.isAccepted.setVisibility(View.VISIBLE);
+            if(requestModel.getRequestModel().isAccepted() == true){
+                holder.isAccepted.setText("Request Status :" + " " + "Bid Accepted");
+                holder.isAccepted.setVisibility(View.VISIBLE);
+            } else {
+                holder.isAccepted.setText("Request Status :" + " " + "Bid Not Accepted");
+                holder.isAccepted.setVisibility(View.VISIBLE);
+            }
+
+            Picasso.get().load(requestModel.getUserModel().getUserImageUrl()).fit().centerCrop().into(holder.imageView);
+            holder.itemView.setTag(requestModel);
+            holder.itemView.setOnClickListener(listener);
+        }else {
+            holder.username.setText("Sender Name :" + " " + requestModel.getUserModel().getUserName());
+            holder.productName.setText("Service Name :" + " " + requestModel.getProductModel().getServiceName());
+
+            if(requestModel.getRequestModel().isAccepted() == true){
+                holder.isAccepted.setText("Request Status :" + " " + "Bid Accepted");
+                holder.isAccepted.setVisibility(View.VISIBLE);
+            } else {
+                holder.isAccepted.setText("Request Status :" + " " + "Bid Not Accepted");
+                holder.isAccepted.setVisibility(View.VISIBLE);
+            }
+
+            Picasso.get().load(requestModel.getUserModel().getUserImageUrl()).fit().centerCrop().into(holder.imageView);
+            holder.itemView.setTag(requestModel);
+            holder.itemView.setOnClickListener(listener);
         }
 
-        Picasso.get().load(requestModel.getUserModel().getUserImageUrl()).fit().centerCrop().into(holder.imageView);
-        holder.itemView.setTag(requestModel);
-        holder.itemView.setOnClickListener(listener);
     }
 
     @Override
