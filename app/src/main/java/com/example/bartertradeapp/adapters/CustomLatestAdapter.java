@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,7 +17,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomRecommendedAdapter extends RecyclerView.Adapter<CustomRecommendedAdapter.ViewHolder> {
+public class CustomLatestAdapter extends RecyclerView.Adapter<CustomLatestAdapter.ViewHolder> {
 
     private List<UserUploadProductModel> userlist;
     private LayoutInflater mInflater;
@@ -29,7 +28,7 @@ public class CustomRecommendedAdapter extends RecyclerView.Adapter<CustomRecomme
     private ArrayList<String> imageList = null;
 
     // data is passed into the constructor
-    public CustomRecommendedAdapter(Context context, List<UserUploadProductModel> userlist) {
+    public CustomLatestAdapter(Context context, List<UserUploadProductModel> userlist) {
         this.mInflater = LayoutInflater.from(context);
         this.userlist = userlist;
     }
@@ -45,28 +44,37 @@ public class CustomRecommendedAdapter extends RecyclerView.Adapter<CustomRecomme
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         UserUploadProductModel list = userlist.get(position);
-        holder.title.setText(list.getProductName());
-        try {
-            if (list.getmImageUri() != null) {
+        if (list.getTag().equals("Product")) {
+            holder.title.setText(list.getProductName());
+            try {
+                if (list.getmImageUri() != null) {
 
-                Picasso.get().load(list.getmImageUri())
-                        .fit()
-                        .into(holder.image);
-
-            } else {
-
-                imageList = list.getmArrList();
-                if (imageList != null) {
-                    Uri uri = Uri.parse(imageList.get(0));
-                    Picasso.get().load(uri)
+                    Picasso.get().load(list.getmImageUri())
                             .fit()
                             .into(holder.image);
-                }
-            }
 
-        } catch (Exception e) {
-            System.out.println("Error " + e.getMessage());
-            //Toast.makeText(this.context,"Error in multiple images" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                } else {
+
+                    imageList = list.getmArrList();
+                    if (imageList != null) {
+                        Uri uri = Uri.parse(imageList.get(0));
+                        Picasso.get().load(uri)
+                                .fit()
+                                .into(holder.image);
+                    }
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error " + e.getMessage());
+                //Toast.makeText(this.context,"Error in multiple images" + e.getMessage(),Toast.LENGTH_SHORT).show();
+            }
+        } else {
+
+            holder.title.setText(list.getServiceName());
+            Picasso.get().load(list.getServiceImageUri())
+                    .fit()
+                    .centerCrop()
+                    .into(holder.image);
         }
 
 
@@ -93,7 +101,8 @@ public class CustomRecommendedAdapter extends RecyclerView.Adapter<CustomRecomme
 
         @Override
         public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onRecommendedItemClick(view, getAdapterPosition());
+            if (mClickListener != null)
+                mClickListener.onLatestItemClick(view, getAdapterPosition());
         }
     }
 
@@ -109,6 +118,6 @@ public class CustomRecommendedAdapter extends RecyclerView.Adapter<CustomRecomme
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
-        void onRecommendedItemClick(View view, int position);
+        void onLatestItemClick(View view, int position);
     }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +18,7 @@ import com.example.bartertradeapp.DetailedActivity;
 import com.example.bartertradeapp.R;
 import com.example.bartertradeapp.adapters.CustomListAdapter;
 import com.example.bartertradeapp.adapters.CustomNearestAdapter;
-import com.example.bartertradeapp.adapters.CustomRecommendedAdapter;
+import com.example.bartertradeapp.adapters.CustomLatestAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,11 +34,12 @@ import java.util.regex.Pattern;
 
 import static com.example.bartertradeapp.HomeActivity.curr;
 
-public class HomeFragment extends BaseFragment implements CustomListAdapter.ItemClickListener, CustomNearestAdapter.ItemClickListener, CustomRecommendedAdapter.ItemClickListener {
+public class HomeFragment extends BaseFragment implements CustomListAdapter.ItemClickListener, CustomNearestAdapter.ItemClickListener, CustomLatestAdapter.ItemClickListener {
 
-    private RecyclerView recyclerView_latest, recyclerView_history, recyclerView_nearest;
-    private CustomListAdapter adapter_history;
-    private CustomNearestAdapter adapter_nearest, adapter_latest;
+    private RecyclerView recyclerView_latest, recyclerView_recommended, recyclerView_nearest;
+    private CustomListAdapter adapter_recommended;
+    private CustomLatestAdapter adapter_latest;
+    private CustomNearestAdapter adapter_nearest;
     LinearLayoutManager layoutManager_latest, layoutManager_history, layoutManager_nearest;
 
     ArrayList<String> category_list;
@@ -66,7 +66,7 @@ public class HomeFragment extends BaseFragment implements CustomListAdapter.Item
 
         // set up the RecyclerView
         recyclerView_latest = view.findViewById(R.id.recyclerView_latest);
-        recyclerView_history = view.findViewById(R.id.recyclerView_history);
+        recyclerView_recommended = view.findViewById(R.id.recyclerView_history);
         recyclerView_nearest = view.findViewById(R.id.recyclerView_nearest);
 
         //layoutManager = new LinearLayoutManager(getContext());
@@ -75,18 +75,20 @@ public class HomeFragment extends BaseFragment implements CustomListAdapter.Item
         layoutManager_nearest = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
         recyclerView_latest.setLayoutManager(layoutManager_latest);
-        recyclerView_history.setLayoutManager(layoutManager_history);
+        recyclerView_recommended.setLayoutManager(layoutManager_history);
         recyclerView_nearest.setLayoutManager(layoutManager_nearest);
 
         // initializing adapter
-        adapter_latest = new CustomNearestAdapter(getContext(), latest_ads);
-        adapter_latest.setClickListener(this);
+        adapter_recommended = new CustomListAdapter(getContext(), history_ads);
+        adapter_recommended.setClickListener(this);
 
-        adapter_history = new CustomListAdapter(getContext(), history_ads);
-        adapter_history.setClickListener(this);
+        adapter_latest = new CustomLatestAdapter(getContext(), latest_ads);
+        adapter_latest.setClickListener(this);
 
         adapter_nearest = new CustomNearestAdapter(getContext(), nearest_ads);
         adapter_nearest.setClickListener(this);
+
+
 
 
         getUserHistory();
@@ -185,7 +187,7 @@ public class HomeFragment extends BaseFragment implements CustomListAdapter.Item
 
 
                 }
-                recyclerView_history.setAdapter(adapter_history);
+                recyclerView_recommended.setAdapter(adapter_recommended);
             }
 
             @Override
@@ -278,7 +280,7 @@ public class HomeFragment extends BaseFragment implements CustomListAdapter.Item
     public void onItemClick(View view, int position) {
 
         intent = new Intent(getContext(), DetailedActivity.class);
-        userUploadProductModel = adapter_latest.getItem(position);
+        userUploadProductModel = adapter_recommended.getItem(position);
         //userUploadProductModel = adapter_nearest.getItem(position);
         //userUploadProductModel = adapter_history.getItem(position);
         ad_id = userUploadProductModel.getAdId();
@@ -384,11 +386,11 @@ public class HomeFragment extends BaseFragment implements CustomListAdapter.Item
     }
 
     @Override
-    public void onRecommendedItemClick(View view, int position) {
+    public void onLatestItemClick(View view, int position) {
 
         intent = new Intent(getContext(), DetailedActivity.class);
         //userUploadProductModel = adapter_latest.getItem(position);
-        userUploadProductModel = adapter_nearest.getItem(position);
+        userUploadProductModel = adapter_latest.getItem(position);
         ad_id = userUploadProductModel.getAdId();
         Date myCurrentDateTime = userUploadProductModel.getCurrentDateTime();
         String myCurrentDateTimeString = userUploadProductModel.getCurrentDateTimeString();
