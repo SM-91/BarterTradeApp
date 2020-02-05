@@ -63,6 +63,7 @@ public class AddServiceFragment extends BaseFragment {
                 UserModel userModel = dataSnapshot.getValue(UserModel.class);
                 String mImageUrl = userModel.getUserImageUrl();
                 Picasso.get().load(mImageUrl)
+                        .centerCrop()
                         .fit()
                         .into(serviceImageView);
                 userUploadProductModel.setServiceImageUri(mImageUrl);
