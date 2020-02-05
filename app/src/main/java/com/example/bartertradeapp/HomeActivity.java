@@ -1,14 +1,11 @@
 package com.example.bartertradeapp;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +13,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -50,12 +46,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import static com.example.bartertradeapp.SignUpActivity.mLocationPermissionGranted;
-
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawer;
     public static boolean mLocationPermissionGranted;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     UserModel userModel;
 
@@ -90,7 +85,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         Average_score();
         userModel = new UserModel( );
 
-
+        getLocationPermission();
         getDeviceLocation( );
 
         Toolbar toolbar = findViewById( R.id.toolbar );
@@ -262,8 +257,26 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
+    public void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission( this.getApplicationContext( ),
+                android.Manifest.permission.ACCESS_FINE_LOCATION )
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
 
-    private void getDeviceLocation() {
+        } else {
+
+            ActivityCompat.requestPermissions( this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION );
+        }
+    }
+
+    public void getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
          * cases when a location is not available.

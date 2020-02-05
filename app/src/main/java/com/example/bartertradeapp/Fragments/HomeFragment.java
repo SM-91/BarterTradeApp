@@ -71,6 +71,8 @@ public class HomeFragment extends BaseFragment implements CustomListAdapter.Item
 
         //layoutManager = new LinearLayoutManager(getContext());
         layoutManager_latest = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        layoutManager_latest.setReverseLayout(true);
+        layoutManager_latest.setStackFromEnd(true);
         layoutManager_history = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         layoutManager_nearest = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
