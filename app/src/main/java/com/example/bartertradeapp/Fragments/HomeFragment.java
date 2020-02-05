@@ -74,7 +74,11 @@ public class HomeFragment extends BaseFragment implements CustomListAdapter.Item
         layoutManager_latest.setReverseLayout(true);
         layoutManager_latest.setStackFromEnd(true);
         layoutManager_history = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        layoutManager_history.setReverseLayout(true);
+        layoutManager_history.setStackFromEnd(true);
         layoutManager_nearest = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        layoutManager_nearest.setReverseLayout(true);
+        layoutManager_nearest.setStackFromEnd(true);
 
         recyclerView_latest.setLayoutManager(layoutManager_latest);
         recyclerView_recommended.setLayoutManager(layoutManager_history);

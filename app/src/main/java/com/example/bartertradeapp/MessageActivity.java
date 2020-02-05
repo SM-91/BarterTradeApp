@@ -95,7 +95,6 @@ public class MessageActivity extends BaseActivity {
                     feedback_layout.setVisibility(GONE);
                 } else if (radio_btn_yes.isChecked()){
                     radio_btn_no.setChecked(false);
-                    postUserHistory();
                     finish();
                     Intent intent = new Intent(MessageActivity.this, FeedbackActivity.class);
                     intent.putExtra("image_data", sender.getUserImageUrl());
@@ -115,6 +114,7 @@ public class MessageActivity extends BaseActivity {
                     trade_layout.setVisibility(GONE);
                 } else if (trade_yes.isChecked()){
                     radio_btn_no.setChecked(false);
+                    postUserHistory();
                     trade_layout.setVisibility(GONE);
                     feedback_layout.setVisibility(View.VISIBLE);
                 }
