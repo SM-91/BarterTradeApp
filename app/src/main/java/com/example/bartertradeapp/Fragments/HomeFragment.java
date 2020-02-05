@@ -115,7 +115,7 @@ public class HomeFragment extends BaseFragment implements CustomListAdapter.Item
     public void getUserHistory(){
         // Setting data by History Data
         DatabaseReference viewDatabaseReference;
-        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserHistory");
+        viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserHistory").child(uploadAuth.getUid());
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -123,12 +123,11 @@ public class HomeFragment extends BaseFragment implements CustomListAdapter.Item
                 category_list.clear();
                 category_list.add("nothing");
                 for (DataSnapshot usersSnapshot : dataSnapshot.getChildren()) {
-                    for (DataSnapshot ds : usersSnapshot.getChildren()) {
-                        UserHistoryModel history = ds.getValue(UserHistoryModel.class);
+                        UserHistoryModel history = usersSnapshot.getValue(UserHistoryModel.class);
                         //category_list.add(history.getCategory());
                         category = history.getCategory();
                         category_search(category);
-                    }
+
                 }
 
             }

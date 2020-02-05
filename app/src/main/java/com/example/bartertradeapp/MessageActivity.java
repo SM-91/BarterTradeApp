@@ -250,7 +250,7 @@ public class MessageActivity extends BaseActivity {
 
         DatabaseReference userHistoryReference;
         userHistoryReference = FirebaseDatabase.getInstance().getReference("UserHistory")
-                .child(chatAuth.getUid()).child(ad_id);
+                .child(sender.getuserId()).child(ad_id);
         userHistoryReference.setValue(userHistoryModel);
     }
 }

@@ -84,6 +84,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         hideKeyboard(this);
         Average_score();
         userModel = new UserModel( );
+        if (firebaseAuth.getUid().equals(null)){
+            Intent intent = new Intent( HomeActivity.this, SignUpActivity.class );
+            startActivity( intent );
+        }
 
         getLocationPermission();
         getDeviceLocation( );
@@ -117,12 +121,16 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         reference.addValueEventListener( new ValueEventListener( ) {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserModel userModel = dataSnapshot.getValue( UserModel.class );
-                nav_header_user_name.setText( userModel.getUserName( ) );
-                nav_header_user_email.setText( userModel.getUserEmail( ) );
-                Picasso.get( ).load( userModel.getUserImageUrl( ) )
-                        .fit( )
-                        .into( img1 );
+                try {
+                    UserModel userModel = dataSnapshot.getValue( UserModel.class );
+                    nav_header_user_name.setText( userModel.getUserName( ) );
+                    nav_header_user_email.setText( userModel.getUserEmail( ) );
+                    Picasso.get( ).load( userModel.getUserImageUrl( ) )
+                            .fit( )
+                            .into( img1 );
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
             }
 
