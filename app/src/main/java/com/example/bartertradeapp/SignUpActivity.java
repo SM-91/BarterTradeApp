@@ -2,9 +2,12 @@ package com.example.bartertradeapp;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +37,9 @@ import java.util.HashMap;
 
 public class SignUpActivity extends BaseActivity {
 
+    public static boolean mLocationPermissionGranted;
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+
     EditText et_email,et_pass,et_confirm_pass,et_username;
     Button btn_signUp, btn_already_account,btn_pic;
     ImageView check;
@@ -51,6 +57,7 @@ public class SignUpActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         changeStatusBarColor();
+        getLocationPermission( );
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -246,5 +253,24 @@ public class SignUpActivity extends BaseActivity {
 
         }, 5000);
 
+    }
+
+    public void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission( this.getApplicationContext( ),
+                android.Manifest.permission.ACCESS_FINE_LOCATION )
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+
+        } else {
+
+            ActivityCompat.requestPermissions( this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION );
+        }
     }
 }

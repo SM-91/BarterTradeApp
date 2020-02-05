@@ -50,9 +50,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import static com.example.bartertradeapp.SignUpActivity.mLocationPermissionGranted;
+
 public class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawer;
+    public static boolean mLocationPermissionGranted;
 
     UserModel userModel;
 
@@ -62,11 +65,10 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     ProgressDialog progress;
 
-    public static boolean mLocationPermissionGranted;
+
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLastKnownLocation;
     public static LatLng curr;
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private static final String TAG = HomeActivity.class.getSimpleName( );
     private NavigationView navigationView;
 
@@ -88,7 +90,7 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         Average_score();
         userModel = new UserModel( );
 
-        getLocationPermission( );
+
         getDeviceLocation( );
 
         Toolbar toolbar = findViewById( R.id.toolbar );
@@ -260,24 +262,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
-    public void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
-        if (ContextCompat.checkSelfPermission( this.getApplicationContext( ),
-                android.Manifest.permission.ACCESS_FINE_LOCATION )
-                == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-
-        } else {
-
-            ActivityCompat.requestPermissions( this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION );
-        }
-    }
 
     private void getDeviceLocation() {
         /*
@@ -310,7 +294,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
 
     public void Average_score() {
         //  Calculating Avg User Feedback
-
         String user_id = firebaseAuth.getCurrentUser().getUid();
         DatabaseReference viewDatabaseReference = FirebaseDatabase.getInstance().getReference("UserFeedback").child(user_id);
         viewDatabaseReference.addValueEventListener(new ValueEventListener() {
@@ -327,7 +310,6 @@ public class HomeActivity extends BaseActivity implements NavigationView.OnNavig
                 //Bug fix here//
                         avg_rating = Float.valueOf(temp_rating) / count;
                 avg_rating_string = String.valueOf(avg_rating);
-                //Toast.makeText(HomeActivity.this, "Rate:" + avg_rating_string, Toast.LENGTH_SHORT).show();
             }
 
             @Override
